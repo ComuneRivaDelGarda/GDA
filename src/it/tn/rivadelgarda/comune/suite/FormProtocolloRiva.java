@@ -18,15 +18,15 @@
 package it.tn.rivadelgarda.comune.suite;
 
 import com.axiastudio.pypapi.Register;
+import com.axiastudio.pypapi.ui.Util;
+import com.axiastudio.pypapi.ui.widgets.PyPaPiTableView;
 import com.axiastudio.suite.base.entities.IUtente;
-import com.axiastudio.suite.base.entities.Ufficio;
-import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.protocollo.entities.Attribuzione;
+import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.forms.FormProtocollo;
-import java.util.ArrayList;
-import java.util.List;
+import com.trolltech.qt.gui.QToolButton;
+import com.trolltech.qt.gui.QWidget;
 
 
 /**
@@ -49,133 +49,41 @@ public class FormProtocolloRiva extends FormProtocollo {
     @Override
     protected void indexChanged(int row) {
         
-        /* Comportamento form da permessi tabellati */
         Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
         Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
-        Ufficio sportello = protocollo.getSportello();
-        List<Ufficio> attribuzioni = new ArrayList();
-        Ufficio attribuzionePrincipale = null;
-        for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ){
-            attribuzioni.add(attribuzione.getUfficio());
-            if( attribuzione.getPrincipale() ){
-                attribuzionePrincipale = attribuzione.getUfficio();
-            }
-        }
-        List<Ufficio> ufficiUtente = new ArrayList();
-        List<Ufficio> ufficiRicercaUtente = new ArrayList();
-        List<Ufficio> ufficiRiservatoUtente = new ArrayList();
-        for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
-            ufficiUtente.add(uu.getUfficio());
-            if( uu.getRicerca() ){
-                ufficiRicercaUtente.add(uu.getUfficio());
-            }
-            if( uu.getPrivato() ){
-                ufficiRiservatoUtente.add(uu.getUfficio());
-            }
-        }
-        
-        // Profilo dell'utente
-        List intersezione = new ArrayList(attribuzioni);
-        intersezione.retainAll(ufficiUtente);
-        Boolean inSportelloOAttribuzione = ufficiUtente.contains(sportello) || intersezione.size()>0;
-        Boolean inSportelloOAttribuzionePrincipale = ufficiUtente.contains(sportello) || ufficiUtente.contains(attribuzionePrincipale);
-        intersezione = new ArrayList(attribuzioni);
-        intersezione.retainAll(ufficiUtente);
-        Boolean inSportelloOAttribuzioneR = ufficiRiservatoUtente.contains(sportello) || intersezione.size()>0;
-        Boolean inSportelloOAttribuzionePrincipaleR = ufficiRiservatoUtente.contains(sportello) || ufficiRiservatoUtente.contains(attribuzionePrincipale);
-        Boolean neSportelloNeAttribuzione = !(inSportelloOAttribuzione || inSportelloOAttribuzioneR);
-        
-        
-        /*
-        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
-        Protocollo protocollo = (Protocollo) this.getContext().getCurrentEntity();
-        Ufficio sportello = protocollo.getSportello();
-        Ufficio attribuzionePrincipale = null;
-        for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ){
-            if( attribuzione.getPrincipale() ){
-                attribuzionePrincipale = attribuzione.getUfficio();
-                break;
-            }
-        }
-        Boolean convAttribuzioni = protocollo.getConvalidaAttribuzioni() == true;
-        Boolean convProtocollo = protocollo.getConvalidaProtocollo() == true;
+        ProfiloUtenteProtocollo profilo = new ProfiloUtenteProtocollo(protocollo, autenticato);
         Boolean nuovoInserimento = protocollo.getId() == null;
         
-        /* uffici dell'utente autenticato *
-        List<Ufficio> uffici = new ArrayList();
-        List<Ufficio> ufficiRicerca = new ArrayList();
-        for(UfficioUtente uu: autenticato.getUfficioUtenteCollection()){
-            uffici.add(uu.getUfficio());
-            if( uu.getRicerca() ){
-                ufficiRicerca.add(uu.getUfficio());
-            }
-        }
-        Boolean modificaProtocollo=false;
+        super.indexChanged(row);
         if( nuovoInserimento ){
-            modificaProtocollo=true;
-        } else if( uffici.contains(sportello) ){
-            modificaProtocollo=true;
-        } else if( ufficiRicerca.contains(attribuzionePrincipale) ){
-            modificaProtocollo=true;
+            return;
         }
+        // modifica protocollo convalidato
+        String[] roWidgets = {"textEdit_oggetto", "tableView_soggettiprotocollo",
+            "tableView_soggettiriservatiprotocollo", "tableView_ufficiprotocollo",
+            "comboBoxTitolario", "comboBox_tiporiferimentomittente", "lineEdit_nrriferimentomittente",
+            "dateEdit_datariferimentomittente", "richiederisposta", "spedito", "riservato",
+            "corrispostoostornato"};
+        for( String widgetName: roWidgets ){
+            Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, widgetName), protocollo.getConvalidaProtocollo());
+        }
+        ((QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario")).setEnabled(!protocollo.getConvalidaProtocollo());
         
-        /* Abilitazione dei pulsanti di convalida *
-        this.protocolloMenuBar.actionByName("convalidaAttribuzioni").setEnabled(!convAttribuzioni);
-        this.protocolloMenuBar.actionByName("convalidaProtocollo").setEnabled(!convProtocollo);
+        // Se non è un nuovo inserimento, metto tutti i campi in readonly
 
-        /* Prima verifico i campi privati *
-        super.indexChanged(row);
-        
-        /* 
-         * Le condizione per il read only (in or):
-         * 
-         * - non è un nuovo inserimento
-         * - il protocollo è convalidato
-         * - non hai il permesso di modifica
-         * 
-         *
-        Boolean readOnly = false;
-        if( convProtocollo || !modificaProtocollo){
-            readOnly = true;
-        }
-        
-        /* Metto eventualmente in read only i campi *
-        for( QObject object: this.getWidgets().values() ){
-            Util.setWidgetReadOnly((QWidget) object, readOnly);
-        }
-        
-        /* Il campo note è modificabile anche a protocollo convalidato *
-        Util.setWidgetReadOnly((QWidget) this.findChild(QTextEdit.class, "textEdit_note"), !modificaProtocollo);
-        
-        /* Se  sei attributore puoi sempre, altrimenti solo se non è read only e non sono convalidate le attribuzioni *
-        if( autenticato.getAttributoreprotocollo() ){
-            Util.setWidgetReadOnly((QWidget) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni"), false );
+        // Visibilità dei soggetti riservati
+        PyPaPiTableView tvSoggettiRiservati =  (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_soggettiriservatiprotocollo");
+        //tvSoggettiRiservati.setReadOnly(!(nuovoInserimento || profilo.inSportelloOAttribuzioneR()));
+        if( !(nuovoInserimento || profilo.inSportelloOAttribuzioneR()) ){
+            tvSoggettiRiservati.hide();
         } else {
-            Util.setWidgetReadOnly((QWidget) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni"), readOnly || convAttribuzioni );
+            tvSoggettiRiservati.show();
         }
         
-        /* id documento, data, e gestione annullamento sempre read only *
-        //Util.setWidgetReadOnly((QWidget) this.findChild(QLineEdit.class, "lineEdit_iddocumento"), true);
-        //Util.setWidgetReadOnly((QWidget) this.findChild(QDateEdit.class, "dateEdit_data"), true);
-        //Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "annullato"), true);
-        //Util.setWidgetReadOnly((QWidget) this.findChild(QCheckBox.class, "annullamentorichiesto"), true);
-        
-        /* Inserimento pratiche permesso solo agli utenti appartenenti allo sportello o a una attribuzione *
-        Boolean inserimentoPratica=false;
-        if( uffici.contains(sportello) ){
-            inserimentoPratica=true;
-        } else {
-            for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ){
-                if( uffici.contains(attribuzione.getUfficio()) ){
-                    inserimentoPratica=true;
-                    break;
-                }
-            }
-        }
-        Util.setWidgetReadOnly((QWidget) this.findChild(PyPaPiTableView.class, "tableView_pratiche"), (!inserimentoPratica || !modificaProtocollo));
-        
-        super.indexChanged(row);
-        */
+        // Se attributore protocollo
+        PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
+        Util.setWidgetReadOnly(tableViewAttribuzioni, !autenticato.getAttributoreprotocollo() && protocollo.getConvalidaAttribuzioni());
+
     }
 
 }
