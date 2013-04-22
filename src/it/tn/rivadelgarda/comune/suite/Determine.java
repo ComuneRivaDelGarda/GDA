@@ -72,7 +72,7 @@ public class Determine {
         String jdbcPassword = System.getProperty("jdbc.password");
         String jdbcDriver = System.getProperty("jdbc.driver");
         String suiteUser = System.getProperty("suite.user");
-        String suiteIdPratica = System.getProperty("suite.idpratica");
+        String suiteIdpratica = System.getProperty("suite.idpratica");
         Map properties = new HashMap();
         if( jdbcUrl != null ){
             properties.put("javax.persistence.jdbc.url", jdbcUrl);
@@ -135,9 +135,9 @@ public class Determine {
         // Plugin CmisPlugin per accedere ad Alfresco
         CmisPlugin cmisPlugin = new CmisPlugin();
         //cmisPlugin.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
-        //        "/Pratiche/${idPratica}/");
+        //        "/Pratiche/${idpratica}/");
         cmisPlugin.setup("http://192.168.64.41:8080/alfresco/service/cmis", "pypapi", ALFRESCO_PASS, 
-                "/Siti/pratiche/documentLibrary/${dataPratica,date,yyyy}/${dataPratica,date,MM}/${idPratica}/");
+                "/Siti/pratiche/documentLibrary/${datapratica,date,yyyy}/${datapratica,date,MM}/${idpratica}/");
         //Register.registerPlugin(cmisPlugin, FormDeterminaJEnte.class);
         
         // Plugin OoopsPlugin per interazione con OpenOffice
@@ -161,7 +161,7 @@ public class Determine {
 
         // configurazione template impegni
         HashMap<String,String> rulesMapImpegni = new HashMap();
-        rulesMapImpegni.put("idpratica", "return obj.getIdPratica()");
+        rulesMapImpegni.put("idpratica", "return obj.getIdpratica()");
         RuleSet rulesSetImpegni = new RuleSet(rulesMapImpegni);
         //IStreamProvider streamProviderImpegni = new CmisStreamProvider("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
         //                                                         "workspace://SpacesStore/62906e73-e3c2-4c28-9688-8be590a0c489");
@@ -199,14 +199,14 @@ public class Determine {
         CriteriaQuery<Determina> cq2 = cb2.createQuery(Determina.class);
         Root from2 = cq2.from(Determina.class);
         cq2.select(from2);
-        Predicate predicate2 = cb2.equal(from2.get(Determina_.idpratica), suiteIdPratica);
+        Predicate predicate2 = cb2.equal(from2.get(Determina_.idpratica), suiteIdpratica);
         cq2 = cq2.where(predicate2);
         Query q2 = em.createQuery(cq2);
         List<Determina> determine = q2.getResultList();
         Determina determina=null;
         if( determine.isEmpty() ){
             determina = new Determina();
-            determina.setIdpratica(suiteIdPratica);
+            determina.setIdpratica(suiteIdpratica);
             
             // la data dovrà essere pescata dalla pratica!
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
@@ -224,12 +224,12 @@ public class Determine {
             em.getTransaction().begin();
             em.persist(determina);
             em.getTransaction().commit();
-            System.out.println("Creata determina "+suiteIdPratica);
+            System.out.println("Creata determina "+suiteIdpratica);
         } else if( determine.size() == 1 ){
             determina = determine.get(0);
-            System.out.println("Selezionata determina "+suiteIdPratica);
+            System.out.println("Selezionata determina "+suiteIdpratica);
         } else {
-            System.out.println("Più determine con lo stesso IdPratica.");
+            System.out.println("Più determine con lo stesso Idpratica.");
             System.exit(1);
         }
         //Window form = Util.formFromName(Determina.class.getName());
