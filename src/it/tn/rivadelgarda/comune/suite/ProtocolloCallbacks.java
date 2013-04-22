@@ -65,7 +65,7 @@ public class ProtocolloCallbacks {
             if( uu.getRicerca() ){
                 ufficiRicerca.add(uu.getUfficio());
             }
-            if( uu.getPrivato() ){
+            if( uu.getRiservato() ){
                 ufficiPrivato.add(uu.getUfficio());
             }
         }
