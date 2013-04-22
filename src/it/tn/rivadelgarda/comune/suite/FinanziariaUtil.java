@@ -48,8 +48,8 @@ public class FinanziariaUtil implements IFinanziaria {
     @Override
     public List<MovimentoDetermina> getMovimentiDetermina(Determina determina) {
         String organoSettore = "DT";
-        String anno = determina.getIdPratica().substring(0, 4);
-        String numero = ((Integer) Integer.parseInt(determina.getIdPratica().substring(4))).toString();
+        String anno = determina.getIdpratica().substring(0, 4);
+        String numero = ((Integer) Integer.parseInt(determina.getIdpratica().substring(4))).toString();
         String attoOBozza = "A"; // XXX
         JEnteHelper jEnteHelper = new JEnteHelper(this.utente);
         List<Movimento> movimenti = jEnteHelper.chiamataRichiestaElencoMovimenti(attoOBozza, organoSettore, anno, numero);
@@ -82,8 +82,8 @@ public class FinanziariaUtil implements IFinanziaria {
         Boolean vistoResponsabile = determina.getVistoResponsabile();
         String rProc=null;
         String organoSettore = "DT";
-        String anno = determina.getIdPratica().substring(0, 4);
-        String numero = ((Integer) Integer.parseInt(determina.getIdPratica().substring(4))).toString();
+        String anno = determina.getIdpratica().substring(0, 4);
+        String numero = ((Integer) Integer.parseInt(determina.getIdpratica().substring(4))).toString();
         for( ServizioDetermina servizioDetermina: determina.getServizioDeterminaCollection() ){
             rProc = String.format("%04d", servizioDetermina.getServizio().getId());
             //rProc = "0181";

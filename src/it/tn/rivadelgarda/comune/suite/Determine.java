@@ -199,14 +199,14 @@ public class Determine {
         CriteriaQuery<Determina> cq2 = cb2.createQuery(Determina.class);
         Root from2 = cq2.from(Determina.class);
         cq2.select(from2);
-        Predicate predicate2 = cb2.equal(from2.get(Determina_.idPratica), suiteIdPratica);
+        Predicate predicate2 = cb2.equal(from2.get(Determina_.idpratica), suiteIdPratica);
         cq2 = cq2.where(predicate2);
         Query q2 = em.createQuery(cq2);
         List<Determina> determine = q2.getResultList();
         Determina determina=null;
         if( determine.isEmpty() ){
             determina = new Determina();
-            determina.setIdPratica(suiteIdPratica);
+            determina.setIdpratica(suiteIdPratica);
             
             // la data dovrà essere pescata dalla pratica!
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");

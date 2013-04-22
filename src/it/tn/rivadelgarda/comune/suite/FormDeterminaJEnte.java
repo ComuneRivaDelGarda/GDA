@@ -97,7 +97,7 @@ public class FormDeterminaJEnte extends FormDetermina implements IDocumentFolder
     @Override
     protected Boolean checkResponsabile() {
         Determina determina = (Determina) this.getContext().getCurrentEntity();
-        //Pratica pratica = SuiteUtil.findPratica(determina.getIdPratica());
+        //Pratica pratica = SuiteUtil.findPratica(determina.getIdpratica());
         IGestoreDeleghe gestore = (IGestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
         IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
         
@@ -207,7 +207,7 @@ public class FormDeterminaJEnte extends FormDetermina implements IDocumentFolder
     public List<Template> getTemplates() {
         List<Template> templates = new ArrayList();
         Determina determina = (Determina) this.getContext().getCurrentEntity();
-        //Pratica pratica = SuiteUtil.findPratica(determina.getIdPratica());
+        //Pratica pratica = SuiteUtil.findPratica(determina.getIdpratica());
         CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormDeterminaJEnte.class, "CMIS");
         AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(determina);
         List<HashMap> children = helper.children();
@@ -228,10 +228,10 @@ public class FormDeterminaJEnte extends FormDetermina implements IDocumentFolder
     @Override
     public void createDocument(String subpath, String name, byte[] content, String mimeType) {
         Determina determina = (Determina) this.getContext().getCurrentEntity();
-        //Pratica pratica = SuiteUtil.findPratica(determina.getIdPratica());
+        //Pratica pratica = SuiteUtil.findPratica(determina.getIdpratica());
         CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormDeterminaJEnte.class, "CMIS");
         AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(determina);
-        String documentName = name + "_" + determina.getIdPratica() + ".odt";
+        String documentName = name + "_" + determina.getIdpratica() + ".odt";
         //String documentName = "out.pdf";
         helper.createDocument(subpath, documentName, content, mimeType);
         cmisPlugin.showForm(determina);
