@@ -26,7 +26,7 @@ import com.axiastudio.suite.deliberedetermine.entities.Determina;
  *
  * @author AXIA Studio (http://www.axiastudio.com)
  */
-public class DeterminaCallbacks {
+public class DeterminaCallbacksRiva {
     
     /*
      * Prima di salvare svuoto la lista dei movimenti

@@ -109,8 +109,8 @@ public class Start {
         
         // registro adapter, validatori, e privacy
         Register.registerAdapters(Resolver.adaptersFromClass(ProtocolloAdapters.class));
-        Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacks.class));
-        Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacks.class));
+        Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacksRiva.class));
+        Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacksRiva.class));
         Register.registerPrivates(Resolver.privatesFromClass(ProtocolloPrivate.class));
         Register.registerPrivates(Resolver.privatesFromClass(PraticaPrivate.class));
         

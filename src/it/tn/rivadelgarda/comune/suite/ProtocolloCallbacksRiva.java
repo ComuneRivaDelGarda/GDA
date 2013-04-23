@@ -47,7 +47,7 @@ import javax.persistence.criteria.Root;
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class ProtocolloCallbacks {
+public class ProtocolloCallbacksRiva {
     
     /*
      * Valida il protocollo e richiede il nuovo iddocumento

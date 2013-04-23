@@ -43,7 +43,7 @@ import javax.persistence.criteria.Root;
  *
  * @author Tiziano Lattisi <tiziano at axiastudio.it>
  */
-public class PraticaCallbacks {
+public class PraticaCallbacksRiva {
     
     @Callback(type=CallbackType.BEFORECOMMIT)
     public static Validation validaPratica(Pratica pratica){

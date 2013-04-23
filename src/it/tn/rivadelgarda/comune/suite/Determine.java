@@ -130,7 +130,7 @@ public class Determine {
         
         // callback per svuotare la determina dagli impegni presi da jEnte prima
         // di committare
-        Register.registerCallbacks(Resolver.callbacksFromClass(DeterminaCallbacks.class));
+        Register.registerCallbacks(Resolver.callbacksFromClass(DeterminaCallbacksRiva.class));
 
         // Plugin CmisPlugin per accedere ad Alfresco
         CmisPlugin cmisPlugin = new CmisPlugin();
