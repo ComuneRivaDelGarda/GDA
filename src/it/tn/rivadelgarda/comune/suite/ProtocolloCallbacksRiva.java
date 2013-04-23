@@ -70,10 +70,11 @@ public class ProtocolloCallbacksRiva {
             }
         }
         Ufficio attribuzionePrincipale = null;
+        int nrAttribuzioniPrincipali = 0;
         for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ){
             if( attribuzione.getPrincipale() ){
+                nrAttribuzioniPrincipali += 1;
                 attribuzionePrincipale = attribuzione.getUfficio();
-                break;
             }
         }
         Ufficio sportello = protocollo.getSportello();
@@ -174,6 +175,14 @@ public class ProtocolloCallbacksRiva {
             }
         }
         
+        /*
+         * 
+         */
+        if( nrAttribuzioniPrincipali != 1 ){
+            msg += "E' possibile e necessario impostare una sola attribuzione principale.\n";
+            res = false;
+        }
+
         /*
          * Restituzione della validazione
          */

@@ -80,10 +80,12 @@ public class FormProtocolloRiva extends FormProtocollo {
             tvSoggettiRiservati.show();
         }
         
-        // Se attributore protocollo
+        // Se attributore protocollo modifica anche a protocollo con attribuzioni convalidate,
+        // altrimenti solo se in attribuzione principale o sportello.
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
-        Util.setWidgetReadOnly(tableViewAttribuzioni, !autenticato.getAttributoreprotocollo() && protocollo.getConvalidaAttribuzioni());
-
+        Boolean modificaAttribuzioni = autenticato.getAttributoreprotocollo() || (!protocollo.getConvalidaAttribuzioni() && profilo.inSportelloOAttribuzionePrincipale());
+        //Util.setWidgetReadOnly(tableViewAttribuzioni, !modificaAttribuzioni);
+        tableViewAttribuzioni.setEnabled(modificaAttribuzioni); // XXX: altrimenti si sposta l'attribuzione principale...
     }
 
 }
