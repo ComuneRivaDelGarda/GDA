@@ -16,6 +16,7 @@
  */
 package it.tn.rivadelgarda.comune.suite;
 
+import com.axiastudio.mapformat.MessageMapFormat;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.annotations.Callback;
 import com.axiastudio.pypapi.annotations.CallbackType;
@@ -32,11 +33,16 @@ import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
@@ -108,6 +114,62 @@ public class PraticaCallbacksRiva {
                 newIdpratica = year+"00000001";
             }
             pratica.setIdpratica(newIdpratica);
+            
+            // codifica
+            String formulacodifica = pratica.getTipo().getFormulacodifica();
+            Map<String, Object> map = new HashMap();
+            map.put("anno", year.toString());
+            map.put("giunta", "2010");
+            String s1="";
+            String s2="";
+            String s3="";
+            Integer n1=0;
+            Integer n2=0;
+            Integer n3=0;
+            if( pratica.getTipo().getCodice().length()>=3 ){
+                s1 = pratica.getTipo().getCodice().substring(0, 3);
+                
+            }
+            if( pratica.getTipo().getCodice().length()>=5 ){
+                s2 = pratica.getTipo().getCodice().substring(3, 5);
+            }
+            if( pratica.getTipo().getCodice().length()==7 ){
+                s3 = pratica.getTipo().getCodice().substring(5, 7);
+            }
+            map.put("s1", s1);
+            map.put("s2", s2);
+            map.put("s3", s3);
+            
+            // max n1
+            Query q1 = em.createQuery("select max(p.codiceinterno) from Pratica p where p.anno = " + year.toString() + " and p.codiceinterno like '"+s1+"%'");
+            String maxN1 = (String) q1.getSingleResult();
+            Integer da = pratica.getTipo().getPorzionenumeroda();
+            Integer a = pratica.getTipo().getPorzionenumeroa();
+            if( maxN1.length()>=a && da!=null && a!=null ){
+                String porzionenumero = maxN1.substring(da, a);
+                n1 = Integer.parseInt(porzionenumero)+1;
+            }
+            // max n2
+            Query q2 = em.createQuery("select max(p.codiceinterno) from Pratica p where p.anno = " + year.toString() + " and p.codiceinterno like '"+s1+"%'");
+            String maxN2 = (String) q2.getSingleResult();
+            if( maxN2.length()>=a && da!=null && a!=null ){
+                String porzionenumero = maxN2.substring(da, a);
+                n2 = Integer.parseInt(porzionenumero)+1;
+            }
+            // max n3
+            Query q3 = em.createQuery("select max(p.codiceinterno) from Pratica p where p.anno = " + year.toString() + " and p.codiceinterno like '"+s1+"%'");
+            String maxN3 = (String) q3.getSingleResult();
+            if( maxN3.length()>=a && da!=null && a!=null ){
+                String porzionenumero = maxN3.substring(da, a);
+                n3 = Integer.parseInt(porzionenumero)+1;
+            }
+            
+            map.put("n1", n1);
+            map.put("n2", n2);
+            map.put("n3", n3);
+            MessageMapFormat mmp = new MessageMapFormat(formulacodifica);
+            String codifica = mmp.format(map);
+            pratica.setCodiceinterno(codifica);
             
             // se mancano gestione e ubicazione, li fisso come l'attribuzione
             if( pratica.getGestione() == null ){
