@@ -90,6 +90,10 @@ public class Start {
         String jdbcUser = System.getProperty("jdbc.user");
         String jdbcPassword = System.getProperty("jdbc.password");
         String jdbcDriver = System.getProperty("jdbc.driver");
+        String cmisUrl = System.getProperty("cmis.url");
+        String cmisUser = System.getProperty("cmis.user");
+        String cmisPassword = System.getProperty("cmis.password");
+
         Map properties = new HashMap();
         properties.put("javax.persistence.jdbc.url", jdbcUrl);
         if( jdbcUser != null ){
@@ -101,6 +105,7 @@ public class Start {
         if( jdbcDriver != null ){
             properties.put("javax.persistence.jdbc.driver", jdbcDriver);
         }
+        
 
         Database db = new Database();
         properties.put("eclipselink.ddl-generation", "");
@@ -261,14 +266,16 @@ public class Start {
         
         // Plugin CmisPlugin per accedere ad Alfresco
         CmisPlugin cmisPlugin = new CmisPlugin();
-        cmisPlugin.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
-                "/Protocollo/${dataprotocollo,date,YYYY}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
+        cmisPlugin.setup(cmisUrl, cmisUser, cmisPassword, 
+                "/Siti/protocollo/documentLibrary/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
         Register.registerPlugin(cmisPlugin, FormProtocolloRiva.class);
-
+        
+        /*
         CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
         cmisPluginPubblicazioni.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
                 "/Pubblicazioni/${inizioconsultazione,date,YYYY}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
         Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
+        */
         
         // Plugin Barcode per la stampa del DataMatrix
         Barcode barcodePlugin = new Barcode();
