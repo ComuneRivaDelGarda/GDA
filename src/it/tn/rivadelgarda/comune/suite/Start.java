@@ -34,8 +34,14 @@ import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.Mdi;
+import com.axiastudio.suite.anagrafiche.entities.AlboProfessionale;
+import com.axiastudio.suite.anagrafiche.entities.Gruppo;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
+import com.axiastudio.suite.anagrafiche.entities.Relazione;
+import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
+import com.axiastudio.suite.anagrafiche.entities.Riferimento;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
+import com.axiastudio.suite.anagrafiche.entities.Stato;
 import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
 import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormSoggetto;
@@ -136,10 +142,40 @@ public class Start {
                               "Utenti");
         
         Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              AlboProfessionale.class,
+                              Window.class,
+                              "Albo professionale");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Stato.class,
+                              Window.class,
+                              "Stati");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/anagrafiche/forms/gruppo.ui",
+                              Gruppo.class,
+                              Window.class,
+                              "Gruppo");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/anagrafiche/forms/relazione.ui",
+                              Relazione.class,
+                              Window.class,
+                              "Relazione");
+        
+        Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/anagrafiche/forms/soggetto.ui",
                               Soggetto.class,
                               FormSoggetto.class,
                               "Soggetti anagrafici");
+
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/anagrafiche/forms/relazionesoggetto.ui",
+                              RelazioneSoggetto.class,
+                              Dialog.class,
+                              "Relazione soggetto");
 
         Register.registerUtility(FormQuickInsertSoggetto.class, IQuickInsertDialog.class, Soggetto.class.getName());
         
@@ -149,6 +185,12 @@ public class Start {
                               FormIndirizzo.class,
                               "Indirizzo");
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/anagrafiche/forms/riferimento.ui",
+                              Riferimento.class,
+                              Dialog.class,
+                              "Riferimento");
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/pratiche/forms/pratica.ui",
                               Pratica.class,
@@ -170,7 +212,7 @@ public class Start {
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/praticaprotocollo.ui",
                               PraticaProtocollo.class,
-                              Window.class,
+                              Dialog.class,
                               "Pratica contenente il protocollo");
 
         Register.registerForm(db.getEntityManagerFactory(),
