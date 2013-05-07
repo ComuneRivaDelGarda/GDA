@@ -65,9 +65,9 @@ public class FormProtocolloRiva extends FormProtocollo {
             "dateEdit_datariferimentomittente", "richiederisposta", "spedito", "riservato",
             "corrispostoostornato"};
         for( String widgetName: roWidgets ){
-            Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, widgetName), protocollo.getConvalidaProtocollo());
+            Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, widgetName), protocollo.getConvalidaprotocollo());
         }
-        ((QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario")).setEnabled(!protocollo.getConvalidaProtocollo());
+        ((QToolButton) this.findChild(QToolButton.class, "toolButtonTitolario")).setEnabled(!protocollo.getConvalidaprotocollo());
         
         // Se non è un nuovo inserimento, metto tutti i campi in readonly
 
@@ -83,7 +83,7 @@ public class FormProtocolloRiva extends FormProtocollo {
         // Se attributore protocollo modifica anche a protocollo con attribuzioni convalidate,
         // altrimenti solo se in attribuzione principale o sportello.
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
-        Boolean modificaAttribuzioni = autenticato.getAttributoreprotocollo() || (!protocollo.getConvalidaAttribuzioni() && profilo.inSportelloOAttribuzionePrincipale());
+        Boolean modificaAttribuzioni = autenticato.getAttributoreprotocollo() || (!protocollo.getConvalidaattribuzioni() && profilo.inSportelloOAttribuzionePrincipale());
         //Util.setWidgetReadOnly(tableViewAttribuzioni, !modificaAttribuzioni);
         tableViewAttribuzioni.setEnabled(modificaAttribuzioni); // XXX: altrimenti si sposta l'attribuzione principale...
     }
