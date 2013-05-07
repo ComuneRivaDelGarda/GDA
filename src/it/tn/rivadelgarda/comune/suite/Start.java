@@ -96,6 +96,7 @@ public class Start {
         String jdbcUser = System.getProperty("jdbc.user");
         String jdbcPassword = System.getProperty("jdbc.password");
         String jdbcDriver = System.getProperty("jdbc.driver");
+        String logLevel = System.getProperty("suite.loglevel");
         String cmisUrl = System.getProperty("cmis.url");
         String cmisUser = System.getProperty("cmis.user");
         String cmisPassword = System.getProperty("cmis.password");
@@ -111,6 +112,11 @@ public class Start {
         if( jdbcDriver != null ){
             properties.put("javax.persistence.jdbc.driver", jdbcDriver);
         }
+        if( logLevel != null ){
+            properties.put("eclipselink.logging.level", logLevel);
+            properties.put("eclipselink.logging.parameters", "true");    
+        }
+
         
 
         Database db = new Database();
