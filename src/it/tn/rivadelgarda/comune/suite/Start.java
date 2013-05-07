@@ -315,7 +315,8 @@ public class Start {
         // Plugin CmisPlugin per accedere ad Alfresco
         CmisPlugin cmisPlugin = new CmisPlugin();
         cmisPlugin.setup(cmisUrl, cmisUser, cmisPassword, 
-                "/Siti/protocollo/documentLibrary/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/");
+                "/Siti/protocollo/documentLibrary/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/",
+                Boolean.FALSE);
         Register.registerPlugin(cmisPlugin, FormProtocolloRiva.class);
         
         /*
