@@ -54,8 +54,11 @@ import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
 import com.axiastudio.suite.pratiche.PraticaPrivate;
+import com.axiastudio.suite.pratiche.entities.Dipendenza;
+import com.axiastudio.suite.pratiche.entities.DipendenzaPratica;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.pratiche.entities.TipoPratica;
+import com.axiastudio.suite.pratiche.forms.FormDipendenzaPratica;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
@@ -221,6 +224,18 @@ public class Start {
                               TipoPratica.class,
                               Window.class,
                               "Tipo Pratica");
+        
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              Dipendenza.class,
+                              Window.class,
+                              "Dipendenza");
+        
+        Register.registerForm(db.getEntityManagerFactory(),
+                              "classpath:com/axiastudio/suite/pratiche/forms/dipendenzapratica.ui",
+                              DipendenzaPratica.class,
+                              FormDipendenzaPratica.class,
+                              "Dipendenza pratica");
         
         Register.registerForm(db.getEntityManagerFactory(),
                               "classpath:com/axiastudio/suite/protocollo/forms/soggettoprotocollo.ui",
