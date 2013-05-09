@@ -34,6 +34,7 @@ import com.axiastudio.pypapi.ui.Dialog;
 import com.axiastudio.pypapi.ui.IQuickInsertDialog;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.suite.Mdi;
+import com.axiastudio.suite.anagrafiche.AnagraficheAdapters;
 import com.axiastudio.suite.anagrafiche.entities.AlboProfessionale;
 import com.axiastudio.suite.anagrafiche.entities.Gruppo;
 import com.axiastudio.suite.anagrafiche.entities.Indirizzo;
@@ -54,6 +55,7 @@ import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
 import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.Servizio;
+import com.axiastudio.suite.pratiche.PraticaAdapters;
 import com.axiastudio.suite.pratiche.PraticaPrivate;
 import com.axiastudio.suite.pratiche.entities.Dipendenza;
 import com.axiastudio.suite.pratiche.entities.DipendenzaPratica;
@@ -132,6 +134,8 @@ public class Start {
         Register.registerUtility(db, IDatabase.class);
         
         // registro adapter, validatori, e privacy
+        Register.registerAdapters(Resolver.adaptersFromClass(PraticaAdapters.class));
+        Register.registerAdapters(Resolver.adaptersFromClass(AnagraficheAdapters.class));
         Register.registerAdapters(Resolver.adaptersFromClass(ProtocolloAdapters.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacksRiva.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacksRiva.class));
