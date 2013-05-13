@@ -86,6 +86,14 @@ public class FormProtocolloRiva extends FormProtocollo {
         Boolean modificaAttribuzioni = autenticato.getAttributoreprotocollo() || (!protocollo.getConvalidaattribuzioni() && profilo.inSportelloOAttribuzionePrincipale());
         //Util.setWidgetReadOnly(tableViewAttribuzioni, !modificaAttribuzioni);
         tableViewAttribuzioni.setEnabled(modificaAttribuzioni); // XXX: altrimenti si sposta l'attribuzione principale...
+
+        /* protocollo annullato? */
+        if( protocollo.getAnnullato() ){
+            // TODO: provare qualche alternativa...
+            this.setStyleSheet("color: red;");
+        } else {
+            this.setStyleSheet("");
+        }
     }
 
 }
