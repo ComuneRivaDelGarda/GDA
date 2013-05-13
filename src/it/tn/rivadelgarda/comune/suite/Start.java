@@ -81,6 +81,8 @@ import com.axiastudio.suite.procedimenti.entities.Norma;
 import com.axiastudio.suite.protocollo.entities.Oggetto;
 import com.axiastudio.suite.protocollo.entities.SoggettoRiservatoProtocollo;
 import com.axiastudio.suite.protocollo.entities.Titolo;
+import com.axiastudio.suite.protocollo.forms.FormProtocollo;
+import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.sedute.entities.CaricaCommissione;
 import com.axiastudio.suite.sedute.entities.Commissione;
 import com.axiastudio.suite.sedute.entities.Seduta;
@@ -320,11 +322,17 @@ public class Start {
 
         
         // Plugin CmisPlugin per accedere ad Alfresco
+        String templateCmisProtocollo = "/Siti/protocollo/documentLibrary/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
         CmisPlugin cmisPlugin = new CmisPlugin();
         cmisPlugin.setup(cmisUrl, cmisUser, cmisPassword, 
-                "/Siti/protocollo/documentLibrary/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/",
+                templateCmisProtocollo,
                 Boolean.FALSE);
         Register.registerPlugin(cmisPlugin, FormProtocolloRiva.class);
+        CmisPlugin cmisPlugin2 = new CmisPlugin();
+        cmisPlugin2.setup(cmisUrl, cmisUser, cmisPassword, 
+                templateCmisProtocollo,
+                Boolean.FALSE);
+        Register.registerPlugin(cmisPlugin, FormScrivania.class);
         
         /*
         CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
