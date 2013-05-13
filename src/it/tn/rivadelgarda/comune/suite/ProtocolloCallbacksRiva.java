@@ -32,6 +32,7 @@ import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo_;
+import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -127,39 +128,43 @@ public class ProtocolloCallbacksRiva {
                 msg += "Devi compilare l'oggetto.";
                 res = false;
             }
-
-
-            if( eNuovo ){
-                Calendar calendar = Calendar.getInstance();
-                Integer year = calendar.get(Calendar.YEAR);
-                Date date = calendar.getTime();
-                Database db = (Database) Register.queryUtility(IDatabase.class);
-                EntityManager em = db.getEntityManagerFactory().createEntityManager();
-                CriteriaBuilder cb = em.getCriteriaBuilder();
-                CriteriaQuery<Protocollo> cq = cb.createQuery(Protocollo.class);
-                Root<Protocollo> root = cq.from(Protocollo.class);
-                cq.select(root);
-                cq.where(cb.equal(root.get(Protocollo_.anno), year));
-                cq.orderBy(cb.desc(root.get("iddocumento")));
-                TypedQuery<Protocollo> tq = em.createQuery(cq).setMaxResults(1);
-                Protocollo max;
-                protocollo.setDataprotocollo(date);
-                protocollo.setAnno(year);
-                try {
-                    max = tq.getSingleResult();
-                } catch (NoResultException ex) {
-                    max=null;
-                }
-                String newIddocumento;
-                if( max != null ){
-                    Integer i = Integer.parseInt(max.getIddocumento().substring(4));
-                    i++;
-                    newIddocumento = year+String.format("%08d", i);
-                } else {
-                    newIddocumento = year+"00000001";
-                }
-                protocollo.setIddocumento(newIddocumento);
+            
+            /* primo inserimento */
+            for( SoggettoProtocollo sp: protocollo.getSoggettoProtocolloCollection() ){
+                sp.setPrimoinserimento(Boolean.TRUE);
             }
+
+            /* dataprotocollo e iddocumento */
+            Calendar calendar = Calendar.getInstance();
+            Integer year = calendar.get(Calendar.YEAR);
+            Date date = calendar.getTime();
+            Database db = (Database) Register.queryUtility(IDatabase.class);
+            EntityManager em = db.getEntityManagerFactory().createEntityManager();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Protocollo> cq = cb.createQuery(Protocollo.class);
+            Root<Protocollo> root = cq.from(Protocollo.class);
+            cq.select(root);
+            cq.where(cb.equal(root.get(Protocollo_.anno), year));
+            cq.orderBy(cb.desc(root.get("iddocumento")));
+            TypedQuery<Protocollo> tq = em.createQuery(cq).setMaxResults(1);
+            Protocollo max;
+            protocollo.setDataprotocollo(date);
+            protocollo.setAnno(year);
+            try {
+                max = tq.getSingleResult();
+            } catch (NoResultException ex) {
+                max=null;
+            }
+            String newIddocumento;
+            if( max != null ){
+                Integer i = Integer.parseInt(max.getIddocumento().substring(4));
+                i++;
+                newIddocumento = year+String.format("%08d", i);
+            } else {
+                newIddocumento = year+"00000001";
+            }
+            protocollo.setIddocumento(newIddocumento);
+
         }
         
         /*
