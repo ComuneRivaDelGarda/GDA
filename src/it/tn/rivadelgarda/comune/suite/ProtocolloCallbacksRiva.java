@@ -115,6 +115,19 @@ public class ProtocolloCallbacksRiva {
                 msg += "Deve essere dichiarato almeno un soggetto esterno (mittente o destinatario).\n";
                 res = false;
             }
+            
+            /* almeno un ufficio */
+            if( protocollo.getUfficioProtocolloCollection().isEmpty() ){
+                msg += "Deve essere dichiarato almeno un ufficio (mittente o destinatario).";
+                res = false;
+            }
+
+            /* Oggetto non nullo */
+            if( protocollo.getOggetto() == null || protocollo.getOggetto().isEmpty() ){
+                msg += "Devi compilare l'oggetto.";
+                res = false;
+            }
+
 
             if( eNuovo ){
                 Calendar calendar = Calendar.getInstance();
