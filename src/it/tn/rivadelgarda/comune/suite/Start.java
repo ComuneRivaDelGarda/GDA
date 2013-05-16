@@ -43,6 +43,7 @@ import com.axiastudio.suite.anagrafiche.entities.RelazioneSoggetto;
 import com.axiastudio.suite.anagrafiche.entities.Riferimento;
 import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.anagrafiche.entities.Stato;
+import com.axiastudio.suite.anagrafiche.entities.TitoloSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormIndirizzo;
 import com.axiastudio.suite.anagrafiche.forms.FormQuickInsertSoggetto;
 import com.axiastudio.suite.anagrafiche.forms.FormRelazioneSoggetto;
@@ -168,6 +169,11 @@ public class Start {
                               Titolo.class,
                               Window.class);
 
+        Register.registerForm(db.getEntityManagerFactory(),
+                              null,
+                              TitoloSoggetto.class,
+                              Window.class);
+        
         Register.registerForm(db.getEntityManagerFactory(),
                               null,
                               Oggetto.class,
@@ -322,7 +328,7 @@ public class Start {
 
         
         // Plugin CmisPlugin per accedere ad Alfresco
-        String templateCmisProtocollo = "/Siti/protocollo/documentLibrary/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
+        String templateCmisProtocollo = "/Siti/protocolli/documentLibrary/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
         CmisPlugin cmisPlugin = new CmisPlugin();
         cmisPlugin.setup(cmisUrl, cmisUser, cmisPassword, 
                 templateCmisProtocollo,
