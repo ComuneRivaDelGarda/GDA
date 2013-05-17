@@ -32,6 +32,7 @@ import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo_;
+import com.axiastudio.suite.protocollo.entities.RiferimentoProtocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -194,11 +195,22 @@ public class ProtocolloCallbacksRiva {
         }
         
         /*
-         * 
+         * Una sola attribuzione in via principale
          */
         if( nrAttribuzioniPrincipali != 1 ){
             msg += "E' possibile e necessario impostare una sola attribuzione principale.\n";
             res = false;
+        }
+        
+        /*
+         * I riferimenti precedenti devono essere realmente precedenti
+         */
+        for( RiferimentoProtocollo rp: protocollo.getRiferimentoProtocolloCollection() ){
+            if( rp.getPrecedente().getDataprotocollo().after(protocollo.getDataprotocollo()) ){
+                msg += "I protocolli precedenti riferiti non possono avere data successiva al protocollo.\n";
+                res = false;
+                break;
+            }
         }
 
         /*
