@@ -79,6 +79,12 @@ public class ProtocolloCallbacksRiva {
                 attribuzionePrincipale = attribuzione.getUfficio();
             }
         }
+        int nrPraticheOriginali = 0;
+        for( PraticaProtocollo praticaProtocollo: protocollo.getPraticaProtocolloCollection()){
+            if( praticaProtocollo.getOriginale()){
+                nrPraticheOriginali += 1;
+            }
+        }
         Ufficio sportello = protocollo.getSportello();
 
         String msg = "";
@@ -200,15 +206,19 @@ public class ProtocolloCallbacksRiva {
         /*
          * Una sola attribuzione in via principale
          */
-        if( nrAttribuzioniPrincipali == 0 ){
-            for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ){
-                attribuzione.setPrincipale(Boolean.TRUE);
-                break;
-            }
-            
-        } else if( nrAttribuzioniPrincipali > 1 ){
+        if( nrAttribuzioniPrincipali != 1 ){
             msg += "E' possibile e necessario impostare una sola attribuzione principale.\n";
             res = false;
+        }
+        
+        /*
+         * Una sola pratica in originale
+         */
+        if( protocollo.getPraticaProtocolloCollection().size() > 0 ){
+            if( nrPraticheOriginali != 1 ){
+                msg += "Il protocollo può essere inserito come originale in una sola pratica.\n";
+                res = false;
+            }
         }
         
         /*
