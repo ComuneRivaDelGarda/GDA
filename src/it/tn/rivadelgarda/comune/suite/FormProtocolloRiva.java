@@ -55,9 +55,9 @@ public class FormProtocolloRiva extends FormProtocollo {
         Boolean nuovoInserimento = protocollo.getId() == null;
         
         super.indexChanged(row);
-        if( nuovoInserimento ){
+        /*if( nuovoInserimento ){
             return;
-        }
+        }*/
         // modifica protocollo convalidato
         String[] roWidgets = {"textEdit_oggetto", "tableView_soggettiprotocollo",
             "tableView_soggettiriservatiprotocollo", "tableView_ufficiprotocollo",
@@ -83,7 +83,7 @@ public class FormProtocolloRiva extends FormProtocollo {
         // Se attributore protocollo modifica anche a protocollo con attribuzioni convalidate,
         // altrimenti solo se in attribuzione principale o sportello.
         PyPaPiTableView tableViewAttribuzioni = (PyPaPiTableView) this.findChild(PyPaPiTableView.class, "tableView_attribuzioni");
-        Boolean modificaAttribuzioni = autenticato.getAttributoreprotocollo() || (!protocollo.getConvalidaattribuzioni() && profilo.inSportelloOAttribuzionePrincipale());
+        Boolean modificaAttribuzioni = nuovoInserimento || autenticato.getAttributoreprotocollo() || (!protocollo.getConvalidaattribuzioni() && profilo.inSportelloOAttribuzionePrincipale());
         //Util.setWidgetReadOnly(tableViewAttribuzioni, !modificaAttribuzioni);
         tableViewAttribuzioni.setEnabled(modificaAttribuzioni); // XXX: altrimenti si sposta l'attribuzione principale...
 
