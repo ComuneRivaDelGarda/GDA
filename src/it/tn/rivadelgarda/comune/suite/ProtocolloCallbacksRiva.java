@@ -200,7 +200,13 @@ public class ProtocolloCallbacksRiva {
         /*
          * Una sola attribuzione in via principale
          */
-        if( nrAttribuzioniPrincipali != 1 ){
+        if( nrAttribuzioniPrincipali == 0 ){
+            for( Attribuzione attribuzione: protocollo.getAttribuzioneCollection() ){
+                attribuzione.setPrincipale(Boolean.TRUE);
+                break;
+            }
+            
+        } else if( nrAttribuzioniPrincipali > 1 ){
             msg += "E' possibile e necessario impostare una sola attribuzione principale.\n";
             res = false;
         }
