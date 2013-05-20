@@ -392,6 +392,11 @@ public class Start {
             mdi.setWindowTitle("GDA");
             //mdi.show();
             
+            // Scrivania
+            FormScrivania form = new FormScrivania();
+            mdi.getWorkspace().addSubWindow(form);
+            form.showMaximized();
+            
             app.setCustomApplicationName("GDA");
             app.setCustomApplicationCredits("Copyright AXIA Studio - Comune di Riva del Garda (2013)<br/>");
             app.exec();
