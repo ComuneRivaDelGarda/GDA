@@ -107,9 +107,9 @@ public class PraticaCallbacksRiva {
             if( max != null ){
                 Integer i = Integer.parseInt(max.getIdpratica().substring(4));
                 i++;
-                newIdpratica = year+String.format("%08d", i);
+                newIdpratica = year+String.format("%05d", i);
             } else {
-                newIdpratica = year+"00000001";
+                newIdpratica = year+"00001";
             }
             pratica.setIdpratica(newIdpratica);
             
