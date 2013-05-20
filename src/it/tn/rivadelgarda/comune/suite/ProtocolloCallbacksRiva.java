@@ -83,6 +83,12 @@ public class ProtocolloCallbacksRiva {
 
         String msg = "";
         
+        // oggi
+        Calendar calendar = Calendar.getInstance();
+        Integer year = calendar.get(Calendar.YEAR);
+        Date today = calendar.getTime();
+
+        
         if( !eNuovo ){
             /*
              * Modifica permessa solo allo sportello e all'attribuzione principale
@@ -136,9 +142,6 @@ public class ProtocolloCallbacksRiva {
             }
 
             /* dataprotocollo e iddocumento */
-            Calendar calendar = Calendar.getInstance();
-            Integer year = calendar.get(Calendar.YEAR);
-            Date date = calendar.getTime();
             Database db = (Database) Register.queryUtility(IDatabase.class);
             EntityManager em = db.getEntityManagerFactory().createEntityManager();
             CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -149,7 +152,7 @@ public class ProtocolloCallbacksRiva {
             cq.orderBy(cb.desc(root.get("iddocumento")));
             TypedQuery<Protocollo> tq = em.createQuery(cq).setMaxResults(1);
             Protocollo max;
-            protocollo.setDataprotocollo(date);
+            protocollo.setDataprotocollo(today);
             protocollo.setAnno(year);
             try {
                 max = tq.getSingleResult();
@@ -211,6 +214,23 @@ public class ProtocolloCallbacksRiva {
                 res = false;
                 break;
             }
+        }
+        
+        /*
+         * Se ci sono convalide inserisco l'esecutore
+         */
+        if( protocollo.getConvalidaattribuzioni() && protocollo.getEsecutoreconvalidaattribuzioni() == null ){
+            protocollo.setEsecutoreconvalidaattribuzioni(autenticato.getLogin());
+            protocollo.setDataconvalidaattribuzioni(today);
+        }
+        if( protocollo.getConvalidaprotocollo()&& protocollo.getEsecutoreconvalidaprotocollo() == null ){
+            protocollo.setEsecutoreconvalidaprotocollo(autenticato.getLogin());
+            protocollo.setDataconvalidaprotocollo(today);
+            // numero protocollo
+        }
+        if( protocollo.getConsolidadocumenti()&& protocollo.getEsecutoreconsolidadocumenti() == null ){
+            protocollo.setEsecutoreconsolidadocumenti(autenticato.getLogin());
+            protocollo.setDataconsolidadocumenti(today);
         }
 
         /*
