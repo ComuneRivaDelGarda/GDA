@@ -62,7 +62,7 @@ public class FormProtocolloRiva extends FormProtocollo {
         String[] roWidgets = {"textEdit_oggetto", "tableView_soggettiprotocollo",
             "tableView_soggettiriservatiprotocollo", "tableView_ufficiprotocollo",
             "comboBoxTitolario", "comboBox_tiporiferimentomittente", "lineEdit_nrriferimentomittente",
-            "dateEdit_datariferimentomittente", "richiederisposta", "spedito", "riservato",
+            "dateEdit_datariferimentomittente", "richiederisposta", "riservato",
             "corrispostoostornato"};
         for( String widgetName: roWidgets ){
             Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, widgetName), protocollo.getConvalidaprotocollo());

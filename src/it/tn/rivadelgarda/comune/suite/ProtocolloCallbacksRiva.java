@@ -89,7 +89,7 @@ public class ProtocolloCallbacksRiva {
 
         String msg = "";
         
-        // oggi
+        // oggi 
         Calendar calendar = Calendar.getInstance();
         Integer year = calendar.get(Calendar.YEAR);
         Date today = calendar.getTime();
@@ -233,8 +233,12 @@ public class ProtocolloCallbacksRiva {
         }
         
         /*
-         * Se ci sono convalide inserisco l'esecutore
+         * Se ci sono convalide e/o spedizioni inserisco l'esecutore e la data
          */
+        if( protocollo.getSpedito() && protocollo.getEsecutorespedizione() == null ){
+            protocollo.setEsecutorespedizione(autenticato.getLogin());
+            protocollo.setDataspedizione(today);
+        }
         if( protocollo.getConvalidaattribuzioni() && protocollo.getEsecutoreconvalidaattribuzioni() == null ){
             protocollo.setEsecutoreconvalidaattribuzioni(autenticato.getLogin());
             protocollo.setDataconvalidaattribuzioni(today);
