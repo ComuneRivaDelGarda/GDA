@@ -94,6 +94,7 @@ public class Start {
         
         // applicazione Qt        
         Application app = new Application(args);
+        app.addQmFile("classpath:com/axiastudio/menjazo/lang/menjazo_{0}.qm"); // menjazo
         app.setLanguage("it");
         
         // config
