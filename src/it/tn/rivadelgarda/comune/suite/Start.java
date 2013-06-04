@@ -52,15 +52,24 @@ public class Start {
      */
     public static void main(String[] args) {
         
+        // jdbc
         String jdbcUrl = System.getProperty("jdbc.url");
         String jdbcUser = System.getProperty("jdbc.user");
         String jdbcPassword = System.getProperty("jdbc.password");
         String jdbcDriver = System.getProperty("jdbc.driver");
+        
+        // log
         String logLevel = System.getProperty("suite.loglevel");
+        
+        // Alfresco
         String cmisUrl = System.getProperty("cmis.url");
         String cmisUser = System.getProperty("cmis.user");
         String cmisPassword = System.getProperty("cmis.password");
-
+        
+        // Stampante etichette
+        String barcodeDevice = System.getProperty("barcode.device"); // es. Zebra_Technologies_ZTC_GK420t
+        String barcodeLanguage = System.getProperty("barcode.language"); // es. ZPL
+        
         Map properties = new HashMap();
         properties.put("javax.persistence.jdbc.url", jdbcUrl);
         if( jdbcUser != null ){
@@ -77,8 +86,6 @@ public class Start {
             properties.put("eclipselink.logging.parameters", "true");    
         }
 
-        
-
         Database db = new Database();
         properties.put("eclipselink.ddl-generation", "");
         db.open("SuitePU", properties);
@@ -88,6 +95,10 @@ public class Start {
         // applicazione Qt        
         Application app = new Application(args);
         app.setLanguage("it");
+        
+        // config
+        app.setConfigItem("barcode.device", barcodeDevice);
+        app.setConfigItem("barcode.language", barcodeLanguage);
 
         // configurazione originale SuitePA
         Configure.configure(db);
