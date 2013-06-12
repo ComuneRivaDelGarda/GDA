@@ -31,7 +31,6 @@ import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.entities.Attribuzione;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
-import com.axiastudio.suite.protocollo.entities.Protocollo_;
 import com.axiastudio.suite.protocollo.entities.RiferimentoProtocollo;
 import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
 import java.util.ArrayList;
@@ -89,12 +88,6 @@ public class ProtocolloCallbacksRiva {
 
         String msg = "";
         
-        // oggi 
-        Calendar calendar = Calendar.getInstance();
-        Integer year = calendar.get(Calendar.YEAR);
-        Date today = calendar.getTime();
-
-        
         if( !eNuovo ){
             /*
              * Modifica permessa solo allo sportello e all'attribuzione principale
@@ -141,40 +134,6 @@ public class ProtocolloCallbacksRiva {
                 msg += "Devi compilare l'oggetto.";
                 res = false;
             }
-            
-            /* primo inserimento */
-            for( SoggettoProtocollo sp: protocollo.getSoggettoProtocolloCollection() ){
-                sp.setPrimoinserimento(Boolean.TRUE);
-            }
-
-            /* dataprotocollo e iddocumento */
-            Database db = (Database) Register.queryUtility(IDatabase.class);
-            EntityManager em = db.getEntityManagerFactory().createEntityManager();
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Protocollo> cq = cb.createQuery(Protocollo.class);
-            Root<Protocollo> root = cq.from(Protocollo.class);
-            cq.select(root);
-            cq.where(cb.equal(root.get(Protocollo_.anno), year));
-            cq.orderBy(cb.desc(root.get("iddocumento")));
-            TypedQuery<Protocollo> tq = em.createQuery(cq).setMaxResults(1);
-            Protocollo max;
-            protocollo.setDataprotocollo(today);
-            protocollo.setAnno(year);
-            try {
-                max = tq.getSingleResult();
-            } catch (NoResultException ex) {
-                max=null;
-            }
-            String newIddocumento;
-            if( max != null ){
-                Integer i = Integer.parseInt(max.getIddocumento().substring(4));
-                i++;
-                newIddocumento = year+String.format("%08d", i);
-            } else {
-                newIddocumento = year+"00000001";
-            }
-            protocollo.setIddocumento(newIddocumento);
-
         }
         
         /*
@@ -231,27 +190,6 @@ public class ProtocolloCallbacksRiva {
                 break;
             }
         }
-        
-        /*
-         * Se ci sono convalide e/o spedizioni inserisco l'esecutore e la data
-         */
-        if( protocollo.getSpedito() && protocollo.getEsecutorespedizione() == null ){
-            protocollo.setEsecutorespedizione(autenticato.getLogin());
-            protocollo.setDataspedizione(today);
-        }
-        if( protocollo.getConvalidaattribuzioni() && protocollo.getEsecutoreconvalidaattribuzioni() == null ){
-            protocollo.setEsecutoreconvalidaattribuzioni(autenticato.getLogin());
-            protocollo.setDataconvalidaattribuzioni(today);
-        }
-        if( protocollo.getConvalidaprotocollo()&& protocollo.getEsecutoreconvalidaprotocollo() == null ){
-            protocollo.setEsecutoreconvalidaprotocollo(autenticato.getLogin());
-            protocollo.setDataconvalidaprotocollo(today);
-            // numero protocollo
-        }
-        if( protocollo.getConsolidadocumenti()&& protocollo.getEsecutoreconsolidadocumenti() == null ){
-            protocollo.setEsecutoreconsolidadocumenti(autenticato.getLogin());
-            protocollo.setDataconsolidadocumenti(today);
-        }
 
         /*
          * Restituzione della validazione
@@ -261,15 +199,6 @@ public class ProtocolloCallbacksRiva {
         } else {
             return new Validation(true);
         }
-    }
-        
-    /*
-     * CallbackType.AFTERCOMMIT
-     */
-    @Callback(type=CallbackType.AFTERCOMMIT)
-    public static Validation afterCommit(Protocollo protocollo){
-        // placeholder
-        return new Validation(true);
     }
 
 }
