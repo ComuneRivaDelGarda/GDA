@@ -26,6 +26,7 @@ import com.axiastudio.pypapi.db.Validation;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.pratiche.PraticaUtil;
 import com.axiastudio.suite.pratiche.entities.Pratica;
 import com.axiastudio.suite.protocollo.ProfiloUtenteProtocollo;
 import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
@@ -87,32 +88,11 @@ public class PraticaCallbacksRiva {
             Date date = calendar.getTime();
             Database db = (Database) Register.queryUtility(IDatabase.class);
             EntityManager em = db.getEntityManagerFactory().createEntityManager();
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Pratica> cq = cb.createQuery(Pratica.class);
-            Root<Pratica> root = cq.from(Pratica.class);
-            cq.select(root);
-            cq.where(cb.equal(root.get("anno"), year));
-            cq.orderBy(cb.desc(root.get("idpratica")));
-            TypedQuery<Pratica> tq = em.createQuery(cq).setMaxResults(1);
-            Pratica max;
-            pratica.setDatapratica(date);
-            pratica.setAnno(year);
-            try {
-                max = tq.getSingleResult();
-            } catch (NoResultException ex) {
-                max=null;
-            }
-            String newIdpratica;
-            if( max != null ){
-                Integer i = Integer.parseInt(max.getIdpratica().substring(4));
-                i++;
-                newIdpratica = year+String.format("%05d", i);
-            } else {
-                newIdpratica = year+"00001";
-            }
-            pratica.setIdpratica(newIdpratica);
-            
+
+            // test codifica
+
             // codifica
+            /*
             String formulacodifica = pratica.getTipo().getFormulacodifica();
             Map<String, Object> map = new HashMap();
             map.put("anno", year.toString());
@@ -142,23 +122,35 @@ public class PraticaCallbacksRiva {
             String maxN1 = (String) q1.getSingleResult();
             Integer da = pratica.getTipo().getPorzionenumeroda();
             Integer a = pratica.getTipo().getPorzionenumeroa();
-            if( maxN1.length()>=a && da!=null && a!=null ){
-                String porzionenumero = maxN1.substring(da, a);
-                n1 = Integer.parseInt(porzionenumero)+1;
+            if( maxN1 != null ){
+                if( maxN1.length()>=a && da!=null && a!=null ){
+                    String porzionenumero = maxN1.substring(da, a);
+                    n1 = Integer.parseInt(porzionenumero)+1;
+                }
+            } else {
+                n1 = 1;
             }
             // max n2
             Query q2 = em.createQuery("select max(p.codiceinterno) from Pratica p where p.anno = " + year.toString() + " and p.codiceinterno like '"+s1+"%'");
             String maxN2 = (String) q2.getSingleResult();
-            if( maxN2.length()>=a && da!=null && a!=null ){
-                String porzionenumero = maxN2.substring(da, a);
-                n2 = Integer.parseInt(porzionenumero)+1;
+            if( maxN2 != null ){
+                if( maxN2.length()>=a && da!=null && a!=null ){
+                    String porzionenumero = maxN2.substring(da, a);
+                    n2 = Integer.parseInt(porzionenumero)+1;
+                }
+            } else {
+                n2 = 1;
             }
             // max n3
             Query q3 = em.createQuery("select max(p.codiceinterno) from Pratica p where p.anno = " + year.toString() + " and p.codiceinterno like '"+s1+"%'");
             String maxN3 = (String) q3.getSingleResult();
-            if( maxN3.length()>=a && da!=null && a!=null ){
-                String porzionenumero = maxN3.substring(da, a);
-                n3 = Integer.parseInt(porzionenumero)+1;
+            if( maxN3 != null ){
+                if( maxN3.length()>=a && da!=null && a!=null ){
+                    String porzionenumero = maxN3.substring(da, a);
+                    n3 = Integer.parseInt(porzionenumero)+1;
+                }
+            } else {
+                n3 = 1;
             }
             
             map.put("n1", n1);
@@ -166,6 +158,8 @@ public class PraticaCallbacksRiva {
             map.put("n3", n3);
             MessageMapFormat mmp = new MessageMapFormat(formulacodifica);
             String codifica = mmp.format(map);
+            */
+            String codifica = PraticaUtil.creaCodificaInterna(pratica.getTipo());
             pratica.setCodiceinterno(codifica);
             
             // se mancano gestione e ubicazione, li fisso come l'attribuzione
