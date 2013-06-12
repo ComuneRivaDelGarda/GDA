@@ -36,6 +36,7 @@ import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.protocollo.entities.Protocollo;
+import com.axiastudio.suite.protocollo.forms.FormProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import java.util.HashMap;
 import java.util.Map;
@@ -107,12 +108,6 @@ public class Start {
         // configurazione personalizzata Riva GDA        
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacksRiva.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacksRiva.class));
-        Register.registerForm(db.getEntityManagerFactory(),
-                              "classpath:com/axiastudio/suite/protocollo/forms/protocollo.ui",
-                              Protocollo.class,
-                              FormProtocolloRiva.class);
-
-                
         
 
         // Plugin CmisPlugin per accedere ad Alfresco
@@ -121,7 +116,7 @@ public class Start {
         cmisPlugin.setup(cmisUrl, cmisUser, cmisPassword, 
                 templateCmisProtocollo,
                 Boolean.FALSE);
-        Register.registerPlugin(cmisPlugin, FormProtocolloRiva.class);
+        Register.registerPlugin(cmisPlugin, FormProtocollo.class);
         CmisPlugin cmisPlugin2 = new CmisPlugin();
         cmisPlugin2.setup(cmisUrl, cmisUser, cmisPassword, 
                 templateCmisProtocollo,
