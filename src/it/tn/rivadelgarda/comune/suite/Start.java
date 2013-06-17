@@ -35,7 +35,6 @@ import com.axiastudio.suite.base.Login;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
-import com.axiastudio.suite.protocollo.entities.Protocollo;
 import com.axiastudio.suite.protocollo.forms.FormProtocollo;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import java.util.HashMap;
@@ -143,7 +142,6 @@ public class Start {
         ooopsPlugin.addTemplate(template);
         
         // template da Cmis
-        
         HashMap<String,String> rules2 = new HashMap();        
         rules2.put("oggetto", "return obj.getDescrizione()+\", da Alfresco!!\"");
         RuleSet ruleSet2 = new RuleSet(rules2);
