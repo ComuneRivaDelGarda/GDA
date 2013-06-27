@@ -39,19 +39,27 @@ import java.util.List;
  * @author AXIA Studio (http://www.axiastudio.com)
  */
 public class FinanziariaUtil implements IFinanziaria {
-    private String utente;
 
-    public FinanziariaUtil(String utente) {
-        this.utente = utente;
+    public FinanziariaUtil() {
     }
 
     @Override
     public List<MovimentoDetermina> getMovimentiDetermina(Determina determina) {
         String organoSettore = "DT";
-        String anno = determina.getIdpratica().substring(0, 4);
-        String numero = ((Integer) Integer.parseInt(determina.getIdpratica().substring(4))).toString();
-        String attoOBozza = "A"; // XXX
-        JEnteHelper jEnteHelper = new JEnteHelper(this.utente);
+        String anno;
+        String attoOBozza;
+        String numero;
+        if( determina.getNumero() == null ){
+            attoOBozza = "B";
+            numero = ((Integer) Integer.parseInt(determina.getIdpratica().substring(4))).toString();
+            anno = determina.getIdpratica().substring(0, 4);
+        } else {
+            attoOBozza = "A";
+            numero = determina.getNumero().toString();
+            anno = determina.getAnno().toString();
+        }
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        JEnteHelper jEnteHelper = new JEnteHelper(autenticato.getLogin());
         List<Movimento> movimenti = jEnteHelper.chiamataRichiestaElencoMovimenti(attoOBozza, organoSettore, anno, numero);
         List<MovimentoDetermina> impegni = new ArrayList();
         if( movimenti != null ){
@@ -82,22 +90,24 @@ public class FinanziariaUtil implements IFinanziaria {
         Boolean vistoResponsabile = determina.getVistoResponsabile();
         String rProc=null;
         String organoSettore = "DT";
-        String anno = determina.getIdpratica().substring(0, 4);
-        String numero = ((Integer) Integer.parseInt(determina.getIdpratica().substring(4))).toString();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String annoBozza = determina.getIdpratica().substring(0, 4);
+        String numeroBozza = ((Integer) Integer.parseInt(determina.getIdpratica().substring(4))).toString();
+        String annoAtto = determina.getAnno().toString();
+        String numeroAtto = determina.getNumero().toString();
+        String data = dateFormat.format(determina.getData());
         for( ServizioDetermina servizioDetermina: determina.getServizioDeterminaCollection() ){
             rProc = String.format("%04d", servizioDetermina.getServizio().getId());
             //rProc = "0181";
             System.out.println(rProc);
             break;
         }        
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String dataDetermina = dateFormat.format(determina.getDataPratica());
-        
+
         String dataVistoResponsabile = null;
         if( determina.getDataVistoResponsabile() != null ){
             dataVistoResponsabile = dateFormat.format(determina.getDataVistoResponsabile());
         }
-        FormMovimenti form = new FormMovimenti(anno, organoSettore, numero, utente, rProc, vistoResponsabile, dataDetermina, dataVistoResponsabile);
+        FormMovimenti form = new FormMovimenti(annoBozza, organoSettore, numeroBozza, annoAtto, organoSettore, numeroAtto, utente, rProc, vistoResponsabile, data, dataVistoResponsabile);
         form.show();
     }
     
