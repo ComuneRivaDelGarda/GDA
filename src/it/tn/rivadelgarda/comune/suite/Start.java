@@ -32,6 +32,8 @@ import com.axiastudio.pypapi.plugins.ooops.Template;
 import com.axiastudio.suite.Configure;
 import com.axiastudio.suite.Mdi;
 import com.axiastudio.suite.base.Login;
+import com.axiastudio.suite.deliberedetermine.entities.Determina;
+import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.suite.pratiche.forms.FormPratica;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
@@ -107,7 +109,13 @@ public class Start {
         // configurazione personalizzata Riva GDA        
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacksRiva.class));
         Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacksRiva.class));
-        
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/deliberedetermine/forms/determina.ui",
+                Determina.class,
+                FormDeterminaJEnte.class);
+        Register.registerUtility(new FinanziariaUtil(), IFinanziaria.class);
+        //Register.registerUtility(FinanziariaUtilFake.class, IFinanziaria.class); // test
+
 
         // Plugin CmisPlugin per accedere ad Alfresco
         String templateCmisProtocollo = "/Siti/protocolli/documentLibrary/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
@@ -116,10 +124,10 @@ public class Start {
                 templateCmisProtocollo,
                 Boolean.FALSE);
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
-        CmisPlugin cmisPlugin2 = new CmisPlugin();
+        /*CmisPlugin cmisPlugin2 = new CmisPlugin();
         cmisPlugin2.setup(cmisUrl, cmisUser, cmisPassword, 
                 templateCmisProtocollo,
-                Boolean.FALSE);
+                Boolean.FALSE);*/
         Register.registerPlugin(cmisPlugin, FormScrivania.class);
         
         /*
@@ -162,7 +170,7 @@ public class Start {
         login.setWindowTitle("GDA");
         int res = login.exec();
         if( res == 1 ){
-        
+
             Mdi mdi = new Mdi();
             mdi.showMaximized();
             mdi.setWindowTitle("GDA");
