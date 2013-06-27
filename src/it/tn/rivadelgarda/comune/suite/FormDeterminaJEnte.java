@@ -78,7 +78,7 @@ public class FormDeterminaJEnte extends FormDetermina implements IDocumentFolder
              * - trasformazione bozza in atto (chiamata jEnte)
              * - generazione protocollo (modello entità pyprotocollo)
              * - convalida protocollo (modello entità pyprotocollo)
-             * - generazione numero di determinazione
+             * - generazione numero, anno e data di determinazione (se non già creati)
              * - valorizzazione vistoresponsabile, datavistoresponsabile, utentevistoresponsabile (implementato in super)
              * - valorizzazione riferimento protocollo
              * - elaborazione determina_*.odt con i dati nuovi -> determina_*_protocollo_*.odt
@@ -184,13 +184,15 @@ public class FormDeterminaJEnte extends FormDetermina implements IDocumentFolder
     @Override
     protected void indexChanged(int row) {
         Determina determina = (Determina) this.getContext().getCurrentEntity();
-        IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
-        List<MovimentoDetermina> movimenti = finanziariaUtil.getMovimentiDetermina(determina);
-        determina.setMovimentoDeterminaCollection(movimenti);
-        // faccio credere al contesto che il contesto padre è cambiato, quindi lo spingo ad aggiornarsi
-        Context context = (Context) Register.queryRelation(this, ".movimentoDeterminaCollection");
-        context.refreshContext();
-        super.indexChanged(row);
+        if( determina.getId() != null ){
+            IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
+            List<MovimentoDetermina> movimenti = finanziariaUtil.getMovimentiDetermina(determina);
+            determina.setMovimentoDeterminaCollection(movimenti);
+            // faccio credere al contesto che il contesto padre è cambiato, quindi lo spingo ad aggiornarsi
+            Context context = (Context) Register.queryRelation(this, ".movimentoDeterminaCollection");
+            context.refreshContext();
+            super.indexChanged(row);
+        }
     }
     
     private void apriGestoreMovimenti() {
