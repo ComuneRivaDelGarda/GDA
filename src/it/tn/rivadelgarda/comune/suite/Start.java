@@ -103,6 +103,11 @@ public class Start {
         app.setConfigItem("barcode.device", barcodeDevice);
         app.setConfigItem("barcode.language", barcodeLanguage);
 
+        // percorsi Alfresco
+        app.setConfigItem("alfrescopath.protocollo", "/Siti/protocollo/documentLibrary");
+        app.setConfigItem("alfrescopath.pratica", "/Siti/pratiche/documentLibrary");
+        app.setConfigItem("alfrescopath.pubblicazione", "/Siti/pubblicazioni/documentLibrary");
+
         // configurazione originale SuitePA
         Configure.configure(db, System.getProperties());
         
@@ -115,16 +120,6 @@ public class Start {
                 FormDeterminaJEnte.class);
         Register.registerUtility(new FinanziariaUtil(), IFinanziaria.class);
         //Register.registerUtility(FinanziariaUtilFake.class, IFinanziaria.class); // test
-
-
-        // Plugin CmisPlugin per accedere ad Alfresco
-        String templateCmisProtocollo = "/Siti/protocollo/documentLibrary/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
-        CmisPlugin cmisPlugin = new CmisPlugin();
-        cmisPlugin.setup(cmisUrl, cmisUser, cmisPassword, 
-                templateCmisProtocollo,
-                Boolean.FALSE);
-        Register.registerPlugin(cmisPlugin, FormProtocollo.class);
-        Register.registerPlugin(cmisPlugin, FormScrivania.class);
 
         /* login */
         Login login = new Login();
