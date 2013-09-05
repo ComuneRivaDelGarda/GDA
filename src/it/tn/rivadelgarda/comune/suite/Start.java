@@ -23,12 +23,12 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.plugins.cmis.CmisPlugin;
-import com.axiastudio.pypapi.plugins.cmis.CmisStreamProvider;
-import com.axiastudio.pypapi.plugins.ooops.FileStreamProvider;
-import com.axiastudio.pypapi.plugins.ooops.OoopsPlugin;
-import com.axiastudio.pypapi.plugins.ooops.RuleSet;
-import com.axiastudio.pypapi.plugins.ooops.Template;
+import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
+import com.axiastudio.suite.plugins.ooops.FileStreamProvider;
+import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
+import com.axiastudio.suite.plugins.ooops.RuleSet;
+import com.axiastudio.suite.plugins.ooops.Template;
 import com.axiastudio.suite.Configure;
 import com.axiastudio.suite.Mdi;
 import com.axiastudio.suite.base.Login;
@@ -104,7 +104,7 @@ public class Start {
         app.setConfigItem("barcode.language", barcodeLanguage);
 
         // configurazione originale SuitePA
-        Configure.configure(db);
+        Configure.configure(db, System.getProperties());
         
         // configurazione personalizzata Riva GDA        
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacksRiva.class));
@@ -118,53 +118,14 @@ public class Start {
 
 
         // Plugin CmisPlugin per accedere ad Alfresco
-        String templateCmisProtocollo = "/Siti/protocolli/documentLibrary/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
+        String templateCmisProtocollo = "/Siti/protocollo/documentLibrary/${dataprotocollo,date,yyyy}/${dataprotocollo,date,MM}/${dataprotocollo,date,dd}/${iddocumento}/";
         CmisPlugin cmisPlugin = new CmisPlugin();
         cmisPlugin.setup(cmisUrl, cmisUser, cmisPassword, 
                 templateCmisProtocollo,
                 Boolean.FALSE);
         Register.registerPlugin(cmisPlugin, FormProtocollo.class);
-        /*CmisPlugin cmisPlugin2 = new CmisPlugin();
-        cmisPlugin2.setup(cmisUrl, cmisUser, cmisPassword, 
-                templateCmisProtocollo,
-                Boolean.FALSE);*/
         Register.registerPlugin(cmisPlugin, FormScrivania.class);
-        
-        /*
-        CmisPlugin cmisPluginPubblicazioni = new CmisPlugin();
-        cmisPluginPubblicazioni.setup("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
-                "/Pubblicazioni/${inizioconsultazione,date,YYYY}/${inizioconsultazione,date,MM}/${inizioconsultazione,date,dd}/${id}/");
-        Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazione.class);
-        */
-        
-        // Plugin OoopsPlugin per interazione con OpenOffice
-        OoopsPlugin ooopsPlugin = new OoopsPlugin();
-        ooopsPlugin.setup("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
-        
-        // template da file system
-        HashMap<String,String> rules = new HashMap();
-        rules.put("oggetto", "return obj.getDescrizione()");
-        RuleSet ruleSet = new RuleSet(rules);
-        IStreamProvider streamProvider1 = new FileStreamProvider("/Users/tiziano/NetBeansProjects/PyPaPi/plugins/PyPaPiOoops/template/test.ott");
-        Template template = new Template(streamProvider1, "Prova", "Template di prova", ruleSet);
-        ooopsPlugin.addTemplate(template);
-        
-        // template da Cmis
-        HashMap<String,String> rules2 = new HashMap();        
-        rules2.put("oggetto", "return obj.getDescrizione()+\", da Alfresco!!\"");
-        RuleSet ruleSet2 = new RuleSet(rules2);
-        IStreamProvider streamProvider2 = new CmisStreamProvider("http://localhost:8080/alfresco/service/cmis", "admin", "admin", 
-                                                                 "workspace://SpacesStore/7b3a2895-51e7-4f2c-9e3d-cf67f7043257");
-        Template template2 = new Template(streamProvider2, "Prova 2", "(template proveniente da Alfresco)", ruleSet2);
-        ooopsPlugin.addTemplate(template2);
-        
-                
-        Register.registerPlugin(ooopsPlugin, FormPratica.class);
 
-        // gestore deleghe
-        GestoreDeleghe gestoreDeleghe = new GestoreDeleghe();
-        Register.registerUtility(gestoreDeleghe, IGestoreDeleghe.class);
-        
         /* login */
         Login login = new Login();
         login.setWindowTitle("GDA");
