@@ -108,6 +108,9 @@ public class Start {
         app.setConfigItem("alfrescopath.pratica", "/Siti/pratiche/documentLibrary");
         app.setConfigItem("alfrescopath.pubblicazione", "/Siti/pubblicazioni/documentLibrary");
 
+        // scringa di connessione per OpenOffice
+        app.setConfigItem("ooops.connection", "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
+
         // configurazione originale SuitePA
         Configure.configure(db, System.getProperties());
         
@@ -130,12 +133,12 @@ public class Start {
             Mdi mdi = new Mdi();
             mdi.showMaximized();
             mdi.setWindowTitle("GDA");
-            //mdi.show();
+            mdi.show();
             
             // Scrivania
-            FormScrivania form = new FormScrivania();
-            mdi.getWorkspace().addSubWindow(form);
-            form.showMaximized();
+            //FormScrivania form = new FormScrivania();
+            //mdi.getWorkspace().addSubWindow(form);
+            //form.showMaximized();
             
             app.setCustomApplicationName("GDA");
             app.setCustomApplicationCredits("Copyright AXIA Studio - Comune di Riva del Garda (2013)<br/>");
