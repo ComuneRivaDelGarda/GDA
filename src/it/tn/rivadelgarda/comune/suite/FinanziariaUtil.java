@@ -27,7 +27,7 @@ import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
-import it.arezzo.infor.jente.jfinanziaria.services.Movimento;
+import com.axiastudio.pypapi.plugins.jente.webservices.Movimento;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
