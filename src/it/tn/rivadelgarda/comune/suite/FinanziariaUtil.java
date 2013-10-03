@@ -51,8 +51,8 @@ public class FinanziariaUtil implements IFinanziaria {
         String numero;
         if( determina.getNumero() == null ){
             attoOBozza = "B";
-            numero = ((Integer) Integer.parseInt(determina.getIdpratica().substring(4))).toString();
-            anno = determina.getIdpratica().substring(0, 4);
+            numero = ((Integer) Integer.parseInt(determina.getPratica().getIdpratica().substring(4))).toString();
+            anno = determina.getPratica().getIdpratica().substring(0, 4);
         } else {
             attoOBozza = "A";
             numero = determina.getNumero().toString();
@@ -91,8 +91,8 @@ public class FinanziariaUtil implements IFinanziaria {
         String rProc=null;
         String organoSettore = "DT";
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String annoBozza = determina.getIdpratica().substring(0, 4);
-        String numeroBozza = ((Integer) Integer.parseInt(determina.getIdpratica().substring(4))).toString();
+        String annoBozza = determina.getPratica().getIdpratica().substring(0, 4);
+        String numeroBozza = ((Integer) Integer.parseInt(determina.getPratica().getIdpratica().substring(4))).toString();
         String annoAtto = determina.getAnno().toString();
         String numeroAtto = determina.getNumero().toString();
         String data = dateFormat.format(determina.getData());
