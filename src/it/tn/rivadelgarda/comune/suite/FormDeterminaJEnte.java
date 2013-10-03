@@ -103,7 +103,7 @@ public class FormDeterminaJEnte extends FormDetermina implements IDocumentFolder
         
         /* non è di spesa o la lista degli impegni è vuota */
         List<MovimentoDetermina> impegni = finanziariaUtil.getMovimentiDetermina(determina);
-        if( !determina.getDiSpesa() || impegni.isEmpty() ){
+        if( !determina.getDispesa() || impegni.isEmpty() ){
             return false;
         }
 
@@ -129,7 +129,7 @@ public class FormDeterminaJEnte extends FormDetermina implements IDocumentFolder
         }
         
         /* la determina è di spesa e non c'è un unico file Impegni_*.odt */
-        if( determina.getDiSpesa() ){
+        if( determina.getDispesa() ){
             Boolean fileImpegniUnico = false;
             for( HashMap map: children ){
                 String fileName = (String) map.get("name");
@@ -156,7 +156,7 @@ public class FormDeterminaJEnte extends FormDetermina implements IDocumentFolder
         }
         /* l'anno della determina non è l'anno corrente */
         String annoCorrente = (new SimpleDateFormat("yyyy")).format(new Date());
-        String annoPratica = (new SimpleDateFormat("yyyy")).format(determina.getDataPratica());
+        String annoPratica = (new SimpleDateFormat("yyyy")).format(determina.getDatapratica());
         if( !annoCorrente.equals(annoPratica) ){
             //return false; // XXX: come testare?
         }
