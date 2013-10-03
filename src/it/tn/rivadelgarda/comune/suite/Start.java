@@ -23,6 +23,7 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.suite.plugins.ooops.FileStreamProvider;
@@ -123,6 +124,12 @@ public class Start {
                 FormDeterminaJEnte.class);
         Register.registerUtility(new FinanziariaUtil(), IFinanziaria.class);
         //Register.registerUtility(FinanziariaUtilFake.class, IFinanziaria.class); // test
+
+        // CMIS e Ooops
+        CmisPlugin cmisPluginDetermina = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
+        Register.registerPlugin(cmisPluginDetermina, FormDeterminaJEnte.class);
+        OoopsPlugin ooopsPluginDetermina = (OoopsPlugin) Register.queryPlugin(FormDetermina.class, "Ooops");
+        Register.registerPlugin(ooopsPluginDetermina, FormDeterminaJEnte.class);
 
         /* login */
         Login login = new Login();

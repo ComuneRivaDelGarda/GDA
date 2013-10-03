@@ -18,12 +18,8 @@
 package it.tn.rivadelgarda.comune.suite;
 
 import com.axiastudio.menjazo.AlfrescoHelper;
-import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
-import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
-import com.axiastudio.suite.plugins.ooops.IDocumentFolder;
-import com.axiastudio.suite.plugins.ooops.Template;
 import com.axiastudio.pypapi.ui.Context;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
@@ -35,7 +31,6 @@ import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
 import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +57,7 @@ class GestoreMovimentiMenuBar extends PyPaPiToolBar {
  * 
  * 
  */
-public class FormDeterminaJEnte extends FormDetermina implements IDocumentFolder {
+public class FormDeterminaJEnte extends FormDetermina {
     
     public FormDeterminaJEnte(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
@@ -201,43 +196,4 @@ public class FormDeterminaJEnte extends FormDetermina implements IDocumentFolder
         finanziariaUtil.apriGestoreMovimenti(determina);
     }
 
-    /*
-     * Per la determina i template aggiuntivi sono quelli contenuti nei documenti
-     * odt presenti nella cartella della pratica.
-     */
-    @Override
-    public List<Template> getTemplates() {
-        List<Template> templates = new ArrayList();
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
-        //Pratica pratica = SuiteUtil.findPratica(determina.getIdpratica());
-        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormDeterminaJEnte.class, "CMIS");
-        AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(determina);
-        List<HashMap> children = helper.children();
-        for( HashMap map: children ){
-            IStreamProvider streamProvider = new CmisStreamProvider("http://192.168.64.41:8080/alfresco/service/cmis", "pypapi", "0i2kiwi", 
-                                                                    (String) map.get("objectId"));
-            //RuleSet rulesSet = new RuleSet(new HashMap()); // XXX: da pescare
-            Template template = new Template(streamProvider, (String) map.get("name"), "Documento generato", null);
-            templates.add(template);
-        }
-        return templates;
-    }
-
-    /*
-     * I documenti creati nel contesto della determina vengono posizionati nella cartella della
-     * pratica, pronti eventualmente ad essere riutilizzati come template.
-     */
-    @Override
-    public void createDocument(String subpath, String name, byte[] content, String mimeType) {
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
-        //Pratica pratica = SuiteUtil.findPratica(determina.getIdpratica());
-        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(FormDeterminaJEnte.class, "CMIS");
-        AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(determina);
-        String documentName = name + "_" + determina.getIdpratica() + ".odt";
-        //String documentName = "out.pdf";
-        helper.createDocument(subpath, documentName, content, mimeType);
-        cmisPlugin.showForm(determina);
-        this.verificaAbilitazionePulsanti();
-    }
-    
 }
