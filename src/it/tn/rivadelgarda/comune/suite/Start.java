@@ -18,28 +18,20 @@
 package it.tn.rivadelgarda.comune.suite;
 
 import com.axiastudio.pypapi.Application;
-import com.axiastudio.pypapi.IStreamProvider;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
-import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
-import com.axiastudio.suite.plugins.ooops.FileStreamProvider;
-import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
-import com.axiastudio.suite.plugins.ooops.RuleSet;
-import com.axiastudio.suite.plugins.ooops.Template;
 import com.axiastudio.suite.Configure;
 import com.axiastudio.suite.Mdi;
+import com.axiastudio.suite.base.ICheckLogin;
 import com.axiastudio.suite.base.Login;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
+import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
-import com.axiastudio.suite.pratiche.forms.FormPratica;
-import com.axiastudio.suite.procedimenti.GestoreDeleghe;
-import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
-import com.axiastudio.suite.protocollo.forms.FormProtocollo;
-import com.axiastudio.suite.protocollo.forms.FormScrivania;
+import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,7 +52,6 @@ public class Start {
         String jdbcUser = System.getProperty("jdbc.user");
         String jdbcPassword = System.getProperty("jdbc.password");
         String jdbcDriver = System.getProperty("jdbc.driver");
-        
         // log
         String logLevel = System.getProperty("suite.loglevel");
         
@@ -68,7 +59,6 @@ public class Start {
         String cmisUrl = System.getProperty("cmis.url");
         String cmisUser = System.getProperty("cmis.user");
         String cmisPassword = System.getProperty("cmis.password");
-        
         // Stampante etichette
         String barcodeDevice = System.getProperty("barcode.device"); // es. Zebra_Technologies_ZTC_GK420t
         String barcodeLanguage = System.getProperty("barcode.language"); // es. ZPL
@@ -93,7 +83,10 @@ public class Start {
         properties.put("eclipselink.ddl-generation", "");
         db.open("SuitePU", properties);
         Register.registerUtility(db, IDatabase.class);
-        
+
+        CheckPGUser checkPGUser = new CheckPGUser();
+        checkPGUser.setJdbcUrl(jdbcUrl);
+        Register.registerUtility(checkPGUser, ICheckLogin.class);
         
         // applicazione Qt        
         Application app = new Application(args);
@@ -111,6 +104,7 @@ public class Start {
 
         // scringa di connessione per OpenOffice
         app.setConfigItem("ooops.connection", "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
+        //app.setConfigItem("ooops.connection", "uno:socket,host=192.168.64.56,port=2002;urp;StarOffice.ServiceManager");
 
         // configurazione originale SuitePA
         Configure.configure(db, System.getProperties());
