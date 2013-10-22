@@ -98,8 +98,6 @@ public class FinanziariaUtil implements IFinanziaria {
         String data = dateFormat.format(determina.getData());
         for( ServizioDetermina servizioDetermina: determina.getServizioDeterminaCollection() ){
             rProc = String.format("%04d", servizioDetermina.getServizio().getId());
-            //rProc = "0181";
-            System.out.println(rProc);
             break;
         }        
 
