@@ -19,7 +19,6 @@ public class CheckPGUser implements ICheckLogin {
             Connection connection = DriverManager.getConnection(url, user, password);
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             return false;
         }
 
