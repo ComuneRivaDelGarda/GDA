@@ -64,7 +64,8 @@ public class FormDeterminaJEnte extends FormDetermina {
         GestoreMovimentiMenuBar gestoreMovimenti = new GestoreMovimentiMenuBar("Gestore movimenti", this);
         this.addToolBar(gestoreMovimenti);
     }
-    
+
+    /*
     @Override
     protected Boolean vistoResponsabile() {
         if( super.vistoResponsabile() ){
@@ -78,25 +79,26 @@ public class FormDeterminaJEnte extends FormDetermina {
              * - valorizzazione riferimento protocollo
              * - elaborazione determina_*.odt con i dati nuovi -> determina_*_protocollo_*.odt
              * - richiesta conferma dell'utente
-             */
+             *
             
             return true;
         }
         return false;
-    }
+    }*/
 
     /*
      * Verifica delle condizioni di abilitazione alla firma del responsabile
      * del servizio.
      */
-    @Override
+
+    //@Override
     protected Boolean checkResponsabile() {
         Determina determina = (Determina) this.getContext().getCurrentEntity();
         //Pratica pratica = SuiteUtil.findPratica(determina.getIdpratica());
         IGestoreDeleghe gestore = (IGestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
         IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
         
-        /* non è di spesa o la lista degli impegni è vuota */
+        // non è di spesa o la lista degli impegni è vuota
         List<MovimentoDetermina> impegni = finanziariaUtil.getMovimentiDetermina(determina);
         if( !determina.getDispesa() || impegni.isEmpty() ){
             return false;
@@ -106,7 +108,7 @@ public class FormDeterminaJEnte extends FormDetermina {
         AlfrescoHelper helper = cmisPlugin.createAlfrescoHelper(determina);
         List<HashMap> children = helper.children();
 
-        /* non è presente un unico file Determina_*.odt */
+        // non è presente un unico file Determina_*.odt
         Boolean fileDeterminaUnico = false;
         for( HashMap map: children ){
             String fileName = (String) map.get("name");
@@ -123,7 +125,7 @@ public class FormDeterminaJEnte extends FormDetermina {
             return false;
         }
         
-        /* la determina è di spesa e non c'è un unico file Impegni_*.odt */
+        // la determina è di spesa e non c'è un unico file Impegni_*.odt
         if( determina.getDispesa() ){
             Boolean fileImpegniUnico = false;
             for( HashMap map: children ){
@@ -142,31 +144,31 @@ public class FormDeterminaJEnte extends FormDetermina {
             }
         }
         
-        /* sono presenti file con estensione diversa da odt o pdf */
+        // sono presenti file con estensione diversa da odt o pdf
         for( HashMap map: children ){
             String fileName = (String) map.get("name");
            if( !(fileName.endsWith(".pdf") || fileName.endsWith(".odt")) ){
                return false;
            }
         }
-        /* l'anno della determina non è l'anno corrente */
+        // l'anno della determina non è l'anno corrente
         String annoCorrente = (new SimpleDateFormat("yyyy")).format(new Date());
         String annoPratica = (new SimpleDateFormat("yyyy")).format(determina.getDatapratica());
         if( !annoCorrente.equals(annoPratica) ){
             //return false; // XXX: come testare?
         }
         
-        /* non è specificato un referente politico */
+        // non è specificato un referente politico
         if( determina.getReferentePolitico() == null || determina.getReferentePolitico().equals("")){
             return false;
         }
         
-        /* nessun servizio è selezionato */
+        // nessun servizio è selezionato
         if( determina.getServizioDeterminaCollection().isEmpty() ){
             return false;
         }
         
-        /* l'utente non è il responsabile del servizio principale e neppure il segretario generale */
+        // l'utente non è il responsabile del servizio principale e neppure il segretario generale
         ServizioDetermina servizioDetermina = (ServizioDetermina) determina.getServizioDeterminaCollection().toArray()[0];
         if( !(gestore.checkTitoloODelega(CodiceCarica.RESPONSABILE_DI_SERVIZIO, servizioDetermina.getServizio()) || gestore.checkTitoloODelega(CodiceCarica.SEGRETARIO)) ){
             return false;
