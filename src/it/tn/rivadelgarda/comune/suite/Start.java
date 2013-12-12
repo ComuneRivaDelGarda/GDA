@@ -113,7 +113,7 @@ public class Start {
         
         // configurazione personalizzata Riva GDA        
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacksRiva.class));
-        Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacksRiva.class));
+//        Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacksRiva.class));
         Register.registerForm(db.getEntityManagerFactory(),
                 "classpath:com/axiastudio/suite/deliberedetermine/forms/determina.ui",
                 Determina.class,
@@ -137,11 +137,6 @@ public class Start {
             mdi.showMaximized();
             mdi.setWindowTitle("GDA");
             mdi.show();
-
-            IForm form = (IForm) Register.queryUtility(IForm.class, Richiesta.class.getName());
-            form.show();
-
-
 
             // Scrivania
             //FormScrivania form = new FormScrivania();
