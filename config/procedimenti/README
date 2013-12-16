@@ -1,0 +1,21 @@
+== Parametri in binging nelle closure Groovy di configurazione dei procedimenti ==
+
+
+utente: l'utente autenticato
+
+gestoreDeleghe: l'utility di gestione delle deleghe
+
+finanziariaUtil: l'utility che implementa IFinanziaria (in caso di gestore esterno)
+
+alfrescoHelper: l'utility di accesso al contenitore cmis Alfresco
+
+documenti: una List<String> contenente i nomi dei file del contenitore cmis
+
+CodiceCarica: l'enum contenente le cariche
+
+
+
+== return ==
+
+Le closure di procedimento possono restituire un qualunque Object. Valori diversi da true vengono
+implementati come false.
