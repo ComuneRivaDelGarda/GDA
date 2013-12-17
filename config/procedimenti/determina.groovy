@@ -1,8 +1,10 @@
+import com.axiastudio.suite.pratiche.PraticaUtil
+
 /*
  *  Determina del responsabile
  */
 
-// Visto del responsabile
+// Visto del responsabile: condizione
 { determina ->
 
     // se la determina è di spesa, allora ci vogliono impegni
@@ -77,4 +79,14 @@
 
 
     return true
+}
+
+// Visto del responsabile: azione
+{ determina ->
+
+    // creazione del protocollo
+    def sportello = determina.getServizioDeterminaCollection().toArray()[0].getServizio().getUfficio()
+    def attribuzioni = [] // XXX
+    def res = PraticaUtil.protocollaPratica(determina.getPratica(), sportello, determina.getOggetto(), attribuzioni)
+    return res
 }
