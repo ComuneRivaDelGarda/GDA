@@ -87,6 +87,15 @@ import com.axiastudio.suite.pratiche.PraticaUtil
     // creazione del protocollo
     def sportello = determina.getServizioDeterminaCollection().toArray()[0].getServizio().getUfficio()
     def attribuzioni = [] // XXX
-    def res = PraticaUtil.protocollaPratica(determina.getPratica(), sportello, determina.getOggetto(), attribuzioni)
-    return res
+    def protocollo = PraticaUtil.protocollaPratica(determina.getPratica(), sportello, determina.getOggetto(), attribuzioni)
+    if( protocollo == null ){
+        return false
+    }
+    determina.setProtocollo(protocollo)
+    return true
+}
+
+// Documento per protocollo: azione
+{ determina ->
+
 }
