@@ -90,7 +90,7 @@ public class FormDeterminaJEnte extends FormDetermina {
      * Verifica delle condizioni di abilitazione alla firma del responsabile
      * del servizio.
      */
-
+    /*
     //@Override
     protected Boolean checkResponsabile() {
         Determina determina = (Determina) this.getContext().getCurrentEntity();
@@ -176,7 +176,7 @@ public class FormDeterminaJEnte extends FormDetermina {
         
         return true;
 
-    }
+    }*/
 
     @Override
     protected void indexChanged(int row) {

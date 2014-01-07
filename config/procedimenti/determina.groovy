@@ -4,7 +4,7 @@ import com.axiastudio.suite.pratiche.PraticaUtil
  *  Determina del responsabile
  */
 
-// Visto del responsabile: condizione
+// Approvazione del responsabile: condizione
 { determina ->
 
     // se la determina è di spesa, allora ci vogliono impegni
@@ -81,8 +81,10 @@ import com.axiastudio.suite.pratiche.PraticaUtil
     return true
 }
 
-// Visto del responsabile: azione
+// Approvazione del responsabile: azione
 { determina ->
+
+    // apertura maschera impegni (per trasformazione bozza in atto)
 
     // creazione del protocollo
     def sportello = determina.getServizioDeterminaCollection().toArray()[0].getServizio().getUfficio()
@@ -95,7 +97,26 @@ import com.axiastudio.suite.pratiche.PraticaUtil
     return true
 }
 
-// Documento per protocollo: azione
+// Preparazione e firma: condizione
+{ determina ->
+
+    // i documenti sono pronti per l'inserimento
+
+}
+
+// Preparazione e firma: azione
+{ determina ->
+
+    // inserimento documenti in protocollo
+
+}
+
+// Visto di bilancio: condizione
+{ determina ->
+
+}
+
+// Visto di bilancio: azione
 { determina ->
 
 }
