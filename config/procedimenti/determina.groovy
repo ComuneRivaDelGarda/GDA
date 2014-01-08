@@ -4,7 +4,7 @@ import com.axiastudio.suite.pratiche.PraticaUtil
  *  Determina del responsabile
  */
 
-// Approvazione del responsabile: condizione
+// Istruttoria: condizione
 { determina ->
 
     // se la determina è di spesa, allora ci vogliono impegni
@@ -107,16 +107,56 @@ import com.axiastudio.suite.pratiche.PraticaUtil
 // Preparazione e firma: azione
 { determina ->
 
+    // path protocollo
+    def path = "/Protocollo/"
+    def protocollo = determina.protocollo
+    path += protocollo.dataprotocollo.format("yyyy/MM/dd/")
+    path += protocollo.iddocumento
+
     // inserimento documenti in protocollo
+    for( Map child: alfrescoHelper.children("protocollo") ){
+        document = alfrescoHelper.copyDocument(child["objectId"], path)
+    }
+    return true
 
 }
 
 // Visto di bilancio: condizione
 { determina ->
 
+    // se la determina è di spesa e ci vuole un solo file del tipo Visto di bilancio_*.odt
+    ok = false
+    for( String fileName: documenti ){
+        if( fileName.startsWith("Visto di bilancio_") && fileName.endsWith(".pdf") ){
+            if( !ok ){
+                ok = true
+            } else {
+                ok = false
+                break
+            }
+        }
+    }
+    if( !ok ){
+        return "Deve essere presente uno ed un solo documento di tipo 'Visto di bilancio' (pdf)."
+    }
+    return true
+
 }
 
 // Visto di bilancio: azione
 { determina ->
 
+    // path protocollo
+    def path = "/Protocollo/"
+    def protocollo = determina.protocollo
+    path += protocollo.dataprotocollo.format("yyyy/MM/dd/")
+    path += protocollo.iddocumento
+
+    // inserimento visto in protocollo
+    for( Map child: alfrescoHelper.children() ){
+        if( child["name"].startsWith("Visto di bilancio_") && child["name"].endsWith(".pdf") ){
+            document = alfrescoHelper.copyDocument(child["objectId"], path)
+        }
+    }
+    return true
 }
