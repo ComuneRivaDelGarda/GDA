@@ -105,7 +105,7 @@ public class Start {
         app.setConfigItem("alfrescopath.pubblicazione", "/Siti/pubblicazioni/documentLibrary");
 
         // scringa di connessione per OpenOffice
-        app.setConfigItem("ooops.connection", "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
+        app.setConfigItem("ooops.connection", "uno:socket,host=ooops,port=2002;urp;StarOffice.ServiceManager");
         //app.setConfigItem("ooops.connection", "uno:socket,host=192.168.64.56,port=2002;urp;StarOffice.ServiceManager");
 
         // configurazione originale SuitePA
