@@ -93,9 +93,13 @@ public class FinanziariaUtil implements IFinanziaria {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String annoBozza = determina.getPratica().getIdpratica().substring(0, 4);
         String numeroBozza = ((Integer) Integer.parseInt(determina.getPratica().getIdpratica().substring(4))).toString();
-        String annoAtto = determina.getAnno().toString();
-        String numeroAtto = determina.getNumero().toString();
-        String data = dateFormat.format(determina.getData());
+        String annoAtto=null;
+        String numeroAtto = null;
+        if( determina.getNumero() != null ){
+            annoAtto = determina.getAnno().toString();
+            numeroAtto = determina.getNumero().toString();
+        }
+        String data = dateFormat.format(determina.getPratica().getDatapratica());
         for( ServizioDetermina servizioDetermina: determina.getServizioDeterminaCollection() ){
             rProc = String.format("%04d", servizioDetermina.getServizio().getId());
             break;
