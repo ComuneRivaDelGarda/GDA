@@ -71,12 +71,17 @@ import com.axiastudio.suite.pratiche.PraticaUtil
         return "Deve essere indicato almeno un servizio."
     }
 
+    return true
+}
+
+// Approvazione del responsabile: condizione
+{ determina ->
+
     // l'utente deve essere il responsabile del servizio principale oppure il segretario generale
     def servizioDetermina = determina.getServizioDeterminaCollection().toArray()[0]
     if( !(gestoreDeleghe.checkTitoloODelega(CodiceCarica.RESPONSABILE_DI_SERVIZIO, servizioDetermina.getServizio()) || gestoreDeleghe.checkTitoloODelega(CodiceCarica.SEGRETARIO)) ){
         return "L'utente deve essere responsabile del servizio principale o segretario generale."
     }
-
 
     return true
 }
