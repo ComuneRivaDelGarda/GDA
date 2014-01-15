@@ -128,7 +128,7 @@ public class ProtocolloCallbacksRiva {
                 return new Validation(false, msg);
             }
             /* almeno un ufficio */
-            if( protocollo.getUfficioProtocolloCollection().isEmpty() ){
+            if( protocollo.getUfficioProtocolloCollection() == null || protocollo.getUfficioProtocolloCollection().isEmpty() ){
                 msg += "Deve essere dichiarato almeno un ufficio (mittente o destinatario).";
                 res = false;
             }
