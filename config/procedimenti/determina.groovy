@@ -94,11 +94,11 @@ import com.axiastudio.suite.pratiche.PraticaUtil
     // creazione del protocollo
     def sportello = determina.getServizioDeterminaCollection().toArray()[0].getServizio().getUfficio()
     def attribuzioni = [] // XXX
-    def protocollo = PraticaUtil.protocollaPratica(determina.getPratica(), sportello, determina.getOggetto(), attribuzioni)
-    if( protocollo == null ){
-        return false
+    def validation = PraticaUtil.protocollaPratica(determina.getPratica(), sportello, determina.getOggetto(), attribuzioni)
+    if( validation.response == false ){
+        return validation.message
     }
-    determina.setProtocollo(protocollo)
+    determina.setProtocollo(validation.entity)
     return true
 }
 

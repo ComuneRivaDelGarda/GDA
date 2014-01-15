@@ -13,6 +13,8 @@ documenti: una List<String> contenente i nomi dei file del contenitore cmis
 
 CodiceCarica: l'enum contenente le cariche
 
+PraticaUtil: una collezione di utilità
+
 
 
 == return ==
