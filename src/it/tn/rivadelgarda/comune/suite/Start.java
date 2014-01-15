@@ -111,9 +111,9 @@ public class Start {
         // configurazione originale SuitePA
         Configure.configure(db, System.getProperties());
         
-        // configurazione personalizzata Riva GDA        
+        // configurazione personalizzata Riva GDA
         Register.registerCallbacks(Resolver.callbacksFromClass(ProtocolloCallbacksRiva.class));
-//        Register.registerCallbacks(Resolver.callbacksFromClass(PraticaCallbacksRiva.class));
+        Register.registerCallbacks(Resolver.callbacksFromClass(DeterminaCallbacksRiva.class));
         Register.registerForm(db.getEntityManagerFactory(),
                 "classpath:com/axiastudio/suite/deliberedetermine/forms/determina.ui",
                 Determina.class,
