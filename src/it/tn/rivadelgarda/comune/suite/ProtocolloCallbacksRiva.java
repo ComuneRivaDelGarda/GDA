@@ -20,29 +20,19 @@ package it.tn.rivadelgarda.comune.suite;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.annotations.Callback;
 import com.axiastudio.pypapi.annotations.CallbackType;
-import com.axiastudio.pypapi.db.Database;
-import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.db.Validation;
+import com.axiastudio.pypapi.db.*;
+import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.anagrafiche.entities.Soggetto;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
+import com.axiastudio.suite.generale.entities.Costante;
 import com.axiastudio.suite.pratiche.entities.Pratica;
-import com.axiastudio.suite.protocollo.entities.Attribuzione;
-import com.axiastudio.suite.protocollo.entities.PraticaProtocollo;
-import com.axiastudio.suite.protocollo.entities.Protocollo;
-import com.axiastudio.suite.protocollo.entities.RiferimentoProtocollo;
-import com.axiastudio.suite.protocollo.entities.SoggettoProtocollo;
+import com.axiastudio.suite.protocollo.entities.*;
+
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -118,11 +108,25 @@ public class ProtocolloCallbacksRiva {
             }
 
             /* almeno un soggetto */
-            if( protocollo.getSoggettoProtocolloCollection().isEmpty() ){
-                msg += "Deve essere dichiarato almeno un soggetto esterno (mittente o destinatario).\n";
-                res = false;
+            if( protocollo.getSoggettoProtocolloCollection() == null || protocollo.getSoggettoProtocolloCollection().isEmpty() ){
+                if( TipoProtocollo.INTERNO.equals(protocollo.getTipo()) ){
+                    Costante costante = SuiteUtil.trovaCostante("SOGGETTO_INTERNI");
+                    Long id = Long.parseLong(costante.getValore());
+                    Controller controller = (Controller) Register.queryUtility(IController.class, Soggetto.class.getName());
+                    Soggetto soggetto = (Soggetto) controller.get(id);
+                    SoggettoProtocollo sp = new SoggettoProtocollo();
+                    sp.setSoggetto(soggetto);
+                    List<SoggettoProtocollo> spList = new ArrayList<SoggettoProtocollo>();
+                    spList.add(sp);
+                    protocollo.setSoggettoProtocolloCollection(spList);
+                } else {
+                    msg += "Deve essere dichiarato almeno un soggetto esterno (mittente o destinatario).";
+                    res = false;
+                }
             }
-            
+            if( res == false ){
+                return new Validation(false, msg);
+            }
             /* almeno un ufficio */
             if( protocollo.getUfficioProtocolloCollection().isEmpty() ){
                 msg += "Deve essere dichiarato almeno un ufficio (mittente o destinatario).";
