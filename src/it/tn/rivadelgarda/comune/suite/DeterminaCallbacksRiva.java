@@ -20,6 +20,7 @@ package it.tn.rivadelgarda.comune.suite;
 import com.axiastudio.pypapi.annotations.Callback;
 import com.axiastudio.pypapi.annotations.CallbackType;
 import com.axiastudio.pypapi.db.Validation;
+import com.axiastudio.suite.deliberedetermine.DeterminaCallbacks;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 
 /**
@@ -33,6 +34,11 @@ public class DeterminaCallbacksRiva {
      */
     @Callback(type=CallbackType.BEFORECOMMIT)
     public static Validation beforeCommit(Determina determina){
+        Validation validation = DeterminaCallbacks.validaDetermina(determina);
+        if( !validation.getResponse() ){
+            return validation;
+        }
+        // svuoto la lista dei movimenti, visto che sono collegato a jEnte
         determina.getMovimentoDeterminaCollection().clear();
         return new Validation(true);
     }
