@@ -74,7 +74,7 @@ import com.axiastudio.suite.pratiche.PraticaUtil
     return true
 }
 
-// Approvazione del responsabile: condizione
+// Istruita da approvare: condizione
 { determina ->
 
     // l'utente deve essere il responsabile del servizio principale oppure il segretario generale
@@ -82,19 +82,23 @@ import com.axiastudio.suite.pratiche.PraticaUtil
     if( !(gestoreDeleghe.checkTitoloODelega(CodiceCarica.RESPONSABILE_DI_SERVIZIO, servizioDetermina.getServizio()) || gestoreDeleghe.checkTitoloODelega(CodiceCarica.SEGRETARIO)) ){
         return "L'utente deve essere responsabile del servizio principale o segretario generale."
     }
+    // deve essere presente almeno un ufficio per l'attribuzione del protocollo
 
     return true
 }
 
-// Approvazione del responsabile: azione
+// Istruita da approvare: azione
 { determina ->
 
     // apertura maschera impegni (per trasformazione bozza in atto)
 
     // creazione del protocollo
     def sportello = determina.getServizioDeterminaCollection().toArray()[0].getServizio().getUfficio()
-    def attribuzioni = [] // XXX
-    def validation = PraticaUtil.protocollaPratica(determina.getPratica(), sportello, determina.getOggetto(), attribuzioni)
+    def ud = determina.getUfficioDeterminaCollection().toArray()
+    def n = ud.size()-1
+    def attribuzioni = (0..n).collect { ud[it].ufficio }
+    def uffici = [ sportello ]
+    def validation = PraticaUtil.protocollaPratica(determina.getPratica(), sportello, determina.getOggetto(), attribuzioni, null, null, uffici)
     if( validation.response == false ){
         return validation.message
     }
@@ -102,18 +106,18 @@ import com.axiastudio.suite.pratiche.PraticaUtil
     return true
 }
 
-// Preparazione e firma: condizione
+// Predisposta per la sottoscrizione: condizione
 { determina ->
 
     // i documenti sono pronti per l'inserimento
 
 }
 
-// Preparazione e firma: azione
+// Predisposta per la sottoscrizione: azione
 { determina ->
 
     // path protocollo
-    def path = "/Protocollo/"
+    def path = "/Siti/protocollo/documentLibrary/"
     def protocollo = determina.protocollo
     path += protocollo.dataprotocollo.format("yyyy/MM/dd/")
     path += protocollo.iddocumento
@@ -126,7 +130,7 @@ import com.axiastudio.suite.pratiche.PraticaUtil
 
 }
 
-// Visto di bilancio: condizione
+// Sottoscritta dal responsabile: condizione
 { determina ->
 
     // se la determina è di spesa e ci vuole un solo file del tipo Visto di bilancio_*.odt
@@ -148,7 +152,7 @@ import com.axiastudio.suite.pratiche.PraticaUtil
 
 }
 
-// Visto di bilancio: azione
+// Sottoscritta dal responsabile: azione
 { determina ->
 
     // path protocollo

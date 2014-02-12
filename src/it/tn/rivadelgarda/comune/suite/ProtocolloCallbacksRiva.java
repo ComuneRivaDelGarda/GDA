@@ -149,7 +149,7 @@ public class ProtocolloCallbacksRiva {
                 /* Nuovo inserimento */
                 Pratica pratica = praticaProtocollo.getPratica();
                 Ufficio ufficioGestore = pratica.getGestione();
-                if( true ){
+                if( false ){
                     /* TODO: riservato */
                     if( !ufficiPrivato.contains(ufficioGestore) && !autenticato.getSupervisorepratiche() ){
                         msg += "Per poter inserire pratiche riservate è necessario appartenere al loro ufficio gestore\n";
@@ -187,11 +187,13 @@ public class ProtocolloCallbacksRiva {
         /*
          * I riferimenti precedenti devono essere realmente precedenti
          */
-        for( RiferimentoProtocollo rp: protocollo.getRiferimentoProtocolloCollection() ){
-            if( rp.getPrecedente().getDataprotocollo().after(protocollo.getDataprotocollo()) ){
-                msg += "I protocolli precedenti riferiti non possono avere data successiva al protocollo.\n";
-                res = false;
-                break;
+        if( protocollo.getRiferimentoProtocolloCollection() != null ){
+            for( RiferimentoProtocollo rp: protocollo.getRiferimentoProtocolloCollection() ){
+                if( rp.getPrecedente().getDataprotocollo().after(protocollo.getDataprotocollo()) ){
+                    msg += "I protocolli precedenti riferiti non possono avere data successiva al protocollo.\n";
+                    res = false;
+                    break;
+                }
             }
         }
 
