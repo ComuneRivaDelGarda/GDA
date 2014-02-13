@@ -156,7 +156,7 @@ import com.axiastudio.suite.pratiche.PraticaUtil
 { determina ->
 
     // path protocollo
-    def path = "/Protocollo/"
+    def path = "/Siti/protocollo/documentLibrary/"
     def protocollo = determina.protocollo
     path += protocollo.dataprotocollo.format("yyyy/MM/dd/")
     path += protocollo.iddocumento
