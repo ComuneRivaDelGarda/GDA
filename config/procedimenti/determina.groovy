@@ -74,19 +74,6 @@ import com.axiastudio.suite.pratiche.PraticaUtil
     return true
 }
 
-// Istruita da approvare: condizione
-{ determina ->
-
-    // l'utente deve essere il responsabile del servizio principale oppure il segretario generale
-    def servizioDetermina = determina.getServizioDeterminaCollection().toArray()[0]
-    if( !(gestoreDeleghe.checkTitoloODelega(CodiceCarica.RESPONSABILE_DI_SERVIZIO, servizioDetermina.getServizio()) || gestoreDeleghe.checkTitoloODelega(CodiceCarica.SEGRETARIO)) ){
-        return "L'utente deve essere responsabile del servizio principale o segretario generale."
-    }
-    // deve essere presente almeno un ufficio per l'attribuzione del protocollo
-
-    return true
-}
-
 // Istruita da approvare: azione
 { determina ->
 
