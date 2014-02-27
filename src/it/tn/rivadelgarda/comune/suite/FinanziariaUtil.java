@@ -28,6 +28,8 @@ import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.pypapi.plugins.jente.webservices.Movimento;
+import com.axiastudio.suite.pratiche.entities.Visto;
+
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -87,10 +89,20 @@ public class FinanziariaUtil implements IFinanziaria {
     @Override
     public void apriGestoreMovimenti(Determina determina) {
         String utente = ((Utente) Register.queryUtility(IUtente.class)).getLogin();
-        Boolean vistoResponsabile = determina.getVistoResponsabile();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        Boolean vistoResponsabile = false;
+        String dataVistoResponsabile = null;
+        for( Visto visto: determina.getPratica().getVistoCollection() ){
+            if( visto.getFase().getId() == 49 ){
+                vistoResponsabile = true;
+                dataVistoResponsabile = dateFormat.format(visto.getData());
+                break;
+            }
+        }
+
         String rProc=null;
         String organoSettore = "DT";
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String annoBozza = determina.getPratica().getIdpratica().substring(0, 4);
         String numeroBozza = ((Integer) Integer.parseInt(determina.getPratica().getIdpratica().substring(4))).toString();
         String annoAtto=null;
@@ -105,10 +117,6 @@ public class FinanziariaUtil implements IFinanziaria {
             break;
         }        
 
-        String dataVistoResponsabile = null;
-        if( determina.getDataVistoResponsabile() != null ){
-            dataVistoResponsabile = dateFormat.format(determina.getDataVistoResponsabile());
-        }
         FormMovimenti form = new FormMovimenti(annoBozza, organoSettore, numeroBozza, annoAtto, organoSettore, numeroAtto, utente, rProc, vistoResponsabile, data, dataVistoResponsabile);
         form.show();
     }
