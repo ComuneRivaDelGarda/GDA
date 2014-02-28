@@ -91,16 +91,13 @@ public class FinanziariaUtil implements IFinanziaria {
         String utente = ((Utente) Register.queryUtility(IUtente.class)).getLogin();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        Boolean vistoResponsabile = false;
-        String dataVistoResponsabile = null;
-        for( Visto visto: determina.getPratica().getVistoCollection() ){
-            if( visto.getFase().getId() == 49 ){
-                vistoResponsabile = true;
-                dataVistoResponsabile = dateFormat.format(visto.getData());
-                break;
-            }
+        Visto visto = determina.getVistoResponsabile();
+        Boolean vistoResponsabile=false;
+        String dataVistoResponsabile=null;
+        if( visto != null ){
+            vistoResponsabile = !visto.getNegato();
+            dataVistoResponsabile = dateFormat.format(visto.getData());
         }
-
         String rProc=null;
         String organoSettore = "DT";
         String annoBozza = determina.getPratica().getIdpratica().substring(0, 4);
@@ -117,7 +114,8 @@ public class FinanziariaUtil implements IFinanziaria {
             break;
         }        
 
-        FormMovimenti form = new FormMovimenti(annoBozza, organoSettore, numeroBozza, annoAtto, organoSettore, numeroAtto, utente, rProc, vistoResponsabile, data, dataVistoResponsabile);
+        FormMovimenti form = new FormMovimenti(annoBozza, organoSettore, numeroBozza, annoAtto, organoSettore,
+                numeroAtto, utente, rProc, vistoResponsabile, data, dataVistoResponsabile);
         form.show();
     }
     
