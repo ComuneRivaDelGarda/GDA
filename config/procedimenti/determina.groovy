@@ -79,7 +79,10 @@ import com.axiastudio.suite.pratiche.PraticaUtil
 
     // apertura maschera impegni (per trasformazione bozza in atto)
 
-    // creazione del protocollo
+    // creazione del protocollo (se non già esistente)
+    if( determina.getProtocollo() != null ){
+        return true;
+    }
     def sportello = determina.getServizioDeterminaCollection().toArray()[0].getServizio().getUfficio()
     def ud = determina.getUfficioDeterminaCollection().toArray()
     def n = ud.size()-1
