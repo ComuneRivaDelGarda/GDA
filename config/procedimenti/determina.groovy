@@ -71,6 +71,11 @@ import com.axiastudio.suite.pratiche.PraticaUtil
         return "Deve essere indicato almeno un servizio."
     }
 
+    // devono essere specificati degli uffici
+    if( determina.getUfficioDeterminaCollection().size() < 1 ){
+        return "Devono essere specificate delle attribuzioni per il protocollo."
+    }
+
     return true
 }
 
@@ -100,6 +105,15 @@ import com.axiastudio.suite.pratiche.PraticaUtil
 { determina ->
 
     // i documenti sono pronti per l'inserimento
+    def path = "/Siti/protocollo/documentLibrary/"
+    def protocollo = determina.protocollo
+    path += protocollo.dataprotocollo.format("yyyy/MM/dd/")
+    path += protocollo.iddocumento
+
+    if( alfrescoHelper.children("protocollo").size() < 1 ){
+        return "Devono essere preparati i documenti per l'associazione al protocollo"
+    }
+    return true
 
 }
 
