@@ -88,12 +88,7 @@ import com.axiastudio.suite.pratiche.PraticaUtil
     if( determina.getProtocollo() != null ){
         return true;
     }
-    def sportello = determina.getServizioDeterminaCollection().toArray()[0].getServizio().getUfficio()
-    def ud = determina.getUfficioDeterminaCollection().toArray()
-    def n = ud.size()-1
-    def attribuzioni = (0..n).collect { ud[it].ufficio }
-    def uffici = [ sportello ]
-    def validation = PraticaUtil.protocollaPratica(determina.getPratica(), sportello, determina.getOggetto(), attribuzioni, null, null, uffici)
+    def validation = PraticaUtil.protocollaDetermina(determina)
     if( validation.response == false ){
         return validation.message
     }
