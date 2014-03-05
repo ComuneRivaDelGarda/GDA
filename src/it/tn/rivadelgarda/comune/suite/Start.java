@@ -31,6 +31,7 @@ import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
+import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -117,6 +118,10 @@ public class Start {
                 FormDeterminaJEnte.class);
         Register.registerUtility(new FinanziariaUtil(), IFinanziaria.class);
         //Register.registerUtility(FinanziariaUtilFake.class, IFinanziaria.class); // test
+        Register.registerForm(db.getEntityManagerFactory(),
+                "classpath:com/axiastudio/suite/pubblicazioni/forms/pubblicazione.ui",
+                Pubblicazione.class,
+                FormPubblicazioneRiva.class);
 
         // CMIS e Ooops
         CmisPlugin cmisPluginDetermina = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
