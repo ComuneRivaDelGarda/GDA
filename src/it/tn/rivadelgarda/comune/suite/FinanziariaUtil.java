@@ -20,6 +20,7 @@ package it.tn.rivadelgarda.comune.suite;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.plugins.jente.FormMovimenti;
 import com.axiastudio.pypapi.plugins.jente.JEnteHelper;
+import com.axiastudio.pypapi.plugins.jente.webservices.Movimento;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
@@ -27,7 +28,6 @@ import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
 import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.finanziaria.entities.Capitolo;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
-import com.axiastudio.pypapi.plugins.jente.webservices.Movimento;
 import com.axiastudio.suite.pratiche.entities.Visto;
 
 import java.math.BigDecimal;

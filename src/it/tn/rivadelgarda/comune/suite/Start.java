@@ -22,7 +22,6 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
-import com.axiastudio.pypapi.ui.IForm;
 import com.axiastudio.suite.Configure;
 import com.axiastudio.suite.Mdi;
 import com.axiastudio.suite.base.ICheckLogin;
@@ -32,7 +31,6 @@ import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
-import com.axiastudio.suite.richieste.entities.Richiesta;
 
 import java.util.HashMap;
 import java.util.Map;

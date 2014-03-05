@@ -2,7 +2,9 @@ package it.tn.rivadelgarda.comune.suite;
 
 import com.axiastudio.suite.base.ICheckLogin;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  * User: tiziano

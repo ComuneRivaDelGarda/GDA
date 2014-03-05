@@ -17,22 +17,15 @@
  */
 package it.tn.rivadelgarda.comune.suite;
 
-import com.axiastudio.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Register;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.pypapi.ui.Context;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
-import com.axiastudio.suite.deliberedetermine.entities.ServizioDetermina;
 import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
-import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
-import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
+
 import java.util.List;
 
 class GestoreMovimentiMenuBar extends PyPaPiToolBar {
