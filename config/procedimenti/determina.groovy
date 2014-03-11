@@ -166,5 +166,12 @@ import com.axiastudio.suite.pratiche.PraticaUtil
             document = alfrescoHelper.copyDocument(child["objectId"], path)
         }
     }
+
+    // inserimento attribuzioni dalla determina
+    def validation = PraticaUtil.inserisciAttribuzioniProtocolloDetermina(determina)
+    if( validation.response == false ){
+        return validation.message
+    }
+
     return true
 }
