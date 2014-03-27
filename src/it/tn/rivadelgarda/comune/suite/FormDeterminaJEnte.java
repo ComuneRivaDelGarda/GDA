@@ -51,6 +51,8 @@ class GestoreMovimentiMenuBar extends PyPaPiToolBar {
  * 
  */
 public class FormDeterminaJEnte extends FormDetermina {
+
+    private Determina precedente=null;
     
     public FormDeterminaJEnte(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
@@ -61,7 +63,11 @@ public class FormDeterminaJEnte extends FormDetermina {
 
     @Override
     protected void indexChanged(int row) {
+        if( precedente != null ){
+            this.getContext().getController().refresh(precedente);
+        }
         Determina determina = (Determina) this.getContext().getCurrentEntity();
+        precedente = determina;
         if( determina.getId() != null ){
             IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
             List<MovimentoDetermina> movimenti = finanziariaUtil.getMovimentiDetermina(determina);
