@@ -25,6 +25,7 @@ import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
 import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
+import com.trolltech.qt.gui.QCheckBox;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ class GestoreMovimentiMenuBar extends PyPaPiToolBar {
         this.insertButton("apriGestoreMovimenti", "Gestore movimenti",
                 "classpath:com/axiastudio/pypapi/plugins/jente/resources/jente.png",
                 "Apri la maschera di gestione dei movimenti", parent);
+        this.actionByName("apriGestoreMovimenti").setEnabled(false);
     }
 }
 
@@ -53,10 +55,11 @@ class GestoreMovimentiMenuBar extends PyPaPiToolBar {
 public class FormDeterminaJEnte extends FormDetermina {
 
     private Determina precedente=null;
-    
+    private GestoreMovimentiMenuBar gestoreMovimenti;
+
     public FormDeterminaJEnte(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
-        GestoreMovimentiMenuBar gestoreMovimenti = new GestoreMovimentiMenuBar("Gestore movimenti", this);
+        gestoreMovimenti = new GestoreMovimentiMenuBar("Gestore movimenti", this);
         this.addToolBar(gestoreMovimenti);
     }
 
@@ -72,6 +75,9 @@ public class FormDeterminaJEnte extends FormDetermina {
             IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
             List<MovimentoDetermina> movimenti = finanziariaUtil.getMovimentiDetermina(determina);
             determina.setMovimentoDeterminaCollection(movimenti);
+            this.gestoreMovimenti.actionByName("apriGestoreMovimenti").setEnabled(
+                    ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesa")).isChecked() || movimenti.size()>0);
+
             // faccio credere al contesto che il contesto padre è cambiato, quindi lo spingo ad aggiornarsi
             Context context = (Context) Register.queryRelation(this, ".movimentoDeterminaCollection");
             context.refreshContext();

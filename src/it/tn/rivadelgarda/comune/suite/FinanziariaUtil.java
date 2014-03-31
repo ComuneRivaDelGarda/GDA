@@ -68,15 +68,30 @@ public class FinanziariaUtil implements IFinanziaria {
             for( Movimento movimentoJEnte: movimenti ){
                 MovimentoDetermina movimento = new MovimentoDetermina();
                 Capitolo capitolo = new Capitolo();
+                if (movimentoJEnte.getMovImpAcce().getEsercizio()!=null && !movimentoJEnte.getMovImpAcce().getEsercizio().equals("")) {
+                    movimento.setAnnoEsercizio(Long.parseLong(movimentoJEnte.getMovImpAcce().getEsercizio()));
+                }
+                capitolo.setNumero(movimentoJEnte.getMovImpAcce().getCapitolo());
                 capitolo.setDescrizione(movimentoJEnte.getMovImpAcce().getCapitolo()+"-"+movimentoJEnte.getMovImpAcce().getDescCapitolo());
                 movimento.setCapitolo(capitolo);
                 movimento.setArticolo(movimentoJEnte.getMovImpAcce().getArticolo());
                 movimento.setImpegno(movimentoJEnte.getMovImpAcce().getNumeroImpacc());
+                if (movimentoJEnte.getMovImpAcce().getAnnoImpacc()!=null && !movimentoJEnte.getMovImpAcce().getAnnoImpacc().equals("")) {
+                    movimento.setAnnoImpegno(Long.parseLong(movimentoJEnte.getMovImpAcce().getAnnoImpacc()));
+                }
                 movimento.setCodiceMeccanografico(movimentoJEnte.getMovImpAcce().getCodMeccanografico());
                 movimento.setSottoImpegno(movimentoJEnte.getMovImpAcce().getSubImpacc());
                 BigDecimal importo = new BigDecimal(movimentoJEnte.getMovImpAcce().getImporto().replace(".", "").replace(",", "."));
                 movimento.setImporto(importo);
-                
+                if (movimentoJEnte.getMovImpAcce().getCodDebBen()!=null && !movimentoJEnte.getMovImpAcce().getCodDebBen().equals("")) {
+                    movimento.setCodiceBeneficiario(Long.parseLong(movimentoJEnte.getMovImpAcce().getCodDebBen()));
+                }
+                movimento.setDescrizioneBeneficiario(movimentoJEnte.getMovImpAcce().getDescCodDebBen());
+                movimento.setCodiceCup(movimentoJEnte.getMovImpAcce().getCodiceCup());
+                movimento.setCodiceCig(movimentoJEnte.getMovImpAcce().getCodiceCig());
+                movimento.setCespite(movimentoJEnte.getMovImpAcce().getCespite());
+                movimento.setDescrizioneCespite(movimentoJEnte.getMovImpAcce().getDescCespite());
+
                 impegni.add(movimento);
             }
         }
@@ -108,14 +123,20 @@ public class FinanziariaUtil implements IFinanziaria {
             annoAtto = determina.getAnno().toString();
             numeroAtto = determina.getNumero().toString();
         }
-        String data = dateFormat.format(determina.getPratica().getDatapratica());
+
+        String data;
+        if (determina.getPratica().getDatapratica()!=null) {
+            data=dateFormat.format(determina.getPratica().getDatapratica());
+        } else {
+            data="";
+        }
         for( ServizioDetermina servizioDetermina: determina.getServizioDeterminaCollection() ){
             rProc = String.format("%04d", servizioDetermina.getServizio().getId());
             break;
         }        
 
         FormMovimenti form = new FormMovimenti(annoBozza, organoSettore, numeroBozza, annoAtto, organoSettore,
-                numeroAtto, utente, rProc, vistoResponsabile, data, dataVistoResponsabile);
+                numeroAtto, utente, rProc, vistoResponsabile, determina.getOggetto(), data, dataVistoResponsabile);
         form.show();
     }
     
