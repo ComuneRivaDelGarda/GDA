@@ -83,6 +83,10 @@ public class FinanziariaUtil implements IFinanziaria {
                 movimento.setSottoImpegno(movimentoJEnte.getMovImpAcce().getSubImpacc());
                 BigDecimal importo = new BigDecimal(movimentoJEnte.getMovImpAcce().getImporto().replace(".", "").replace(",", "."));
                 movimento.setImporto(importo);
+                if (movimentoJEnte.getMovImpAcce().getImportoImpacc()!=null && !movimentoJEnte.getMovImpAcce().getImportoImpacc().equals("")) {
+                    BigDecimal importoTot = new BigDecimal(movimentoJEnte.getMovImpAcce().getImporto().replace(".", "").replace(",", "."));
+                    movimento.setImportoImpegnoAccertamento(importoTot);
+                }
                 if (movimentoJEnte.getMovImpAcce().getCodDebBen()!=null && !movimentoJEnte.getMovImpAcce().getCodDebBen().equals("")) {
                     movimento.setCodiceBeneficiario(Long.parseLong(movimentoJEnte.getMovImpAcce().getCodDebBen()));
                 }
