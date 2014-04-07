@@ -39,7 +39,9 @@ public class DeterminaCallbacksRiva {
             return validation;
         }
         // svuoto la lista dei movimenti, visto che sono collegato a jEnte
-        determina.getMovimentoDeterminaCollection().clear();
+        if ( determina.getMovimentoDeterminaCollection() != null ) {
+            determina.getMovimentoDeterminaCollection().clear();
+        }
         return new Validation(true);
     }
 }
