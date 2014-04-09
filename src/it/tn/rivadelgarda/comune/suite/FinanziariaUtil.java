@@ -34,6 +34,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,7 +52,7 @@ public class FinanziariaUtil implements IFinanziaria {
         String anno;
         String attoOBozza;
         String numero;
-        if( determina.getNumero() == null ){
+        if( determina.getNumero() == null || determina.getNumero() == 0 ){
             attoOBozza = "B";
             numero = ((Integer) Integer.parseInt(determina.getPratica().getIdpratica().substring(4))).toString();
             anno = determina.getPratica().getIdpratica().substring(0, 4);
@@ -75,6 +76,7 @@ public class FinanziariaUtil implements IFinanziaria {
                 capitolo.setDescrizione(movimentoJEnte.getMovImpAcce().getCapitolo()+"-"+movimentoJEnte.getMovImpAcce().getDescCapitolo());
                 movimento.setCapitolo(capitolo);
                 movimento.setArticolo(movimentoJEnte.getMovImpAcce().getArticolo());
+                movimento.setEu(movimentoJEnte.getMovImpAcce().getEu());
                 movimento.setImpegno(movimentoJEnte.getMovImpAcce().getNumeroImpacc());
                 if (movimentoJEnte.getMovImpAcce().getAnnoImpacc()!=null && !movimentoJEnte.getMovImpAcce().getAnnoImpacc().equals("")) {
                     movimento.setAnnoImpegno(Long.parseLong(movimentoJEnte.getMovImpAcce().getAnnoImpacc()));
@@ -127,7 +129,6 @@ public class FinanziariaUtil implements IFinanziaria {
             annoAtto = determina.getAnno().toString();
             numeroAtto = determina.getNumero().toString();
         }
-
         String data;
         if (determina.getPratica().getDatapratica()!=null) {
             data=dateFormat.format(determina.getPratica().getDatapratica());
@@ -137,11 +138,50 @@ public class FinanziariaUtil implements IFinanziaria {
         for( ServizioDetermina servizioDetermina: determina.getServizioDeterminaCollection() ){
             rProc = String.format("%04d", servizioDetermina.getServizio().getId());
             break;
-        }        
+        }
+        String validoImpegni;
+        if (determina.getDispesa()) {
+            validoImpegni = "S";
+        } else {
+            validoImpegni = "N";
+        }
+        String validoAccertamenti;
+        if (determina.getDiEntrata()) {
+            validoAccertamenti = "S";
+        } else {
+            validoAccertamenti = "N";
+        }
 
         FormMovimenti form = new FormMovimenti(annoBozza, organoSettore, numeroBozza, annoAtto, organoSettore,
-                numeroAtto, utente, rProc, vistoResponsabile, determina.getOggetto(), data, dataVistoResponsabile);
+                numeroAtto, utente, rProc, vistoResponsabile, determina.getOggetto(), data, dataVistoResponsabile,
+                validoImpegni, validoAccertamenti);
         form.show();
     }
-    
+
+    public Boolean assegnaEsecutivitaAtto(Determina determina, Date data) {
+        String utente = ((Utente) Register.queryUtility(IUtente.class)).getLogin();
+        JEnteHelper jEnteHelper = new JEnteHelper(utente);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        return jEnteHelper.chiamataModificaEsecutivitaAtto("A", "DT", determina.getAnno().toString(),
+                determina.getNumero().toString(), sdf.format(data), "S");
+    }
+
+    public Boolean trasformaBozzaInAtto(Determina determina, Date data) {
+
+        String utente = ((Utente) Register.queryUtility(IUtente.class)).getLogin();
+        JEnteHelper jEnteHelper = new JEnteHelper(utente);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String annoBozza = determina.getPratica().getIdpratica().substring(0, 4);
+        String numeroBozza = ((Integer) Integer.parseInt(determina.getPratica().getIdpratica().substring(4))).toString();
+
+        if( determina.getVistoResponsabile() != null && determina.getNumero() != null && determina.getNumero() != 0 &&
+                ! jEnteHelper.chiamataRichiestaEsisteBozzaOAtto("A", "DT", determina.getAnno().toString(), determina.getNumero().toString()) ){
+            return jEnteHelper.chiamataRichiestaTrasformazioneBozzaInAtto("B", "DT", annoBozza, numeroBozza, "DT", determina.getAnno().toString(),
+                    determina.getNumero().toString(), sdf.format(data));
+        } else {
+            return false;
+        }
+    }
+
 }

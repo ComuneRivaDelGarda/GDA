@@ -24,6 +24,7 @@ import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,5 +61,15 @@ public class FinanziariaUtilFake implements IFinanziaria {
     public void apriGestoreMovimenti(Determina determina) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    @Override
+    public Boolean assegnaEsecutivitaAtto(Determina determina, Date data) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Boolean trasformaBozzaInAtto(Determina determina, Date data) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
 }
