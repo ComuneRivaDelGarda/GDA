@@ -32,6 +32,7 @@ import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
+import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -128,6 +129,8 @@ public class Start {
         Register.registerPlugin(cmisPluginDetermina, FormDeterminaJEnte.class);
         OoopsPlugin ooopsPluginDetermina = (OoopsPlugin) Register.queryPlugin(FormDetermina.class, "Ooops");
         Register.registerPlugin(ooopsPluginDetermina, FormDeterminaJEnte.class);
+        CmisPlugin cmisPluginPubblicazioni = (CmisPlugin) Register.queryPlugin(FormPubblicazione.class, "CMIS");
+        Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazioneRiva.class);
 
         /* login */
         Login login = new Login();

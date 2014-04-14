@@ -16,13 +16,13 @@
  */
 package it.tn.rivadelgarda.comune.suite;
 
-import com.axiastudio.pypapi.ui.Window;
+import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
 import com.axiastudio.suite.plugins.atm.helper.PutAttoHelper;
 import com.axiastudio.suite.plugins.atm.ws.ATMClient;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
-import com.trolltech.qt.gui.QPushButton;
+import com.trolltech.qt.gui.QSpinBox;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -41,7 +41,13 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
     }
 
     public void pubblicaOra(){
-        System.out.println("buh!");
+
+        QSpinBox n_giorni = (QSpinBox) findChild(QSpinBox.class, "spinBox_n_giorni");
+        int n = n_giorni.value();
+        if( n == 0 ){
+            Util.warningBox(this, "Dati di pubblicazione errati", "Deve essere indicato un numero di giorni di consultazione");
+            return;
+        }
 
         Pubblicazione pubblicazione = (Pubblicazione) this.getContext().getCurrentEntity();
 
