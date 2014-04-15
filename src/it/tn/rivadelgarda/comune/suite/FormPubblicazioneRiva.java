@@ -58,7 +58,8 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
 
         pubblicazioneATM.setTitolo(pubblicazione.getTitolo());
         pubblicazioneATM.setDescrizione(pubblicazione.getDescrizione());
-        pubblicazioneATM.setInizioconsultazione(pubblicazione.getInizioconsultazione());
+        pubblicazioneATM.setDataatto(pubblicazione.getDataatto());
+        pubblicazioneATM.setNumeroatto(pubblicazione.getNumeroatto());
         pubblicazioneATM.setDurataconsultazione(pubblicazione.getDurataconsultazione());
         pubblicazioneATM.setRichiedente(pubblicazione.getRichiedente());
         pubblicazioneATM.setTipoatto(pubblicazione.getTipoattopubblicazione().getDescrizione());
