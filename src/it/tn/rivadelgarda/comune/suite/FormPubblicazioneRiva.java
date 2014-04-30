@@ -26,7 +26,6 @@ import com.trolltech.qt.gui.QSpinBox;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -42,6 +41,7 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
 
     public void pubblicaOra(){
 
+
         QSpinBox n_giorni = (QSpinBox) findChild(QSpinBox.class, "spinBox_n_giorni");
         int n = n_giorni.value();
         if( n == 0 ){
@@ -51,15 +51,21 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
 
         Pubblicazione pubblicazione = (Pubblicazione) this.getContext().getCurrentEntity();
 
-        Calendar calendar = Calendar.getInstance(Locale.ITALIAN);
-        Date oggi = calendar.getTime();
-
         PubblicazioneATM pubblicazioneATM = new PubblicazioneATM();
 
         pubblicazioneATM.setTitolo(pubblicazione.getTitolo());
         pubblicazioneATM.setDescrizione(pubblicazione.getDescrizione());
-        pubblicazioneATM.setDataatto(pubblicazione.getDataatto());
-        pubblicazioneATM.setNumeroatto(pubblicazione.getNumeroatto());
+
+        if( pubblicazione.getDataatto() != null ) {
+            pubblicazioneATM.setDataatto(pubblicazione.getDataatto());
+        } else {
+            Calendar calendar = Calendar.getInstance(Locale.ITALIAN);
+            pubblicazioneATM.setDataatto(calendar.getTime());
+        }
+
+        if( pubblicazione.getNumeroatto() != null  ) {
+            pubblicazioneATM.setNumeroatto(pubblicazione.getNumeroatto());
+        }
         pubblicazioneATM.setDurataconsultazione(pubblicazione.getDurataconsultazione());
         pubblicazioneATM.setRichiedente(pubblicazione.getRichiedente());
         pubblicazioneATM.setTipoatto(pubblicazione.getTipoattopubblicazione().getDescrizione());
@@ -74,7 +80,10 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
                 ctx.getProperty(ATMClient.WSAKEY),
                 ctx.getProperty(ATMClient.ENDPOINT));
 
-        helper.putAtto(pubblicazioneATM);
+        boolean res = helper.putAtto(pubblicazioneATM);
+        if( !res ){
+            Util.warningBox(this, "Arrore in pubblicazione", "L'atto non è stato pubblicato all'albo.");
+        }
     }
 
     private Properties loadConfig() {
