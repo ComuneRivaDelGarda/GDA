@@ -16,18 +16,22 @@
  */
 package it.tn.rivadelgarda.comune.suite;
 
+import com.axiastudio.menjazo.AlfrescoHelper;
+import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.ui.Util;
+import com.axiastudio.suite.plugins.atm.FileATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
 import com.axiastudio.suite.plugins.atm.helper.PutAttoHelper;
 import com.axiastudio.suite.plugins.atm.ws.ATMClient;
+import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
 import com.trolltech.qt.gui.QSpinBox;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.Properties;
+import java.io.InputStream;
+import java.util.*;
 
 /**
  *
@@ -82,9 +86,35 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
                 ctx.getProperty(ATMClient.WSAKEY),
                 ctx.getProperty(ATMClient.ENDPOINT));
 
+        // documento e allegati
+        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(pubblicazione.getClass(), "CMIS");
+        AlfrescoHelper cmisHelper = cmisPlugin.createAlfrescoHelper(pubblicazione);
+        Boolean isAtto=Boolean.TRUE;
+        List<FileATM> allegati = new ArrayList<FileATM>();
+        for( Map child: cmisHelper.children() ){
+            String name = (String) child.get("name");
+            String title = (String) child.get("title");
+            CmisStreamProvider streamProvider = cmisPlugin.createCmisStreamProvider((String) child.get("objectId"));
+            InputStream inputStream = streamProvider.getInputStream();
+            FileATM fileATM = new FileATM();
+            fileATM.setTitoloallegato(title);
+            fileATM.setFileallegato(inputStream);
+            fileATM.setFileallegatoname(name);
+            if( isAtto ) {
+                pubblicazioneATM.setFileAtto(fileATM);
+                isAtto = Boolean.FALSE;
+            } else {
+                allegati.add(fileATM);
+            }
+        }
+        pubblicazioneATM.setAllegati(allegati);
         boolean res = helper.putAtto(pubblicazioneATM);
         if( !res ){
-            Util.warningBox(this, "Arrore in pubblicazione", "L'atto non è stato pubblicato all'albo.");
+            Util.warningBox(this, "Errore in pubblicazione", "L'atto non è stato pubblicato all'albo.");
+        } else {
+            pubblicazione.setPubblicato(Boolean.TRUE);
+            this.getContext().commitChanges();
+            Util.warningBox(this, "Pubblicazione avvenuta", "L'atto è stato pubblicato all'albo, verificare su http://www.albotelematico.tn.it/bacheca/riva-del-garda.");
         }
     }
 
