@@ -76,7 +76,8 @@ public class FormDeterminaJEnte extends FormDetermina {
             List<MovimentoDetermina> movimenti = finanziariaUtil.getMovimentiDetermina(determina);
             determina.setMovimentoDeterminaCollection(movimenti);
             this.gestoreMovimenti.actionByName("apriGestoreMovimenti").setEnabled(
-                    ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesa")).isChecked() || movimenti.size()>0);
+                    ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesa")).isChecked() ||
+                    ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_entrata")).isChecked() || movimenti.size()>0);
 
             // faccio credere al contesto che il contesto padre è cambiato, quindi lo spingo ad aggiornarsi
             Context context = (Context) Register.queryRelation(this, ".movimentoDeterminaCollection");

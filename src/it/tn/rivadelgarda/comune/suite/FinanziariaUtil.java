@@ -76,7 +76,9 @@ public class FinanziariaUtil implements IFinanziaria {
                 capitolo.setDescrizione(movimentoJEnte.getMovImpAcce().getCapitolo()+"-"+movimentoJEnte.getMovImpAcce().getDescCapitolo());
                 movimento.setCapitolo(capitolo);
                 movimento.setArticolo(movimentoJEnte.getMovImpAcce().getArticolo());
+                movimento.setArchivio(movimentoJEnte.getMovImpAcce().getArchivio());
                 movimento.setEu(movimentoJEnte.getMovImpAcce().getEu());
+                movimento.setTipoMovimento(movimentoJEnte.getMovImpAcce().getTipoMovimento());
                 movimento.setImpegno(movimentoJEnte.getMovImpAcce().getNumeroImpacc());
                 if (movimentoJEnte.getMovImpAcce().getAnnoImpacc()!=null && !movimentoJEnte.getMovImpAcce().getAnnoImpacc().equals("")) {
                     movimento.setAnnoImpegno(Long.parseLong(movimentoJEnte.getMovImpAcce().getAnnoImpacc()));
@@ -175,10 +177,13 @@ public class FinanziariaUtil implements IFinanziaria {
         String annoBozza = determina.getPratica().getIdpratica().substring(0, 4);
         String numeroBozza = ((Integer) Integer.parseInt(determina.getPratica().getIdpratica().substring(4))).toString();
 
-        if( determina.getVistoResponsabile() != null && determina.getNumero() != null && determina.getNumero() != 0 &&
-                ! jEnteHelper.chiamataRichiestaEsisteBozzaOAtto("A", "DT", determina.getAnno().toString(), determina.getNumero().toString()) ){
-            return jEnteHelper.chiamataRichiestaTrasformazioneBozzaInAtto("B", "DT", annoBozza, numeroBozza, "DT", determina.getAnno().toString(),
-                    determina.getNumero().toString(), sdf.format(data));
+        if( determina.getNumero() != null && determina.getNumero() != 0 ) {
+            if ( ! jEnteHelper.chiamataRichiestaEsisteBozzaOAtto("A", "DT", determina.getAnno().toString(), determina.getNumero().toString()) ){
+                return jEnteHelper.chiamataRichiestaTrasformazioneBozzaInAtto("B", "DT", annoBozza, numeroBozza, "DT", determina.getAnno().toString(),
+                        determina.getNumero().toString(), sdf.format(data));
+            } else {
+                return true;
+            }
         } else {
             return false;
         }
