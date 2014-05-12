@@ -71,7 +71,13 @@ public class Start {
         String barcodeDevice = null;
         String barcodeLanguage = null;
 
-        String oooConnection = "uno:socket,host=ooops,port=2002;urp;StarOffice.ServiceManager";
+        String oooConnection = null;
+
+        String atmWsakey = null;
+        String atmMAC = null;
+        String atmUserID = null;
+        String atmPassword = null;
+        String atmEndpoint = null;
 
         // file di Properties
         Properties properties = new Properties();
@@ -99,6 +105,13 @@ public class Start {
                 barcodeLanguage = properties.getProperty("barcode.language"); // es. ZPL
 
                 oooConnection = properties.getProperty("ooo.connection");
+
+                atmWsakey = properties.getProperty("atm.wsakey");
+                atmMAC = properties.getProperty("atm.MAC");
+                atmUserID = properties.getProperty("atm.userID");
+                atmPassword = properties.getProperty("atm.password");
+                atmEndpoint = properties.getProperty("atm.endpoint");
+
             }
         } catch (IOException e) {
 
@@ -124,6 +137,8 @@ public class Start {
 
         // OpenOffice
         if( oooConnection == null ) oooConnection = System.getProperty("ooo.connection");
+
+        // i parametri ATM non possono essere passati come parametro
 
         // Stampante etichette
         if( barcodeDevice == null ) barcodeDevice = System.getProperty("barcode.device"); // es. Zebra_Technologies_ZTC_GK420t
@@ -171,6 +186,13 @@ public class Start {
         // scringa di connessione per OpenOffice
         app.setConfigItem("ooops.connection", oooConnection);
         //app.setConfigItem("ooops.connection", "uno:socket,host=192.168.64.56,port=2002;urp;StarOffice.ServiceManager");
+
+        // parametri ATM
+        app.setConfigItem("atm.wsakey", atmWsakey);
+        app.setConfigItem("atm.userID", atmUserID);
+        app.setConfigItem("atm.MAC", atmMAC);
+        app.setConfigItem("atm.password", atmPassword);
+        app.setConfigItem("atm.endpoint", atmEndpoint);
 
         // configurazione originale SuitePA
         Configure.configure(db, System.getProperties());

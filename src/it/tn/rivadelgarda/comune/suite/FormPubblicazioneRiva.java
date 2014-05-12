@@ -17,6 +17,7 @@
 package it.tn.rivadelgarda.comune.suite;
 
 import com.axiastudio.menjazo.AlfrescoHelper;
+import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.suite.plugins.atm.FileATM;
@@ -78,13 +79,12 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
 
         PutAttoHelper helper = new PutAttoHelper();
 
-        Properties ctx = loadConfig();
-
-        helper.setup(ctx.getProperty(ATMClient.USER_ID),
-                ctx.getProperty(ATMClient.PASSWORD),
-                ctx.getProperty(ATMClient.MAC_NAME),
-                ctx.getProperty(ATMClient.WSAKEY),
-                ctx.getProperty(ATMClient.ENDPOINT));
+        Application app = Application.getApplicationInstance();
+        helper.setup((String) app.getConfigItem("atm.userID"),
+                (String) app.getConfigItem("atm.password"),
+                (String) app.getConfigItem("atm.MAC"),
+                (String) app.getConfigItem("atm.wsakey"),
+                (String) app.getConfigItem("atm.endpoint"));
 
         // documento e allegati
         CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(pubblicazione.getClass(), "CMIS");
