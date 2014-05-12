@@ -173,12 +173,16 @@ public class Start {
         Application app = new Application(args);
         app.addQmFile("classpath:com/axiastudio/menjazo/lang/menjazo_{0}.qm"); // menjazo
         app.setLanguage("it");
-        
-        // config
+
+
+        // barcode
         app.setConfigItem("barcode.device", barcodeDevice);
         app.setConfigItem("barcode.language", barcodeLanguage);
 
-        // percorsi Alfresco
+        // Alfresco
+        app.setConfigItem("cmis.url", cmisUrl);
+        app.setConfigItem("cmis.user", cmisUser);
+        app.setConfigItem("cmis.password", cmisPassword);
         app.setConfigItem("alfrescopath.protocollo", alfrescopathProtocollo);
         app.setConfigItem("alfrescopath.pratica", alfrescopathPratica);
         app.setConfigItem("alfrescopath.pubblicazione", alfrescopathPubblicazione);
@@ -195,7 +199,7 @@ public class Start {
         app.setConfigItem("atm.endpoint", atmEndpoint);
 
         // configurazione originale SuitePA
-        Configure.configure(db, System.getProperties());
+        Configure.configure(db);
         
         // configurazione personalizzata Riva GDA
         Register.registerCallbacks(Resolver.callbacksFromClass(DeterminaCallbacksRiva.class));
