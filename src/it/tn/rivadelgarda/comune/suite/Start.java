@@ -34,8 +34,12 @@ import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  *
@@ -48,42 +52,102 @@ public class Start {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+
+        String jdbcUrl = null;
+        String jdbcUser = null;
+        String jdbcPassword = null;
+        String jdbcDriver = null;
+
+        String logLevel = null;
+
+        String cmisUrl = null;
+        String cmisUser = null;
+        String cmisPassword = null;
+
+        String alfrescopathProtocollo = null;
+        String alfrescopathPratica = null;
+        String alfrescopathPubblicazione = null;
+
+        String barcodeDevice = null;
+        String barcodeLanguage = null;
+
+        String oooConnection = "uno:socket,host=ooops,port=2002;urp;StarOffice.ServiceManager";
+
+        // file di Properties
+        Properties properties = new Properties();
+        try {
+            InputStream inputStream = Start.class.getResourceAsStream("gda.properties");
+            if( inputStream != null ) {
+                properties.load(inputStream);
+
+                jdbcUrl = properties.getProperty("jdbc.url");
+                jdbcUser = properties.getProperty("jdbc.user");
+                jdbcPassword = properties.getProperty("jdbc.password");
+                jdbcDriver = properties.getProperty("jdbc.driver");
+
+                logLevel = properties.getProperty("suite.loglevel");
+
+                cmisUrl = properties.getProperty("cmis.url");
+                cmisUser = properties.getProperty("cmis.user");
+                cmisPassword = properties.getProperty("cmis.password");
+
+                alfrescopathProtocollo = properties.getProperty("alfrescopath.protocollo");
+                alfrescopathPratica = properties.getProperty("alfrescopath.protocollo");
+                alfrescopathPubblicazione = properties.getProperty("alfrescopath.protocollo");
+
+                barcodeDevice = properties.getProperty("barcode.device"); // es. Zebra_Technologies_ZTC_GK420t
+                barcodeLanguage = properties.getProperty("barcode.language"); // es. ZPL
+
+                oooConnection = properties.getProperty("ooo.connection");
+            }
+        } catch (IOException e) {
+
+        }
+
         // jdbc
-        String jdbcUrl = System.getProperty("jdbc.url");
-        String jdbcUser = System.getProperty("jdbc.user");
-        String jdbcPassword = System.getProperty("jdbc.password");
-        String jdbcDriver = System.getProperty("jdbc.driver");
+        if( jdbcUrl == null ) jdbcUrl = System.getProperty("jdbc.url");
+        if( jdbcUser == null ) jdbcUser = System.getProperty("jdbc.user");
+        if( jdbcPassword == null ) jdbcPassword = System.getProperty("jdbc.password");
+        if( jdbcDriver == null ) jdbcDriver = System.getProperty("jdbc.driver");
+
         // log
-        String logLevel = System.getProperty("suite.loglevel");
+        if( logLevel == null ) logLevel = System.getProperty("suite.loglevel");
         
         // Alfresco
-        String cmisUrl = System.getProperty("cmis.url");
-        String cmisUser = System.getProperty("cmis.user");
-        String cmisPassword = System.getProperty("cmis.password");
+        if( cmisUrl == null ) cmisUrl = System.getProperty("cmis.url");
+        if( cmisUser == null ) cmisUser = System.getProperty("cmis.user");
+        if( cmisPassword == null ) cmisPassword = System.getProperty("cmis.password");
+
+        if( alfrescopathProtocollo == null ) alfrescopathProtocollo = System.getProperty("alfrescopath.protocollo");
+        if( alfrescopathPratica == null ) alfrescopathPratica = System.getProperty("alfrescopath.pratica");
+        if( alfrescopathPubblicazione == null ) alfrescopathPubblicazione = System.getProperty("alfrescopath.pubblicazione");
+
+        // OpenOffice
+        if( oooConnection == null ) oooConnection = System.getProperty("ooo.connection");
+
         // Stampante etichette
-        String barcodeDevice = System.getProperty("barcode.device"); // es. Zebra_Technologies_ZTC_GK420t
-        String barcodeLanguage = System.getProperty("barcode.language"); // es. ZPL
+        if( barcodeDevice == null ) barcodeDevice = System.getProperty("barcode.device"); // es. Zebra_Technologies_ZTC_GK420t
+        if( barcodeLanguage == null ) barcodeLanguage = System.getProperty("barcode.language"); // es. ZPL
         
-        Map properties = new HashMap();
-        properties.put("javax.persistence.jdbc.url", jdbcUrl);
+        Map mapProperties = new HashMap();
+        mapProperties.put("javax.persistence.jdbc.url", jdbcUrl);
         if( jdbcUser != null ){
-            properties.put("javax.persistence.jdbc.user", jdbcUser);
+            mapProperties.put("javax.persistence.jdbc.user", jdbcUser);
         }
         if( jdbcPassword != null ){
-            properties.put("javax.persistence.jdbc.password", jdbcPassword);
+            mapProperties.put("javax.persistence.jdbc.password", jdbcPassword);
         }
         if( jdbcDriver != null ){
-            properties.put("javax.persistence.jdbc.driver", jdbcDriver);
+            mapProperties.put("javax.persistence.jdbc.driver", jdbcDriver);
         }
         if( logLevel != null ){
-            properties.put("eclipselink.logging.level", logLevel);
-            properties.put("eclipselink.logging.parameters", "true");    
+            mapProperties.put("eclipselink.logging.level", logLevel);
+            mapProperties.put("eclipselink.logging.parameters", "true");
         }
 
         Database db = new Database();
-        properties.put("eclipselink.ddl-generation", "");
-        db.open("SuitePU", properties);
+        mapProperties.put("eclipselink.ddl-generation", "");
+        db.open("SuitePU", mapProperties);
         Register.registerUtility(db, IDatabase.class);
 
         CheckPGUser checkPGUser = new CheckPGUser();
@@ -100,12 +164,12 @@ public class Start {
         app.setConfigItem("barcode.language", barcodeLanguage);
 
         // percorsi Alfresco
-        app.setConfigItem("alfrescopath.protocollo", "/Siti/protocollo/documentLibrary");
-        app.setConfigItem("alfrescopath.pratica", "/Siti/pratiche/documentLibrary");
-        app.setConfigItem("alfrescopath.pubblicazione", "/Siti/pubblicazioni/documentLibrary");
+        app.setConfigItem("alfrescopath.protocollo", alfrescopathProtocollo);
+        app.setConfigItem("alfrescopath.pratica", alfrescopathPratica);
+        app.setConfigItem("alfrescopath.pubblicazione", alfrescopathPubblicazione);
 
         // scringa di connessione per OpenOffice
-        app.setConfigItem("ooops.connection", "uno:socket,host=ooops,port=2002;urp;StarOffice.ServiceManager");
+        app.setConfigItem("ooops.connection", oooConnection);
         //app.setConfigItem("ooops.connection", "uno:socket,host=192.168.64.56,port=2002;urp;StarOffice.ServiceManager");
 
         // configurazione originale SuitePA
