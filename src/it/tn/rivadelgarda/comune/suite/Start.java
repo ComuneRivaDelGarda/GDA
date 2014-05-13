@@ -117,33 +117,59 @@ public class Start {
 
         }
 
+        /*
+         *  OVerriding della configurazione
+         */
+
         // jdbc
-        if( jdbcUrl == null ) jdbcUrl = System.getProperty("jdbc.url");
-        if( jdbcUser == null ) jdbcUser = System.getProperty("jdbc.user");
-        if( jdbcPassword == null ) jdbcPassword = System.getProperty("jdbc.password");
-        if( jdbcDriver == null ) jdbcDriver = System.getProperty("jdbc.driver");
-
+        if( System.getProperty("jdbc.url") != null ) {
+            jdbcUrl = System.getProperty("jdbc.url");
+        }
+        if( System.getProperty("jdbc.user") != null ) {
+            jdbcUser = System.getProperty("jdbc.user");
+        }
+        if( System.getProperty("jdbc.password") != null ) {
+            jdbcPassword = System.getProperty("jdbc.password");
+        }
+        if( System.getProperty("jdbc.driver") != null ) {
+            jdbcDriver = System.getProperty("jdbc.driver");
+        }
         // log
-        if( logLevel == null ) logLevel = System.getProperty("suite.loglevel");
-        
+        if( System.getProperty("suite.loglevel") != null ) {
+            logLevel = System.getProperty("suite.loglevel");
+        }
         // Alfresco
-        if( cmisUrl == null ) cmisUrl = System.getProperty("cmis.url");
-        if( cmisUser == null ) cmisUser = System.getProperty("cmis.user");
-        if( cmisPassword == null ) cmisPassword = System.getProperty("cmis.password");
-
-        if( alfrescopathProtocollo == null ) alfrescopathProtocollo = System.getProperty("alfrescopath.protocollo");
-        if( alfrescopathPratica == null ) alfrescopathPratica = System.getProperty("alfrescopath.pratica");
-        if( alfrescopathPubblicazione == null ) alfrescopathPubblicazione = System.getProperty("alfrescopath.pubblicazione");
-
+        if( System.getProperty("cmis.url") != null ) {
+            cmisUrl = System.getProperty("cmis.url");
+        }
+        if( System.getProperty("cmis.user") != null ) {
+            cmisUser = System.getProperty("cmis.user");
+        }
+        if( System.getProperty("cmis.password") != null ) {
+            cmisPassword = System.getProperty("cmis.password");
+        }
+        if( System.getProperty("alfrescopath.protocollo") != null ) {
+            alfrescopathProtocollo = System.getProperty("alfrescopath.protocollo");
+        }
+        if( System.getProperty("alfrescopath.pratica") != null ) {
+            alfrescopathPratica = System.getProperty("alfrescopath.pratica");
+        }
+        if( System.getProperty("alfrescopath.pubblicazione") != null ) {
+            alfrescopathPubblicazione = System.getProperty("alfrescopath.pubblicazione");
+        }
         // OpenOffice
-        if( oooConnection == null ) oooConnection = System.getProperty("ooo.connection");
-
+        if( System.getProperty("ooo.connection") != null ) {
+            oooConnection = System.getProperty("ooo.connection");
+        }
         // i parametri ATM non possono essere passati come parametro
-
         // Stampante etichette
-        if( barcodeDevice == null ) barcodeDevice = System.getProperty("barcode.device"); // es. Zebra_Technologies_ZTC_GK420t
-        if( barcodeLanguage == null ) barcodeLanguage = System.getProperty("barcode.language"); // es. ZPL
-        
+        if( System.getProperty("barcode.device") != null ) {
+            barcodeDevice = System.getProperty("barcode.device");
+        }
+        if( System.getProperty("barcode.language") != null ) {
+            barcodeLanguage = System.getProperty("barcode.language");
+        }
+
         Map mapProperties = new HashMap();
         mapProperties.put("javax.persistence.jdbc.url", jdbcUrl);
         if( jdbcUser != null ){
