@@ -73,6 +73,7 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
         }
         pubblicazioneATM.setDurataconsultazione(pubblicazione.getDurataconsultazione());
         pubblicazioneATM.setRichiedente(pubblicazione.getRichiedente());
+        pubblicazioneATM.setOrgano(pubblicazione.getOrgano());
         pubblicazioneATM.setTipoatto(pubblicazione.getTipoattopubblicazione().getChiave());
 
         PutAttoHelper helper = new PutAttoHelper();
