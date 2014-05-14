@@ -91,9 +91,17 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
         AlfrescoHelper cmisHelper = cmisPlugin.createAlfrescoHelper(pubblicazione);
         Boolean isAtto=Boolean.TRUE;
         List<FileATM> allegati = new ArrayList<FileATM>();
+        Integer i=0;
         for( Map child: cmisHelper.children() ){
             String name = (String) child.get("name");
             String title = (String) child.get("title");
+            if( title == null ){
+                if( i==0 ){
+                    titolo = "atto";
+                } else {
+                    title = "allegato " + i;
+                }
+            }
             CmisStreamProvider streamProvider = cmisPlugin.createCmisStreamProvider((String) child.get("objectId"));
             InputStream inputStream = streamProvider.getInputStream();
             FileATM fileATM = new FileATM();
@@ -106,6 +114,7 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
             } else {
                 allegati.add(fileATM);
             }
+            i++;
         }
         pubblicazioneATM.setAllegati(allegati);
         boolean res = helper.putAtto(pubblicazioneATM);
