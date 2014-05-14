@@ -58,8 +58,6 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
 
         PubblicazioneATM pubblicazioneATM = new PubblicazioneATM();
 
-        String titolo = pubblicazione.getTitolo().replaceAll("'", "`");
-        pubblicazioneATM.setTitolo(titolo);
         String descrizione = pubblicazione.getDescrizione().replaceAll("'", "`");
         pubblicazioneATM.setDescrizione(descrizione);
 
@@ -97,7 +95,7 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
             String title = (String) child.get("title");
             if( title == null ){
                 if( i==0 ){
-                    titolo = "atto";
+                    title = "atto";
                 } else {
                     title = "allegato " + i;
                 }
