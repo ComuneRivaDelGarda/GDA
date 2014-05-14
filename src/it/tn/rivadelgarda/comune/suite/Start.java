@@ -98,8 +98,8 @@ public class Start {
                 cmisPassword = properties.getProperty("cmis.password");
 
                 alfrescopathProtocollo = properties.getProperty("alfrescopath.protocollo");
-                alfrescopathPratica = properties.getProperty("alfrescopath.protocollo");
-                alfrescopathPubblicazione = properties.getProperty("alfrescopath.protocollo");
+                alfrescopathPratica = properties.getProperty("alfrescopath.pratica");
+                alfrescopathPubblicazione = properties.getProperty("alfrescopath.pubblicazione");
 
                 barcodeDevice = properties.getProperty("barcode.device"); // es. Zebra_Technologies_ZTC_GK420t
                 barcodeLanguage = properties.getProperty("barcode.language"); // es. ZPL
