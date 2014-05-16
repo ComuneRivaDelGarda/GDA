@@ -21,10 +21,19 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.ui.Context;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Ufficio;
+import com.axiastudio.suite.base.entities.UfficioUtente;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
+import com.axiastudio.suite.deliberedetermine.forms.DeterminaToolbar;
 import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
+import com.axiastudio.suite.procedimenti.GestoreDeleghe;
+import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
+import com.axiastudio.suite.procedimenti.TitoloDelega;
+import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.trolltech.qt.gui.QCheckBox;
 
 import java.util.List;
@@ -56,11 +65,14 @@ public class FormDeterminaJEnte extends FormDetermina {
 
     private Determina precedente=null;
     private GestoreMovimentiMenuBar gestoreMovimenti;
+    private DeterminaToolbar determinaToolbar;
 
     public FormDeterminaJEnte(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
         gestoreMovimenti = new GestoreMovimentiMenuBar("Gestore movimenti", this);
         this.addToolBar(gestoreMovimenti);
+        determinaToolbar = new DeterminaToolbar("Dettaglio", this);
+        addToolBar(determinaToolbar);
     }
 
 
@@ -79,6 +91,31 @@ public class FormDeterminaJEnte extends FormDetermina {
                     ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesa")).isChecked() ||
                     ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_entrata")).isChecked() || movimenti.size()>0);
 
+            Boolean vediDocumenti=Boolean.FALSE;
+            Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+            // Segretario abilitato
+            GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
+//            TitoloDelega vediDocumenticheck = gestoreDeleghe.checkTitoloODelega(CodiceCarica.SEGRETARIO);
+            if( gestoreDeleghe.checkTitoloODelega(CodiceCarica.SEGRETARIO) != null ){
+                vediDocumenti = Boolean.TRUE;
+            }
+            // Responsabile di servizio abilitato
+            else if( gestoreDeleghe.checkTitoloODelega(CodiceCarica.RESPONSABILE_DI_SERVIZIO, determina.getServizio()) != null ){
+                vediDocumenti = Boolean.TRUE;
+            }
+            // Utenti "gestori Determine"
+            else if( gestoreDeleghe.checkTitoloODelega(CodiceCarica.GESTORE_DETERMINA) != null ){
+                vediDocumenti = Boolean.TRUE;
+            }
+            // Utenti appartenenti all'ufficio gestore della pratica
+            else if( utenteInUfficio(autenticato, determina.getPratica().getGestione()) != null &&
+                        utenteInUfficio(autenticato, determina.getPratica().getGestione()).getModificapratica()){
+                    vediDocumenti = Boolean.TRUE;
+            }
+            // Istruttore e responsabile della pratica
+            // TODO
+            this.determinaToolbar.actionByName("apriDocumenti").setEnabled(vediDocumenti);
+
             // faccio credere al contesto che il contesto padre è cambiato, quindi lo spingo ad aggiornarsi
             Context context = (Context) Register.queryRelation(this, ".movimentoDeterminaCollection");
             context.refreshContext();
@@ -90,6 +127,15 @@ public class FormDeterminaJEnte extends FormDetermina {
         Determina determina = (Determina) this.getContext().getCurrentEntity();
         IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
         finanziariaUtil.apriGestoreMovimenti(determina);
+    }
+
+    private UfficioUtente utenteInUfficio(Utente utente, Ufficio ufficio) {
+        for (UfficioUtente ufficioUt: utente.getUfficioUtenteCollection()) {
+            if ( ufficioUt.getUfficio().equals(ufficio) ) {
+                return ufficioUt;
+            }
+        }
+        return null;
     }
 
 }
