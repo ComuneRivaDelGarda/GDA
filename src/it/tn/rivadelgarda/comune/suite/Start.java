@@ -51,9 +51,9 @@ public class Start extends Suite {
     public static void main(String[] args) {
 
         Application app = new Application(args);
-        String propertiesFile = Start.class.getResource("gda.properties").getPath();
+        InputStream propertiesStream = Start.class.getResourceAsStream("gda.properties");
 
-        configure(app, propertiesFile);
+        configure(app, propertiesStream);
 
         Database db = (Database) Register.queryUtility(IDatabase.class);
 
@@ -86,9 +86,8 @@ public class Start extends Suite {
         // parametri ATM
         Properties properties = new Properties();
         try {
-            InputStream inputStream = Start.class.getResourceAsStream(propertiesFile);
-            if( inputStream != null ) {
-                properties.load(inputStream);
+            if( propertiesStream != null ) {
+                properties.load(propertiesStream);
                 app.setConfigItem("atm.wsakey", properties.getProperty("atm.wsakey"));
                 app.setConfigItem("atm.MAC", properties.getProperty("atm.MAC"));
                 app.setConfigItem("atm.userID", properties.getProperty("atm.userID"));
