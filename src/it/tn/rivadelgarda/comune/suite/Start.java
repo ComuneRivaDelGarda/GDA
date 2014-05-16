@@ -86,6 +86,7 @@ public class Start extends Suite {
         // parametri ATM
         Properties properties = new Properties();
         try {
+            propertiesStream = Start.class.getResourceAsStream("gda.properties");
             if( propertiesStream != null ) {
                 properties.load(propertiesStream);
                 app.setConfigItem("atm.wsakey", properties.getProperty("atm.wsakey"));
