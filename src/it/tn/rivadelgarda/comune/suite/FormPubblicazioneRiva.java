@@ -59,6 +59,8 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
         PubblicazioneATM pubblicazioneATM = new PubblicazioneATM();
 
         String descrizione = pubblicazione.getDescrizione().replaceAll("'", "`");
+        descrizione = descrizione.replaceAll("\"", "`");
+        descrizione = descrizione.replaceAll("\n", " ");
         pubblicazioneATM.setDescrizione(descrizione);
 
         if( pubblicazione.getDataatto() != null ) {
