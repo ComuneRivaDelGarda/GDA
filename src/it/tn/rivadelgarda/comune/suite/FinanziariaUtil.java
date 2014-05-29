@@ -67,40 +67,42 @@ public class FinanziariaUtil implements IFinanziaria {
         List<MovimentoDetermina> impegni = new ArrayList();
         if( movimenti != null ){
             for( Movimento movimentoJEnte: movimenti ){
-                MovimentoDetermina movimento = new MovimentoDetermina();
-                Capitolo capitolo = new Capitolo();
-                if (movimentoJEnte.getMovImpAcce().getEsercizio()!=null && !movimentoJEnte.getMovImpAcce().getEsercizio().equals("")) {
-                    movimento.setAnnoEsercizio(Long.parseLong(movimentoJEnte.getMovImpAcce().getEsercizio()));
-                }
-                capitolo.setNumero(movimentoJEnte.getMovImpAcce().getCapitolo());
-                capitolo.setDescrizione(movimentoJEnte.getMovImpAcce().getCapitolo()+"-"+movimentoJEnte.getMovImpAcce().getDescCapitolo());
-                movimento.setCapitolo(capitolo);
-                movimento.setArticolo(movimentoJEnte.getMovImpAcce().getArticolo());
-                movimento.setArchivio(movimentoJEnte.getMovImpAcce().getArchivio());
-                movimento.setEu(movimentoJEnte.getMovImpAcce().getEu());
-                movimento.setTipoMovimento(movimentoJEnte.getMovImpAcce().getTipoMovimento());
-                movimento.setImpegno(movimentoJEnte.getMovImpAcce().getNumeroImpacc());
-                if (movimentoJEnte.getMovImpAcce().getAnnoImpacc()!=null && !movimentoJEnte.getMovImpAcce().getAnnoImpacc().equals("")) {
-                    movimento.setAnnoImpegno(Long.parseLong(movimentoJEnte.getMovImpAcce().getAnnoImpacc()));
-                }
-                movimento.setCodiceMeccanografico(movimentoJEnte.getMovImpAcce().getCodMeccanografico());
-                movimento.setSottoImpegno(movimentoJEnte.getMovImpAcce().getSubImpacc());
-                BigDecimal importo = new BigDecimal(movimentoJEnte.getMovImpAcce().getImporto().replace(".", "").replace(",", "."));
-                movimento.setImporto(importo);
-                if (movimentoJEnte.getMovImpAcce().getImportoImpacc()!=null && !movimentoJEnte.getMovImpAcce().getImportoImpacc().equals("")) {
-                    BigDecimal importoTot = new BigDecimal(movimentoJEnte.getMovImpAcce().getImporto().replace(".", "").replace(",", "."));
-                    movimento.setImportoImpegnoAccertamento(importoTot);
-                }
-                if (movimentoJEnte.getMovImpAcce().getCodDebBen()!=null && !movimentoJEnte.getMovImpAcce().getCodDebBen().equals("")) {
-                    movimento.setCodiceBeneficiario(Long.parseLong(movimentoJEnte.getMovImpAcce().getCodDebBen()));
-                }
-                movimento.setDescrizioneBeneficiario(movimentoJEnte.getMovImpAcce().getDescCodDebBen());
-                movimento.setCodiceCup(movimentoJEnte.getMovImpAcce().getCodiceCup());
-                movimento.setCodiceCig(movimentoJEnte.getMovImpAcce().getCodiceCig());
-                movimento.setCespite(movimentoJEnte.getMovImpAcce().getCespite());
-                movimento.setDescrizioneCespite(movimentoJEnte.getMovImpAcce().getDescCespite());
+                if ( movimentoJEnte.getMovImpAcce()!=null ) {
+                    MovimentoDetermina movimento = new MovimentoDetermina();
+                    Capitolo capitolo = new Capitolo();
+                    if (movimentoJEnte.getMovImpAcce().getEsercizio()!=null && !movimentoJEnte.getMovImpAcce().getEsercizio().equals("")) {
+                        movimento.setAnnoEsercizio(Long.parseLong(movimentoJEnte.getMovImpAcce().getEsercizio()));
+                    }
+                    capitolo.setNumero(movimentoJEnte.getMovImpAcce().getCapitolo());
+                    capitolo.setDescrizione(movimentoJEnte.getMovImpAcce().getCapitolo()+"-"+movimentoJEnte.getMovImpAcce().getDescCapitolo());
+                    movimento.setCapitolo(capitolo);
+                    movimento.setArticolo(movimentoJEnte.getMovImpAcce().getArticolo());
+                    movimento.setArchivio(movimentoJEnte.getMovImpAcce().getArchivio());
+                    movimento.setEu(movimentoJEnte.getMovImpAcce().getEu());
+                    movimento.setTipoMovimento(movimentoJEnte.getMovImpAcce().getTipoMovimento());
+                    movimento.setImpegno(movimentoJEnte.getMovImpAcce().getNumeroImpacc());
+                    if (movimentoJEnte.getMovImpAcce().getAnnoImpacc()!=null && !movimentoJEnte.getMovImpAcce().getAnnoImpacc().equals("")) {
+                        movimento.setAnnoImpegno(Long.parseLong(movimentoJEnte.getMovImpAcce().getAnnoImpacc()));
+                    }
+                    movimento.setCodiceMeccanografico(movimentoJEnte.getMovImpAcce().getCodMeccanografico());
+                    movimento.setSottoImpegno(movimentoJEnte.getMovImpAcce().getSubImpacc());
+                    BigDecimal importo = new BigDecimal(movimentoJEnte.getMovImpAcce().getImporto().replace(".", "").replace(",", "."));
+                    movimento.setImporto(importo);
+                    if (movimentoJEnte.getMovImpAcce().getImportoImpacc()!=null && !movimentoJEnte.getMovImpAcce().getImportoImpacc().equals("")) {
+                        BigDecimal importoTot = new BigDecimal(movimentoJEnte.getMovImpAcce().getImporto().replace(".", "").replace(",", "."));
+                        movimento.setImportoImpegnoAccertamento(importoTot);
+                    }
+                    if (movimentoJEnte.getMovImpAcce().getCodDebBen()!=null && !movimentoJEnte.getMovImpAcce().getCodDebBen().equals("")) {
+                        movimento.setCodiceBeneficiario(Long.parseLong(movimentoJEnte.getMovImpAcce().getCodDebBen()));
+                    }
+                    movimento.setDescrizioneBeneficiario(movimentoJEnte.getMovImpAcce().getDescCodDebBen());
+                    movimento.setCodiceCup(movimentoJEnte.getMovImpAcce().getCodiceCup());
+                    movimento.setCodiceCig(movimentoJEnte.getMovImpAcce().getCodiceCig());
+                    movimento.setCespite(movimentoJEnte.getMovImpAcce().getCespite());
+                    movimento.setDescrizioneCespite(movimentoJEnte.getMovImpAcce().getDescCespite());
 
-                impegni.add(movimento);
+                    impegni.add(movimento);
+                }
             }
         }
         return impegni;
@@ -148,7 +150,7 @@ public class FinanziariaUtil implements IFinanziaria {
             validoImpegni = "N";
         }
         String validoAccertamenti;
-        if (determina.getDiEntrata()) {
+        if (determina.getDientrata()) {
             validoAccertamenti = "S";
         } else {
             validoAccertamenti = "N";
@@ -156,7 +158,7 @@ public class FinanziariaUtil implements IFinanziaria {
 
         FormMovimenti form = new FormMovimenti(annoBozza, organoSettore, numeroBozza, annoAtto, organoSettore,
                 numeroAtto, utente, rProc, vistoResponsabile, determina.getOggetto(), data, dataVistoResponsabile,
-                validoImpegni, validoAccertamenti);
+                "S", "S", "S", "S", "S");
         form.show();
     }
 
