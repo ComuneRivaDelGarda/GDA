@@ -16,7 +16,7 @@
  */
 package it.tn.rivadelgarda.comune.suite;
 
-import com.axiastudio.menjazo.AlfrescoHelper;
+import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.ui.Util;
