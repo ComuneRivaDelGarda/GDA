@@ -54,6 +54,7 @@ public class Start extends Suite {
         InputStream propertiesStream = Start.class.getResourceAsStream("gda.properties");
 
         configure(app, propertiesStream);
+        app.setLanguage("it");
 
         Database db = (Database) Register.queryUtility(IDatabase.class);
 
