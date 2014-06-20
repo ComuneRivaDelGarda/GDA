@@ -80,21 +80,45 @@ import com.axiastudio.suite.pratiche.PraticaUtil
 }
 
 // Istruita da approvare: azione
-{ determina ->
+        { determina ->
 
-    // apertura maschera impegni (per trasformazione bozza in atto)
+            nImpegniInfor = determina.movimentoDeterminaCollection.size()
 
-    // creazione del protocollo (se non già esistente)
-    if( determina.getProtocollo() != null ){
-        return true;
-    }
-    def validation = PraticaUtil.protocollaDetermina(determina)
-    if( validation.response == false ){
-        return validation.message
-    }
-    determina.setProtocollo(validation.entity)
-    return true
-}
+            // acquisizione numero determina (se non già esistente)
+            if (determina.getNumero() == null || determina.getNumero() == 0){
+                if ( ! DeterminaUtil.numeroDiDetermina(determina) ) {
+                    return "Errore nell'acquisizione del numero di derermina"
+                }
+            }
+
+            // creazione del protocollo (se non già esistente)
+            if( determina.getProtocollo() == null ){
+                def validation = PraticaUtil.protocollaDetermina(determina)
+                if( validation.response == false ){
+                    return validation.message
+                }
+            }
+
+            // trasformazione bozza in atto se spesa o entrata
+            if ((determina.dispesa || determina.diEntrata) && nImpegniInfor>0 ) {
+                if ( ! finanziariaUtil.trasformaBozzaInAtto(determina, determina.getData()) ) {
+                    return "Errore nella trasformazione da bozza in atto"
+                }
+            }
+
+            // copia documenti pdf nella cartella x la protocollazione
+            def path = "/Siti/pratiche/documentLibrary/"
+            path += determina.datapratica.format("yyyy/MM/") + determina.pratica.idpratica + "/protocollo"
+
+            // inserimento documenti in protocollo
+            for( Map child: alfrescoHelper.children() ){
+                if( child["name"].endsWith(".pdf") ) {
+                    document = alfrescoHelper.copyDocument(child["objectId"], path)
+                }
+            }
+
+            return true
+        }
 
 // Predisposta per la sottoscrizione: condizione
 { determina ->
@@ -113,21 +137,24 @@ import com.axiastudio.suite.pratiche.PraticaUtil
 }
 
 // Predisposta per la sottoscrizione: azione
-{ determina ->
+        { determina ->
 
-    // path protocollo
-    def path = "/Siti/protocollo/documentLibrary/"
-    def protocollo = determina.protocollo
-    path += protocollo.dataprotocollo.format("yyyy/MM/dd/")
-    path += protocollo.iddocumento
+            // path protocollo
+            def path = "/Siti/protocollo/documentLibrary/"
+            def protocollo = determina.protocollo
+            path += protocollo.dataprotocollo.format("yyyy/MM/dd/")
+            path += protocollo.iddocumento
 
-    // inserimento documenti in protocollo
-    for( Map child: alfrescoHelper.children("protocollo") ){
-        document = alfrescoHelper.copyDocument(child["objectId"], path)
-    }
-    return true
+            // inserimento documenti in protocollo
+            for( Map child: alfrescoHelper.children("protocollo") ){
+                document = alfrescoHelper.copyDocument(child["objectId"], path)
+            }
 
-}
+            // consolida protocollo
+            protocollo.setConsolidadocumenti(true)
+
+            return true
+        }
 
 // Sottoscritta dal responsabile: condizione
 { determina ->
@@ -152,26 +179,31 @@ import com.axiastudio.suite.pratiche.PraticaUtil
 }
 
 // Sottoscritta dal responsabile: azione
-{ determina ->
+        { determina ->
 
-    // path protocollo
-    def path = "/Siti/protocollo/documentLibrary/"
-    def protocollo = determina.protocollo
-    path += protocollo.dataprotocollo.format("yyyy/MM/dd/")
-    path += protocollo.iddocumento
+            // path protocollo
+            def path = "/Siti/protocollo/documentLibrary/"
+            def protocollo = determina.protocollo
+            path += protocollo.dataprotocollo.format("yyyy/MM/dd/")
+            path += protocollo.iddocumento
 
-    // inserimento visto in protocollo
-    for( Map child: alfrescoHelper.children() ){
-        if( child["name"].startsWith("Visto di bilancio_") && child["name"].endsWith(".pdf") ){
-            document = alfrescoHelper.copyDocument(child["objectId"], path)
+            // inserimento visto in protocollo
+            for( Map child: alfrescoHelper.children() ){
+                if( child["name"].startsWith("Visto di bilancio_") && child["name"].endsWith(".pdf") ){
+                    document = alfrescoHelper.copyDocument(child["objectId"], path)
+                }
+            }
+
+            // inserimento attribuzioni dalla determina
+            def validation = PraticaUtil.inserisciAttribuzioniProtocolloDetermina(determina)
+            if( validation.response == false ){
+                return validation.message
+            }
+
+            // inserimento data di esecutività dell'atto
+            if ( determina.movimentoDeterminaCollection.size()>0 && ! finanziariaUtil.assegnaEsecutivitaAtto(determina, Calendar.getInstance().getTime()) ) {
+                return "Errore nell'inserimento della data di esecutività"
+            }
+
+            return true
         }
-    }
-
-    // inserimento attribuzioni dalla determina
-    def validation = PraticaUtil.inserisciAttribuzioniProtocolloDetermina(determina)
-    if( validation.response == false ){
-        return validation.message
-    }
-
-    return true
-}
