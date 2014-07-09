@@ -109,6 +109,7 @@ public class Start extends Suite {
             Mdi mdi = new Mdi();
             mdi.showMaximized();
             mdi.setWindowTitle("GDA");
+            mdi.getItemPassword().setHidden(true);
             mdi.show();
 
             // Scrivania
