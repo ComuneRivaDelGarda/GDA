@@ -65,14 +65,11 @@ public class FormDeterminaJEnte extends FormDetermina {
 
     private Determina precedente=null;
     private GestoreMovimentiMenuBar gestoreMovimenti;
-    private DeterminaToolbar determinaToolbar;
 
     public FormDeterminaJEnte(String uiFile, Class entityClass, String title){
         super(uiFile, entityClass, title);
         gestoreMovimenti = new GestoreMovimentiMenuBar("Gestore movimenti", this);
         this.addToolBar(gestoreMovimenti);
-        determinaToolbar = new DeterminaToolbar("Dettaglio", this);
-        addToolBar(determinaToolbar);
     }
 
 
@@ -115,6 +112,9 @@ public class FormDeterminaJEnte extends FormDetermina {
             // Istruttore e responsabile della pratica
             // TODO
             this.determinaToolbar.actionByName("apriDocumenti").setEnabled(vediDocumenti);
+
+            this.determinaToolbar.actionByName("vistoLiquidazione").
+                    setEnabled(gestoreDeleghe.checkTitoloODelega(CodiceCarica.GESTORE_LIQUIDAZIONI) != null);
 
             // faccio credere al contesto che il contesto padre è cambiato, quindi lo spingo ad aggiornarsi
             Context context = (Context) Register.queryRelation(this, ".movimentoDeterminaCollection");
