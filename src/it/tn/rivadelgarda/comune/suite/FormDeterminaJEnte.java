@@ -84,15 +84,15 @@ public class FormDeterminaJEnte extends FormDetermina {
             IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
             List<MovimentoDetermina> movimenti = finanziariaUtil.getMovimentiDetermina(determina);
             determina.setMovimentoDeterminaCollection(movimenti);
-            this.gestoreMovimenti.actionByName("apriGestoreMovimenti").setEnabled(
-                    ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesa")).isChecked() ||
-                    ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_entrata")).isChecked() || movimenti.size()>0);
+            Boolean abilitaMovimenti=(((QCheckBox) this.findChild(QCheckBox.class, "checkBox_spesa")).isChecked() ||
+                    ((QCheckBox) this.findChild(QCheckBox.class, "checkBox_entrata")).isChecked() || movimenti.size()>0) &&
+                    determina.getVistoBilancio()==null && determina.getVistoBilancioNegato()==null;
+            this.gestoreMovimenti.actionByName("apriGestoreMovimenti").setEnabled(abilitaMovimenti);
 
             Boolean vediDocumenti=Boolean.FALSE;
             Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
             // Segretario abilitato
             GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
-//            TitoloDelega vediDocumenticheck = gestoreDeleghe.checkTitoloODelega(CodiceCarica.SEGRETARIO);
             if( gestoreDeleghe.checkTitoloODelega(CodiceCarica.SEGRETARIO) != null ){
                 vediDocumenti = Boolean.TRUE;
             }
