@@ -75,10 +75,10 @@ public class FormDeterminaJEnte extends FormDetermina {
 
     @Override
     protected void indexChanged(int row) {
-        if( precedente != null ){
+        Determina determina = (Determina) this.getContext().getCurrentEntity();
+        if( precedente != null && !precedente.equals(determina)){
             this.getContext().getController().refresh(precedente);
         }
-        Determina determina = (Determina) this.getContext().getCurrentEntity();
         precedente = determina;
         if( determina.getId() != null ){
             IFinanziaria finanziariaUtil = (IFinanziaria) Register.queryUtility(IFinanziaria.class);
