@@ -33,6 +33,7 @@ import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
+import com.trolltech.qt.gui.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,12 +46,35 @@ import java.util.Properties;
  */
 public class Start extends Suite {
 
+    private static final String UPDATEURL = null;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
 
         Application app = new Application(args);
+
+        /* UPDATE */
+        if( UPDATEURL != null && AppUpdater.checkForUpdates(UPDATEURL) ) {
+            QDialog dialog = new QDialog();
+            QVBoxLayout layout = new QVBoxLayout(dialog);
+            QLabel msg = new QLabel();
+            layout.addWidget(msg);
+            QPushButton button = new QPushButton("OK");
+            layout.addWidget(button);
+            button.clicked.connect(dialog, "accept()");
+            dialog.setWindowTitle("Aggiornamento");
+            if( AppUpdater.update(UPDATEURL) ) {
+                msg.setText("L'applicazione è stata aggiornata, è necessario riavviarla.");
+                int res = dialog.exec();
+                System.exit(res);
+            } else {
+                msg.setText("Sono presenti degli aggiornamenti. Premere OK per continuare a lavorare con la versione attuale.");
+                dialog.exec();
+            }
+        }
+
         InputStream propertiesStream = Start.class.getResourceAsStream("gda.properties");
 
         configure(app, propertiesStream);
@@ -61,7 +85,7 @@ public class Start extends Suite {
         // login su Postgres
         CheckPGUser checkPGUser = new CheckPGUser();
         checkPGUser.setJdbcUrl((String) app.getConfigItem("jdbc.url"));
-        Register.registerUtility(checkPGUser, ICheckLogin.class);
+        //Register.registerUtility(checkPGUser, ICheckLogin.class);
 
         // configurazione personalizzata Riva GDA
         Register.registerCallbacks(Resolver.callbacksFromClass(DeterminaCallbacksRiva.class));
@@ -109,7 +133,9 @@ public class Start extends Suite {
             Mdi mdi = new Mdi();
             mdi.showMaximized();
             mdi.setWindowTitle("GDA");
-            mdi.getItemPassword().setHidden(true);
+            if( Register.queryUtility(ICheckLogin.class) != null ) {
+                mdi.getItemPassword().setHidden(true);
+            }
             mdi.show();
 
             // Scrivania
