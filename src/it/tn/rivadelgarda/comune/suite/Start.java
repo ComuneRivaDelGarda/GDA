@@ -46,7 +46,7 @@ import java.util.Properties;
  */
 public class Start extends Suite {
 
-    private static final String UPDATEURL = "http://itas5p.intra.infotn.it/gda/GDA.jar.pack.gz";
+    private static final String UPDATEURL = "";
 
     /**
      * @param args the command line arguments
