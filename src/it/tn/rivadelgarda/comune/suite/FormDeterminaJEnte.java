@@ -27,13 +27,10 @@ import com.axiastudio.suite.base.entities.UfficioUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.entities.MovimentoDetermina;
-import com.axiastudio.suite.deliberedetermine.forms.DeterminaToolbar;
 import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
 import com.axiastudio.suite.procedimenti.GestoreDeleghe;
 import com.axiastudio.suite.procedimenti.IGestoreDeleghe;
-import com.axiastudio.suite.procedimenti.TitoloDelega;
-import com.axiastudio.suite.procedimenti.entities.CodiceCarica;
 import com.trolltech.qt.gui.QCheckBox;
 
 import java.util.List;
@@ -93,15 +90,15 @@ public class FormDeterminaJEnte extends FormDetermina {
             Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
             // Segretario abilitato
             GestoreDeleghe gestoreDeleghe = (GestoreDeleghe) Register.queryUtility(IGestoreDeleghe.class);
-            if( gestoreDeleghe.checkTitoloODelega(CodiceCarica.SEGRETARIO) != null ){
+            if( gestoreDeleghe.checkTitoloODelega("SEGRETARIO") != null ){
                 vediDocumenti = Boolean.TRUE;
             }
             // Responsabile di servizio abilitato
-            else if( gestoreDeleghe.checkTitoloODelega(CodiceCarica.RESPONSABILE_DI_SERVIZIO, determina.getServizio()) != null ){
+            else if( gestoreDeleghe.checkTitoloODelega("RESPONSABILE_DI_SERVIZIO", determina.getServizio()) != null ){
                 vediDocumenti = Boolean.TRUE;
             }
             // Utenti "gestori Determine"
-            else if( gestoreDeleghe.checkTitoloODelega(CodiceCarica.GESTORE_DETERMINA) != null ){
+            else if( gestoreDeleghe.checkTitoloODelega("GESTORE_DETERMINA") != null ){
                 vediDocumenti = Boolean.TRUE;
             }
             // Utenti appartenenti all'ufficio gestore della pratica
@@ -114,7 +111,7 @@ public class FormDeterminaJEnte extends FormDetermina {
             this.determinaToolbar.actionByName("apriDocumenti").setEnabled(vediDocumenti);
 
             this.determinaToolbar.actionByName("vistoLiquidazione").
-                    setEnabled(gestoreDeleghe.checkTitoloODelega(CodiceCarica.GESTORE_LIQUIDAZIONI) != null);
+                    setEnabled(gestoreDeleghe.checkTitoloODelega("GESTORE_LIQUIDAZIONI") != null);
 
             // faccio credere al contesto che il contesto padre è cambiato, quindi lo spingo ad aggiornarsi
             Context context = (Context) Register.queryRelation(this, ".movimentoDeterminaCollection");
