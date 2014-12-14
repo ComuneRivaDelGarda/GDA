@@ -46,7 +46,7 @@ import java.util.Properties;
  */
 public class Start extends Suite {
 
-    private static final String UPDATEURL = null;
+    private static final String UPDATEURL = "http://itas5p.intra.infotn.it/gda/GDA.jar.pack.gz";
 
     /**
      * @param args the command line arguments
@@ -85,7 +85,7 @@ public class Start extends Suite {
         // login su Postgres
         CheckPGUser checkPGUser = new CheckPGUser();
         checkPGUser.setJdbcUrl((String) app.getConfigItem("jdbc.url"));
-        //Register.registerUtility(checkPGUser, ICheckLogin.class);
+        Register.registerUtility(checkPGUser, ICheckLogin.class);
 
         // configurazione personalizzata Riva GDA
         Register.registerCallbacks(Resolver.callbacksFromClass(DeterminaCallbacksRiva.class));
