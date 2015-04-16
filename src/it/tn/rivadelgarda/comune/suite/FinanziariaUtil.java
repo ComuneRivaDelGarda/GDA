@@ -100,6 +100,9 @@ public class FinanziariaUtil implements IFinanziaria {
                     movimento.setCodiceCig(movimentoJEnte.getMovImpAcce().getCodiceCig());
                     movimento.setCespite(movimentoJEnte.getMovImpAcce().getCespite());
                     movimento.setDescrizioneCespite(movimentoJEnte.getMovImpAcce().getDescCespite());
+                    movimento.setModalitaindividuazionebeneficiario(movimentoJEnte.getMovImpAcce().getAttributi().getAttributo01().getValoreDescrizione());
+                    movimento.setNormatitoloattribuzione(movimentoJEnte.getMovImpAcce().getAttributi().getAttributo02().getValoreDescrizione());
+                    movimento.setAlbobeneficiari(movimentoJEnte.getMovImpAcce().getAttributi().getAttributo03().getValoreDescrizione());
 
                     impegni.add(movimento);
                 }
