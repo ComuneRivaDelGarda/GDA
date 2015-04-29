@@ -140,7 +140,7 @@ public class FinanziariaUtil implements IFinanziaria {
             data="";
         }
         for( ServizioDetermina servizioDetermina: determina.getServizioDeterminaCollection() ){
-            rProc = String.format("%04d", servizioDetermina.getServizio().getId());
+            rProc = servizioDetermina.getServizio().getResponsabileprocedura();
             break;
         }
         String validoImpegni;
