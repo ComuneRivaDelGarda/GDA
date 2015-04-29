@@ -94,7 +94,6 @@ public class Start extends Suite {
                 Determina.class,
                 FormDeterminaJEnte.class);
         Register.registerUtility(new FinanziariaUtil(), IFinanziaria.class);
-        //Register.registerUtility(FinanziariaUtilFake.class, IFinanziaria.class); // test
         Register.registerForm(db.getEntityManagerFactory(),
                 "classpath:com/axiastudio/suite/pubblicazioni/forms/pubblicazione.ui",
                 Pubblicazione.class,
