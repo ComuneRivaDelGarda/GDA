@@ -22,6 +22,7 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.Resolver;
 import com.axiastudio.pypapi.db.Database;
 import com.axiastudio.pypapi.db.IDatabase;
+import com.axiastudio.suite.Configure;
 import com.axiastudio.suite.Mdi;
 import com.axiastudio.suite.Suite;
 import com.axiastudio.suite.base.ICheckLogin;
@@ -80,7 +81,13 @@ public class Start extends Suite {
         configure(app, propertiesStream);
         app.setLanguage("it");
 
+        /* login */
+        Login login = new Login();
+        login.setWindowTitle("GDA");
+        int res = login.exec();
+
         Database db = (Database) Register.queryUtility(IDatabase.class);
+        Configure.configure(db);
 
         // login su Postgres
         CheckPGUser checkPGUser = new CheckPGUser();
@@ -123,10 +130,6 @@ public class Start extends Suite {
 
         }
 
-        /* login */
-        Login login = new Login();
-        login.setWindowTitle("GDA");
-        int res = login.exec();
         if( res == 1 ){
 
             Mdi mdi = new Mdi();
