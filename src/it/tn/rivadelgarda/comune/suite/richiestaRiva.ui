@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1162</width>
+    <height>979</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dettaglio messaggio</string>
+  </property>
+  <property name="searchcolumns" stdset="0">
+   <string>data,&lt;testop&gt;,mittentep,datascadenza</string>
+  </property>
+  <property name="nodelete" stdset="0">
+   <bool>true</bool>
+  </property>
+  <property name="sortcolumn" stdset="0">
+   <number>0</number>
+  </property>
+  <property name="sortorder" stdset="0">
+   <string>&gt;</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,1,1">
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QLineEdit" name="lineEdit_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="column" stdset="0">
+       <string>mittentep</string>
+      </property>
+      <property name="private" stdset="0">
+       <bool>true</bool>
+      </property>
+      <property name="export" stdset="0">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="column" stdset="0">
+       <string>testop</string>
+      </property>
+      <property name="private" stdset="0">
+       <bool>true</bool>
+      </property>
+      <property name="export" stdset="0">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QGroupBox" name="groupBoxRichiesta">
+      <property name="title">
+       <string>Richiesta</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Data</string>
+         </property>
+         <property name="buddy">
+          <cstring>dateTimeEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateTimeEdit" name="dateTimeEdit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>data</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="QCheckBox" name="checkBox">
+         <property name="text">
+          <string>Cancellabile</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>cancellabile</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Mittente</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Oggetto</string>
+         </property>
+         <property name="buddy">
+          <cstring>textEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Da completare entro</string>
+         </property>
+         <property name="buddy">
+          <cstring>dateEditEntroIl</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit" name="dateEditEntroIl">
+         <property name="displayFormat">
+          <string>dd/MM/yyyy</string>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>datascadenza</string>
+         </property>
+         <property name="export" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Giorni di preavviso</string>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QSpinBox" name="spinBox">
+         <property name="column" stdset="0">
+          <string>giornipreavviso</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="4">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>337</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="1" colspan="4">
+        <widget class="QTextEdit" name="textEdit">
+         <property name="styleSheet">
+          <string notr="true">:enabled { color:  rgb(0, 0, 0); background-color:  rgb(255,255,255)} :disabled { color:  rgb(0, 0, 0); background-color:  rgb(255,255,255)}</string>
+         </property>
+         <property name="column" stdset="0">
+          <string>testo</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="private" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="4">
+        <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox" name="comboBoxMittente">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="column" stdset="0">
+          <string>mittente</string>
+         </property>
+         <property name="search" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="private" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="destinatari">
+       <attribute name="title">
+        <string>Destinatari</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="2" column="0" colspan="2">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableViewPersone">
+          <property name="entity" stdset="0">
+           <string>.destinatarioUtenteCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&lt;destinatario&gt;,&gt;conoscenza&lt;,&gt;letto&lt;,&gt;richiestacancellabile&lt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>destinatario</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>destinatario,cc,letto,canc</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="searchfields" stdset="0">
+           <string>destinatario</string>
+          </property>
+          <property name="saverows" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="filters" stdset="0">
+           <string>disabilitato=false,richieste=true</string>
+          </property>
+          <property name="private" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2" colspan="3">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableViewUffici">
+          <property name="entity" stdset="0">
+           <string>.destinatarioUfficioCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&lt;destinatario&gt;,&gt;conoscenza&lt;,&gt;letto&lt;,&gt;richiestacancellabile&lt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>destinatario</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>destinatario,cc,letto,canc</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="saverows" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="searchfields" stdset="0">
+           <string>destinatario</string>
+          </property>
+          <property name="filters" stdset="0">
+           <string>richieste=true</string>
+          </property>
+          <property name="private" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>448</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Uffici</string>
+          </property>
+          <property name="buddy">
+           <cstring>tableViewUffici</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QComboBox" name="comboBoxGruppiDestinatari">
+          <item>
+           <property name="text">
+            <string> </string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Tutti gli utenti del Comune</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Tutti i dipendenti</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Tutti i responsabili strutture organizzative</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>444</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_12">
+          <property name="text">
+           <string>Gruppi di destinatari</string>
+          </property>
+          <property name="buddy">
+           <cstring>comboBoxGruppiDestinatari</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Persone</string>
+          </property>
+          <property name="buddy">
+           <cstring>tableViewPersone</cstring>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="riferimenti">
+       <attribute name="title">
+        <string>Riferimenti precedenti e successivi</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>Precedenti</string>
+          </property>
+          <property name="buddy">
+           <cstring>tableViewPrecedenti</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableViewPrecedenti">
+          <property name="entity" stdset="0">
+           <string>.richiestaPrecedente</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&lt;mittente&gt;,&lt;data&gt;,testo,&lt;datascadenza&gt;</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>Mittente,Data,Testo,Scadenza</string>
+          </property>
+          <property name="private" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_16">
+          <property name="text">
+           <string>Successivi</string>
+          </property>
+          <property name="buddy">
+           <cstring>tableViewSuccessivi</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableViewSuccessivi">
+          <property name="entity" stdset="0">
+           <string>.richiestaSuccessivaCollection</string>
+          </property>
+          <property name="columns" stdset="0">
+           <string>&lt;mittente&gt;,&lt;data&gt;,testo,&lt;datascadenza&gt;</string>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>1</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>Mittente,Data,Testo,Scadenza</string>
+          </property>
+          <property name="private" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="collegati">
+       <attribute name="title">
+        <string>Pratiche/protocolli collegati</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>Pratiche</string>
+          </property>
+          <property name="buddy">
+           <cstring>tableViewPratiche</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableViewPratiche">
+          <property name="minimumSize">
+           <size>
+            <width>600</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="sizeIncrement">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="columns" stdset="0">
+           <string>oggetto,&lt;pratica&gt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>pratica</string>
+          </property>
+          <property name="entity" stdset="0">
+           <string>.richiestaPraticaCollection</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>Oggetto,Pratica</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>2</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
+          </property>
+          <property name="searchfields" stdset="0">
+           <string>pratica</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>Protocolli</string>
+          </property>
+          <property name="buddy">
+           <cstring>tableViewProtocolli</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="com.axiastudio.pypapi.ui.widgets.PyPaPiTableView" name="tableViewProtocolli">
+          <property name="minimumSize">
+           <size>
+            <width>600</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="sizeIncrement">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="columns" stdset="0">
+           <string>oggetto,&lt;protocollo&gt;</string>
+          </property>
+          <property name="reference" stdset="0">
+           <string>protocollo</string>
+          </property>
+          <property name="entity" stdset="0">
+           <string>.richiestaProtocolloCollection</string>
+          </property>
+          <property name="headers" stdset="0">
+           <string>Oggetto,Protocollo</string>
+          </property>
+          <property name="search" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="sortcolumn" stdset="0">
+           <number>2</number>
+          </property>
+          <property name="sortorder" stdset="0">
+           <string>&gt;</string>
+          </property>
+          <property name="searchfields" stdset="0">
+           <string>protocollo</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pypapicombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header>pypapidateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiTableView</class>
+   <extends>QTableView</extends>
+   <header>pypapitableview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>com.axiastudio.pypapi.ui.widgets.PyPaPiDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>pypapidatetimeedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>dateTimeEdit</tabstop>
+  <tabstop>comboBoxMittente</tabstop>
+  <tabstop>textEdit</tabstop>
+  <tabstop>dateEditEntroIl</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>comboBoxGruppiDestinatari</tabstop>
+  <tabstop>tableViewPersone</tabstop>
+  <tabstop>tableViewUffici</tabstop>
+  <tabstop>tableViewPrecedenti</tabstop>
+  <tabstop>tableViewSuccessivi</tabstop>
+  <tabstop>tableViewPratiche</tabstop>
+  <tabstop>tableViewProtocolli</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>spinBox</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>lineEdit_2</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

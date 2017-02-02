@@ -21,6 +21,8 @@ import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.ui.Context;
 import com.axiastudio.pypapi.ui.Window;
 import com.axiastudio.pypapi.ui.widgets.PyPaPiToolBar;
+import com.axiastudio.suite.SuiteUtil;
+import com.axiastudio.suite.base.BaseUtil;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Ufficio;
 import com.axiastudio.suite.base.entities.UfficioUtente;
@@ -106,12 +108,18 @@ public class FormDeterminaJEnte extends FormDetermina {
                         utenteInUfficio(autenticato, determina.getPratica().getGestione()).getModificapratica()){
                     vediDocumenti = Boolean.TRUE;
             }
+            // Utenti appartenenti all'ufficio Ragioneria
+            else if( BaseUtil.utenteInUfficio(autenticato,
+                    Integer.parseInt(SuiteUtil.trovaCostante("UFFICIO_RAGIONERIA_E_CONTABILITA").getValore()), true) ){
+                vediDocumenti = Boolean.TRUE;
+            }
             // Istruttore e responsabile della pratica
             // TODO
             this.determinaToolbar.actionByName("apriDocumenti").setEnabled(vediDocumenti);
 
             this.determinaToolbar.actionByName("vistoLiquidazione").
-                    setEnabled(gestoreDeleghe.checkTitoloODelega("GESTORE_LIQUIDAZIONI") != null);
+                    setEnabled(gestoreDeleghe.checkTitoloODelega
+                            ("GESTORE_LIQUIDAZIONI", null, null, null, null, null, Boolean.FALSE) != null);
 
             // faccio credere al contesto che il contesto padre è cambiato, quindi lo spingo ad aggiornarsi
             Context context = (Context) Register.queryRelation(this, ".movimentoDeterminaCollection");

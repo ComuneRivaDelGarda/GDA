@@ -16,6 +16,9 @@
  */
 package it.tn.rivadelgarda.comune.suite;
 
+import com.axiastudio.pypapi.plugins.IPlugin;
+import com.axiastudio.suite.base.entities.IUtente;
+import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
@@ -23,12 +26,13 @@ import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.suite.plugins.atm.FileATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
 import com.axiastudio.suite.plugins.atm.helper.PutAttoHelper;
-import com.axiastudio.suite.plugins.atm.ws.ATMClient;
 import com.axiastudio.suite.plugins.cmis.CmisPlugin;
 import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
+import com.trolltech.qt.gui.QAction;
 import com.trolltech.qt.gui.QSpinBox;
+import com.trolltech.qt.gui.QWidget;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -122,7 +126,9 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
         if( !res ){
             Util.warningBox(this, "Errore in pubblicazione", "L'atto non è stato pubblicato all'albo.");
         } else {
+            Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
             pubblicazione.setPubblicato(Boolean.TRUE);
+            pubblicazione.setEsecutorepubblicazione(autenticato.getLogin());
             this.getContext().commitChanges();
             Util.warningBox(this, "Pubblicazione avvenuta", "L'atto è stato pubblicato all'albo, verificare su http://www.albotelematico.tn.it/bacheca/riva-del-garda.");
         }
@@ -141,4 +147,40 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
         return p;
 
     }
+
+    @Override
+    protected void indexChanged(int row) {
+        super.indexChanged(row);
+        QAction action = (QAction) this.findChild(QAction.class, "showForm");
+        action.triggered.disconnect();
+        action.triggered.connect(this, "apriDocumento()");
+
+        Pubblicazione pubblicazione = (Pubblicazione) this.getContext().getCurrentEntity();
+        // Pubblicazione inviata all'albo: disabilitazione di tutto tranne data fine pubblicazione (per ri-pubblicazione)
+        String[] roWidgets = {"dateEdit_dataatto", "spinBox_numeroatto", "comboBox_TipoAtto", "lineEdit_Richiedente",
+                "lineEdit_Organo", "textEdit_Descrizione", ""};
+        for (String widgetName : roWidgets) {
+            Util.setWidgetReadOnly((QWidget) this.findChild(QWidget.class, widgetName), pubblicazione.getPubblicato());
+        }
+    }
+
+    public void apriDocumento() {
+        Pubblicazione pubblicazione = (Pubblicazione) this.getContext().getCurrentEntity();
+        if (pubblicazione == null || pubblicazione.getId() == null) {
+            return;
+        }
+        List<IPlugin> plugins = (List) Register.queryPlugins(this.getClass());
+        for (IPlugin plugin : plugins) {
+            if ("CMIS".equals(plugin.getName())) {
+                if ( pubblicazione.getPubblicato() ){
+                    ((CmisPlugin) plugin).showForm(pubblicazione, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE,
+                            Boolean.FALSE, Boolean.FALSE, new HashMap());
+                } else {
+                    ((CmisPlugin) plugin).showForm(pubblicazione, Boolean.TRUE, Boolean.TRUE, Boolean.FALSE,
+                            Boolean.TRUE, Boolean.TRUE, new HashMap());
+                }
+            }
+        }
+    }
+
 }
