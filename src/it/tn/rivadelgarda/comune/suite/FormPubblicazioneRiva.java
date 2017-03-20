@@ -16,23 +16,22 @@
  */
 package it.tn.rivadelgarda.comune.suite;
 
-import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
-import com.axiastudio.suite.menjazo.AlfrescoHelper;
 import com.axiastudio.pypapi.Application;
 import com.axiastudio.pypapi.Register;
 import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.suite.plugins.atm.FileATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
 import com.axiastudio.suite.plugins.atm.helper.PutAttoHelper;
-import com.axiastudio.suite.plugins.cmis.CmisPlugin;
-import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
 import com.trolltech.qt.gui.QAction;
 import com.trolltech.qt.gui.QSpinBox;
 import com.trolltech.qt.gui.QWidget;
+import it.tn.rivadelgarda.comune.gda.WebAppBridge;
+import it.tn.rivadelgarda.comune.gda.WebAppBridgeBuilder;
+import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,6 +58,7 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
         }
 
         Pubblicazione pubblicazione = (Pubblicazione) this.getContext().getCurrentEntity();
+        String externalId = "pubblicazione_" + pubblicazione.getId();
 
         PubblicazioneATM pubblicazioneATM = new PubblicazioneATM();
 
@@ -92,35 +92,33 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
                 (String) app.getConfigItem("atm.endpoint"));
 
         // documento e allegati
-        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(pubblicazione.getClass(), "CMIS");
-        AlfrescoHelper cmisHelper = cmisPlugin.createAlfrescoHelper(pubblicazione);
-        Boolean isAtto=Boolean.TRUE;
+        DocerHelper docerHelper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
+
         List<FileATM> allegati = new ArrayList<FileATM>();
         Integer i=0;
-        for( Map child: cmisHelper.children() ){
-            String name = (String) child.get("name");
-            String title = (String) child.get("title");
-            if( title == null ){
-                if( i==0 ){
-                    title = "atto";
-                } else {
-                    title = "allegato " + i;
+        try {
+            List<Map<String, String>> folderDocuments = docerHelper.searchDocumentsByExternalIdFirstAndRelated(externalId);
+            for( Map<String, String> doc: folderDocuments){
+                String documentId = doc.get("DOCNUM");
+                String tipo_componente = doc.get("TIPO_COMPONENTE");
+                String name = doc.get("DOCNAME");
+                String title = doc.get("ABSTRACT");
+                InputStream inputStream = docerHelper.getDocumentStream(documentId, "1");
+                FileATM fileATM = new FileATM();
+                fileATM.setTitoloallegato(title);
+                fileATM.setFileallegato(inputStream);
+                fileATM.setFileallegatoname(name);
+                if( "PRINCIPALE".equals(tipo_componente) ) {
+                    pubblicazioneATM.setFileAtto(fileATM);
+                } else if( "ALLEGATO".equals(tipo_componente) ){
+                    allegati.add(fileATM);
                 }
             }
-            CmisStreamProvider streamProvider = cmisPlugin.createCmisStreamProvider((String) child.get("objectId"));
-            InputStream inputStream = streamProvider.getInputStream();
-            FileATM fileATM = new FileATM();
-            fileATM.setTitoloallegato(title);
-            fileATM.setFileallegato(inputStream);
-            fileATM.setFileallegatoname(name);
-            if( isAtto ) {
-                pubblicazioneATM.setFileAtto(fileATM);
-                isAtto = Boolean.FALSE;
-            } else {
-                allegati.add(fileATM);
-            }
-            i++;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         pubblicazioneATM.setAllegati(allegati);
         boolean res = helper.putAtto(pubblicazioneATM);
         if( !res ){
@@ -164,23 +162,59 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
         }
     }
 
-    public void apriDocumento() {
+    private void apriDocumento(){
+
         Pubblicazione pubblicazione = (Pubblicazione) this.getContext().getCurrentEntity();
+        String externalId = "pubblicazione_" + pubblicazione.getId();
         if (pubblicazione == null || pubblicazione.getId() == null) {
             return;
         }
-        List<IPlugin> plugins = (List) Register.queryPlugins(this.getClass());
-        for (IPlugin plugin : plugins) {
-            if ("CMIS".equals(plugin.getName())) {
-                if ( pubblicazione.getPubblicato() ){
-                    ((CmisPlugin) plugin).showForm(pubblicazione, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE,
-                            Boolean.FALSE, Boolean.FALSE, new HashMap());
-                } else {
-                    ((CmisPlugin) plugin).showForm(pubblicazione, Boolean.TRUE, Boolean.TRUE, Boolean.FALSE,
-                            Boolean.TRUE, Boolean.TRUE, new HashMap());
-                }
-            }
+        Utente autenticato = (Utente) Register.queryUtility(IUtente.class);
+        Application app = Application.getApplicationInstance();
+        DocerHelper helper = new DocerHelper((String)app.getConfigItem("docer.url"), (String) app.getConfigItem("docer.username"),
+                (String) app.getConfigItem("docer.password"));
+
+        String url = "http://192.168.64.200:8080/gdadocer/index.html#?externalId=" + externalId;
+        url += "&utente=" + autenticato.getNome().toUpperCase();
+        Boolean view = false;
+        Boolean download = false;
+        Boolean parent = false;
+        Boolean delete;
+        Boolean upload;
+        Boolean version;
+        if ( pubblicazione.getPubblicato() ){
+            delete = Boolean.FALSE;
+            upload = Boolean.FALSE;
+            version = Boolean.FALSE;
+        } else {
+            delete = Boolean.TRUE;
+            upload = Boolean.TRUE;
+            version = Boolean.TRUE;
         }
+        String flags="";
+        for( Boolean flag: Arrays.asList(view, delete, download, parent, upload, version) ){
+            flags += flag ? "1" :  "0";
+        }
+        url += "&flags=" + flags;
+
+        WebAppBridge bridge = WebAppBridgeBuilder.create()
+                .url(url)
+//                .developerExtrasEnabled(Boolean.TRUE)                       // abilità "inspect" dal menu contestuale
+                .javaScriptEnabled(Boolean.TRUE)                            // abilità l'esecuzione di JavaScript
+//                .javaScriptCanOpenWindows(Boolean.TRUE)                     // JS può aprire finestre in popup
+//                .javaScriptCanCloseWindows(Boolean.TRUE)                    // JS può chiudere finestre
+//                .javaScriptCanAccessClipboard(Boolean.TRUE)                 // JS legge e scrive da clipboard
+                .cookieJarEnabled(Boolean.TRUE)                             // la pagina può impostare dei cookie
+                .downloadEnabled(Boolean.TRUE)                              // download abilitati
+//                .downloadContentTypes(new String[]{"application/pdf"})      // content type permessi al download
+                .downloadPath("/home/pivamichela")                   // cartella proposta per il download
+//                .loadFinishedCallback(callbackClass, "callback()")          // callback da eseguire a pagina caricata
+                .build();
+
+        bridge.show();
+
+
     }
+
 
 }
