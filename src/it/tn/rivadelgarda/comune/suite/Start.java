@@ -121,50 +121,50 @@ public class Start extends Suite {
         login.setWindowTitle("GDA");
         int res = login.exec();
 
-        Database db = (Database) Register.queryUtility(IDatabase.class);
-        Configure.configure(db);
-
-        // configurazione personalizzata Riva GDA
-        Register.registerCallbacks(Resolver.callbacksFromClass(DeterminaCallbacksRiva.class));
-        Register.registerForm(db.getEntityManagerFactory(),
-                "classpath:com/axiastudio/suite/deliberedetermine/forms/determina.ui",
-                Determina.class,
-                FormDeterminaJEnte.class);
-        Register.registerUtility(new FinanziariaUtil(), IFinanziaria.class);
-        Register.registerForm(db.getEntityManagerFactory(),
-                "classpath:com/axiastudio/suite/pubblicazioni/forms/pubblicazione.ui",
-                Pubblicazione.class,
-                FormPubblicazioneRiva.class);
-        Register.registerForm(db.getEntityManagerFactory(),
-                "classpath:it/tn/rivadelgarda/comune/suite/richiestaRiva.ui",
-                Richiesta.class,
-                FormRichiestaRiva.class);
-
-        // CMIS e Ooops
-        CmisPlugin cmisPluginDetermina = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
-        Register.registerPlugin(cmisPluginDetermina, FormDeterminaJEnte.class);
-        OoopsPlugin ooopsPluginDetermina = (OoopsPlugin) Register.queryPlugin(FormDetermina.class, "Ooops");
-        Register.registerPlugin(ooopsPluginDetermina, FormDeterminaJEnte.class);
-        CmisPlugin cmisPluginPubblicazioni = (CmisPlugin) Register.queryPlugin(FormPubblicazione.class, "CMIS");
-        Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazioneRiva.class);
-
-        // parametri ATM
-        Properties properties = new Properties();
-        try {
-            propertiesStream = Start.class.getResourceAsStream("gda.properties");
-            if( propertiesStream != null ) {
-                properties.load(propertiesStream);
-                app.setConfigItem("atm.wsakey", properties.getProperty("atm.wsakey"));
-                app.setConfigItem("atm.MAC", properties.getProperty("atm.MAC"));
-                app.setConfigItem("atm.userID", properties.getProperty("atm.userID"));
-                app.setConfigItem("atm.password", properties.getProperty("atm.password"));
-                app.setConfigItem("atm.endpoint", properties.getProperty("atm.endpoint"));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         if( res == 1 ){
+            Database db = (Database) Register.queryUtility(IDatabase.class);
+            Configure.configure(db);
+
+            // configurazione personalizzata Riva GDA
+            Register.registerCallbacks(Resolver.callbacksFromClass(DeterminaCallbacksRiva.class));
+            Register.registerForm(db.getEntityManagerFactory(),
+                    "classpath:com/axiastudio/suite/deliberedetermine/forms/determina.ui",
+                    Determina.class,
+                    FormDeterminaJEnte.class);
+            Register.registerUtility(new FinanziariaUtil(), IFinanziaria.class);
+            Register.registerForm(db.getEntityManagerFactory(),
+                    "classpath:com/axiastudio/suite/pubblicazioni/forms/pubblicazione.ui",
+                    Pubblicazione.class,
+                    FormPubblicazioneRiva.class);
+            Register.registerForm(db.getEntityManagerFactory(),
+                    "classpath:it/tn/rivadelgarda/comune/suite/richiestaRiva.ui",
+                    Richiesta.class,
+                    FormRichiestaRiva.class);
+
+            // CMIS e Ooops
+            CmisPlugin cmisPluginDetermina = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
+            Register.registerPlugin(cmisPluginDetermina, FormDeterminaJEnte.class);
+            OoopsPlugin ooopsPluginDetermina = (OoopsPlugin) Register.queryPlugin(FormDetermina.class, "Ooops");
+            Register.registerPlugin(ooopsPluginDetermina, FormDeterminaJEnte.class);
+            CmisPlugin cmisPluginPubblicazioni = (CmisPlugin) Register.queryPlugin(FormPubblicazione.class, "CMIS");
+            Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazioneRiva.class);
+
+            // parametri ATM
+            Properties properties = new Properties();
+            try {
+                propertiesStream = Start.class.getResourceAsStream("gda.properties");
+                if( propertiesStream != null ) {
+                    properties.load(propertiesStream);
+                    app.setConfigItem("atm.wsakey", properties.getProperty("atm.wsakey"));
+                    app.setConfigItem("atm.MAC", properties.getProperty("atm.MAC"));
+                    app.setConfigItem("atm.userID", properties.getProperty("atm.userID"));
+                    app.setConfigItem("atm.password", properties.getProperty("atm.password"));
+                    app.setConfigItem("atm.endpoint", properties.getProperty("atm.endpoint"));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             Mdi mdi = new Mdi();
             mdi.showMinimized();
             mdi.setWindowTitle("GDA");
