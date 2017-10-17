@@ -16,6 +16,7 @@
  */
 package it.tn.rivadelgarda.comune.suite;
 
+import com.axiastudio.pypapi.plugins.IPlugin;
 import com.axiastudio.suite.base.entities.IUtente;
 import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.menjazo.AlfrescoHelper;
@@ -25,9 +26,9 @@ import com.axiastudio.pypapi.ui.Util;
 import com.axiastudio.suite.plugins.atm.FileATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
 import com.axiastudio.suite.plugins.atm.helper.PutAttoHelper;
-import com.axiastudio.suite.plugins.cmis.AlfrescoCmisPlugin;
-import com.axiastudio.suite.plugins.cmis.AlfrescoCmisStreamProvider;
-import com.axiastudio.suite.plugins.docer.DocerPlugin;
+import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+import com.axiastudio.suite.plugins.cmis.CmisStreamProvider;
+//import com.axiastudio.suite.plugins.docer.DocerPlugin;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
 import com.axiastudio.suite.pubblicazioni.forms.FormPubblicazione;
 import com.trolltech.qt.gui.QAction;
@@ -92,7 +93,7 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
                 (String) app.getConfigItem("atm.endpoint"));
 
         // documento e allegati
-        AlfrescoCmisPlugin cmisPlugin = (AlfrescoCmisPlugin) Register.queryPlugin(pubblicazione.getClass(), "CMIS");
+        CmisPlugin cmisPlugin = (CmisPlugin) Register.queryPlugin(pubblicazione.getClass(), "CMIS");
         AlfrescoHelper cmisHelper = cmisPlugin.createAlfrescoHelper(pubblicazione);
         Boolean isAtto=Boolean.TRUE;
         List<FileATM> allegati = new ArrayList<FileATM>();
@@ -107,7 +108,7 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
                     title = "allegato " + i;
                 }
             }
-            AlfrescoCmisStreamProvider streamProvider = cmisPlugin.createCmisStreamProvider((String) child.get("objectId"));
+            CmisStreamProvider streamProvider = cmisPlugin.createCmisStreamProvider((String) child.get("objectId"));
             InputStream inputStream = streamProvider.getInputStream();
             FileATM fileATM = new FileATM();
             fileATM.setTitoloallegato(title);
@@ -169,28 +170,22 @@ public class FormPubblicazioneRiva extends FormPubblicazione {
         if (pubblicazione == null || pubblicazione.getId() == null) {
             return;
         }
-
-        // creazione dei flag con i permessi di accesso alla folder
-        Boolean view = true;
-        Boolean delete = false;
-        Boolean download = true;
-        Boolean parent = false;
-        Boolean upload = false;
-        Boolean version = false;
-        if ( !pubblicazione.getPubblicato() ){
-            delete = true;
-            upload = true;
-            version = true;
+        List<IPlugin> plugins = (List) Register.queryPlugins(this.getClass());
+        for (IPlugin plugin : plugins) {
+            if ("CMIS".equals(plugin.getName())) {
+                if ( pubblicazione.getPubblicato() ){
+                    ((CmisPlugin) plugin).showForm(pubblicazione, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE,
+                            Boolean.FALSE, Boolean.FALSE, new HashMap());
+                } else {
+                    ((CmisPlugin) plugin).showForm(pubblicazione, Boolean.TRUE, Boolean.TRUE, Boolean.FALSE,
+                            Boolean.TRUE, Boolean.TRUE, new HashMap());
+                }
+            }
         }
-        String url = "#?externalId=pubblicazione_" + pubblicazione.getId();
-        String flags="";
-        for( Boolean flag: Arrays.asList(view, delete, download, parent, upload, version) ){
-            flags += flag ? "1" :  "0";
-        }
-        url += "&flags=" + flags;
-
-        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Pubblicazione.class, "DocER");
-        docerPlugin.showForm(pubblicazione, url);
+//        url += "&flags=" + flags;
+//
+//        DocerPlugin docerPlugin = (DocerPlugin) Register.queryPlugin(Pubblicazione.class, "DocER");
+//        docerPlugin.showForm(pubblicazione, url);
     }
 
 }

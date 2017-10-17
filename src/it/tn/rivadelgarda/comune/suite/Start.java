@@ -32,8 +32,8 @@ import com.axiastudio.suite.base.entities.Utente;
 import com.axiastudio.suite.deliberedetermine.entities.Determina;
 import com.axiastudio.suite.deliberedetermine.forms.FormDetermina;
 import com.axiastudio.suite.finanziaria.entities.IFinanziaria;
-import com.axiastudio.suite.plugins.cmis.AlfrescoCmisPlugin;
-import com.axiastudio.suite.plugins.docer.DocerPlugin;
+import com.axiastudio.suite.plugins.cmis.CmisPlugin;
+//import com.axiastudio.suite.plugins.docer.DocerPlugin;
 import com.axiastudio.suite.plugins.ooops.OoopsPlugin;
 import com.axiastudio.suite.protocollo.forms.FormScrivania;
 import com.axiastudio.suite.pubblicazioni.entities.Pubblicazione;
@@ -143,14 +143,14 @@ public class Start extends Suite {
                     FormRichiestaRiva.class);
 
             // CMIS e Ooops
-//            AlfrescoCmisPlugin cmisPluginDetermina = (AlfrescoCmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
-//            Register.registerPlugin(cmisPluginDetermina, FormDeterminaJEnte.class);
-//            AlfrescoCmisPlugin cmisPluginPubblicazioni = (AlfrescoCmisPlugin) Register.queryPlugin(FormPubblicazione.class, "CMIS");
-//            Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazioneRiva.class);
-            DocerPlugin cmisPluginDetermina = (DocerPlugin) Register.queryPlugin(FormDetermina.class, "DocER");
+            CmisPlugin cmisPluginDetermina = (CmisPlugin) Register.queryPlugin(FormDetermina.class, "CMIS");
             Register.registerPlugin(cmisPluginDetermina, FormDeterminaJEnte.class);
-            DocerPlugin cmisPluginPubblicazioni = (DocerPlugin) Register.queryPlugin(FormPubblicazione.class, "DocER");
+            CmisPlugin cmisPluginPubblicazioni = (CmisPlugin) Register.queryPlugin(FormPubblicazione.class, "CMIS");
             Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazioneRiva.class);
+//            DocerPlugin cmisPluginDetermina = (DocerPlugin) Register.queryPlugin(FormDetermina.class, "DocER");
+//            Register.registerPlugin(cmisPluginDetermina, FormDeterminaJEnte.class);
+//            DocerPlugin cmisPluginPubblicazioni = (DocerPlugin) Register.queryPlugin(FormPubblicazione.class, "DocER");
+//            Register.registerPlugin(cmisPluginPubblicazioni, FormPubblicazioneRiva.class);
             OoopsPlugin ooopsPluginDetermina = (OoopsPlugin) Register.queryPlugin(FormDetermina.class, "Ooops");
             Register.registerPlugin(ooopsPluginDetermina, FormDeterminaJEnte.class);
 
