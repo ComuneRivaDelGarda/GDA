@@ -203,4 +203,16 @@ public class FinanziariaUtil implements IFinanziaria {
         }
     }
 
+    public Boolean modificaOggettoBozza(Determina determina, String oggetto) {
+        String utente = ((Utente) Register.queryUtility(IUtente.class)).getLogin();
+        JEnteHelper jEnteHelper = new JEnteHelper(utente);
+        String numeroBozza = ((Integer) Integer.parseInt(determina.getPratica().getIdpratica().substring(4))).toString();
+        Boolean ret=true;
+        if ( jEnteHelper.chiamataRichiestaEsisteBozzaOAtto("B", "DT", determina.getAnno().toString(), numeroBozza) ) {
+            ret=jEnteHelper.chiamataModificaOggettoBozza("B", "DT", determina.getAnno().toString(), numeroBozza, determina.getOggetto());
+        }
+        return ret;
+    }
+
+
 }
