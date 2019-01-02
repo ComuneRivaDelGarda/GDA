@@ -35,7 +35,7 @@ Class-Path: ../lib/XmlSchema-1.4.2.jar ../lib/activation-1.1.jar ../li
  b/itextpdf-5.4.1-sources.jar ../lib/itextpdf-5.4.1.jar ../lib/ivy-2.2
  .0.jar ../lib/jalopy-1.5rc3.jar ../lib/jansi-1.6.jar ../lib/java_uno.
  jar ../lib/javax.persistence.jar ../lib/jaxb-api-2.1.jar ../lib/jaxb-
- impl-2.1.11.jar ../lib/jaxb-impl-2.1.6.jar ../lib/jaxb-xjc-2.1.6.jar
+ impl-2.1.11.jar ../lib/jaxb-impl-2.1.6.jar ../lib/jaxb-xjc-2.1.6.jar 
  ../lib/jaxen-1.1.1.jar ../lib/jaxws-api-2.1.jar ../lib/jaxws-rt-2.1.7
  .jar ../lib/jcommander-1.27.jar ../lib/jettison-1.0-RC2.jar ../lib/ji
  bx-bind-1.1.5.jar ../lib/jibx-run-1.1.5.jar ../lib/jline-1.0.jar ../l
@@ -44,31 +44,31 @@ Class-Path: ../lib/XmlSchema-1.4.2.jar ../lib/activation-1.1.jar ../li
  ar ../lib/mail.jar ../lib/mailapi.jar ../lib/mex-1.4.1.jar ../lib/mim
  epull-1.3.jar ../lib/neethi-2.0.4.jar ../lib/org.eclipse.persistence.
  jpa.modelgen_2.6.3.v20160428-59c81c5.jar ../lib/org.json-20120521.jar
-  ../lib/org.osgi.core-1.0.0.jar ../lib/pop3.jar ../lib/postgresql-9.1
- -901.jdbc4.jar ../lib/qdox-1.12.1.jar ../lib/resolver-20050927.jar ..
- /lib/ridl.jar ../lib/saaj-api-1.3.jar ../lib/saaj-impl-1.3.3.jar ../l
- ib/servlet-api-2.4.jar ../lib/smtp.jar ../lib/soapmonitor-1.4.1.jar .
- ./lib/stax-api-1.0.1.jar ../lib/stax-api-1.0.jar ../lib/stax-ex-1.2.j
- ar ../lib/streambuffer-0.9.jar ../lib/testng-6.8.jar ../lib/unoil.jar
-  ../lib/unoloader.jar ../lib/woden-api-1.0M8.jar ../lib/woden-impl-do
- m-1.0M8.jar ../lib/wsdl4j-1.6.2.jar ../lib/wstx-asl-3.2.3.jar ../lib/
- wstx-asl-3.2.4.jar ../lib/xalan-2.7.0.jar ../lib/xercesImpl-2.8.1.jar
-  ../lib/xml-apis-1.3.04.jar ../lib/xml-resolver-1.2.jar ../lib/xmlbea
- ns-2.3.0.jar ../lib/xmlpull-1.1.3.1.jar ../lib/xstream-1.4.2.jar ../n
- ative/qtjambi-designer.jar ../native/qtjambi-native.jar ../native/qtj
- ambi.jar ../lib/aopalliance-repackaged-2.4.0-b31.jar ../lib/hk2-api-2
- .4.0-b31.jar ../lib/hk2-locator-2.4.0-b31.jar ../lib/hk2-utils-2.4.0-
- b31.jar ../lib/jackson-annotations-2.5.4.jar ../lib/jackson-core-2.5.
- 4.jar ../lib/jackson-databind-2.5.4.jar ../lib/jackson-jaxrs-base-2.5
- .4.jar ../lib/jackson-jaxrs-json-provider-2.5.4.jar ../lib/jackson-mo
- dule-jaxb-annotations-2.5.4.jar ../lib/javassist-3.18.1-GA.jar ../lib
- /javax.annotation-api-1.2.jar ../lib/javax.inject-2.4.0-b31.jar ../li
- b/javax.ws.rs-api-2.0.1.jar ../lib/jersey-client-2.22.1.jar ../lib/je
- rsey-common-2.22.1.jar ../lib/jersey-entity-filtering-2.22.1.jar ../l
- ib/jersey-guava-2.22.1.jar ../lib/jersey-media-json-jackson-2.22.1.ja
- r ../lib/jersey-media-multipart-2.22.1.jar ../lib/mimepull-1.9.6.jar
- ../lib/osgi-resource-locator-1.0.1.jar ../lib/slf4j-api-1.7.7.jar ../
- lib/slf4j-log4j12-1.7.7.jar ../lib/commons-lang3-3.4.jar
+  ../lib/org.osgi.core-1.0.0.jar ../lib/pop3.jar ../lib/postgresql-42.
+ 2.2.jre7.jar ../lib/qdox-1.12.1.jar ../lib/resolver-20050927.jar ../l
+ ib/ridl.jar ../lib/saaj-api-1.3.jar ../lib/saaj-impl-1.3.3.jar ../lib
+ /servlet-api-2.4.jar ../lib/smtp.jar ../lib/soapmonitor-1.4.1.jar ../
+ lib/stax-api-1.0.1.jar ../lib/stax-api-1.0.jar ../lib/stax-ex-1.2.jar
+  ../lib/streambuffer-0.9.jar ../lib/testng-6.8.jar ../lib/unoil.jar .
+ ./lib/unoloader.jar ../lib/woden-api-1.0M8.jar ../lib/woden-impl-dom-
+ 1.0M8.jar ../lib/wsdl4j-1.6.2.jar ../lib/wstx-asl-3.2.3.jar ../lib/ws
+ tx-asl-3.2.4.jar ../lib/xalan-2.7.0.jar ../lib/xercesImpl-2.8.1.jar .
+ ./lib/xml-apis-1.3.04.jar ../lib/xml-resolver-1.2.jar ../lib/xmlbeans
+ -2.3.0.jar ../lib/xmlpull-1.1.3.1.jar ../lib/xstream-1.4.2.jar ../nat
+ ive/qtjambi-designer.jar ../native/qtjambi-native.jar ../native/qtjam
+ bi.jar ../lib/aopalliance-repackaged-2.4.0-b31.jar ../lib/hk2-api-2.4
+ .0-b31.jar ../lib/hk2-locator-2.4.0-b31.jar ../lib/hk2-utils-2.4.0-b3
+ 1.jar ../lib/jackson-annotations-2.5.4.jar ../lib/jackson-core-2.5.4.
+ jar ../lib/jackson-databind-2.5.4.jar ../lib/jackson-jaxrs-base-2.5.4
+ .jar ../lib/jackson-jaxrs-json-provider-2.5.4.jar ../lib/jackson-modu
+ le-jaxb-annotations-2.5.4.jar ../lib/javassist-3.18.1-GA.jar ../lib/j
+ avax.annotation-api-1.2.jar ../lib/javax.inject-2.4.0-b31.jar ../lib/
+ javax.ws.rs-api-2.0.1.jar ../lib/jersey-client-2.22.1.jar ../lib/jers
+ ey-common-2.22.1.jar ../lib/jersey-entity-filtering-2.22.1.jar ../lib
+ /jersey-guava-2.22.1.jar ../lib/jersey-media-json-jackson-2.22.1.jar 
+ ../lib/jersey-media-multipart-2.22.1.jar ../lib/mimepull-1.9.6.jar ..
+ /lib/osgi-resource-locator-1.0.1.jar ../lib/slf4j-api-1.7.7.jar ../li
+ b/slf4j-log4j12-1.7.7.jar ../lib/commons-lang3-3.4.jar
 Main-Class: it.tn.rivadelgarda.comune.suite.Start
 SplashScreen-Image: images/pypapi256.png
 
